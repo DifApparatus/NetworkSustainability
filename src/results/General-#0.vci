@@ -1,0 +1,268 @@
+file 9739 1575244656                                            
+version 2
+run General-0-20191202-02:56:00-24908
+attr configname General
+attr datetime 20191202-02:56:00
+attr experiment General
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsf ""
+attr measurement ""
+attr network Network
+attr processid 24908
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+param **.constraintAreaMinX 0m
+param **.constraintAreaMinY 0m
+param **.constraintAreaMinZ 0m
+param **.constraintAreaMaxX 600m
+param **.constraintAreaMaxY 400m
+param **.constraintAreaMaxZ 0m
+param **.node*.mobility.typename "\"MassMobility\""
+param **.node*.mobility.initFromDisplayString true
+param **.node*.mobility.changeInterval "truncnormal(2s, 0.5s)"
+param **.node*.mobility.angleDelta "normal(0deg, 30deg)"
+param **.node*.mobility.speed "truncnormal(20mps, 8mps)"
+param **.node*.mobility.updateInterval 100ms
+param **.node*.numPppInterfaces 3
+param **.visualizer.**.displayPositions true
+
+vector 0 Network.node1.ppp[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 1 Network.node1.ppp[0].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 2 Network.node1.ppp[1].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 3 Network.node1.ppp[1].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 4 Network.node1.ppp[2].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 5 Network.node1.ppp[2].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 6 Network.node2.ppp[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 7 Network.node2.ppp[0].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 8 Network.node2.ppp[1].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 9 Network.node2.ppp[1].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 10 Network.node2.ppp[2].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 11 Network.node2.ppp[2].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 12 Network.node3.ppp[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 13 Network.node3.ppp[0].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 14 Network.node3.ppp[1].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 15 Network.node3.ppp[1].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 16 Network.node3.ppp[2].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 17 Network.node3.ppp[2].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 18 Network.node4.ppp[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 19 Network.node4.ppp[0].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 20 Network.node4.ppp[1].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 21 Network.node4.ppp[1].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 22 Network.node4.ppp[2].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 23 Network.node4.ppp[2].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 24 Network.node5.ppp[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 25 Network.node5.ppp[0].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 26 Network.node5.ppp[1].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 27 Network.node5.ppp[1].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 28 Network.node5.ppp[2].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 29 Network.node5.ppp[2].ppp transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "tx state, vector"
+vector 30 Network.node1.energyStorage powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 31 Network.node2.energyStorage powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 32 Network.node3.energyStorage powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 33 Network.node4.energyStorage powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 34 Network.node5.energyStorage powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 35 Network.node1.wlan[0].radio radioMode:vector ETV
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, vector"
+vector 36 Network.node1.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 37 Network.node2.wlan[0].radio radioMode:vector ETV
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, vector"
+vector 38 Network.node2.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 39 Network.node3.wlan[0].radio radioMode:vector ETV
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, vector"
+vector 40 Network.node3.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 41 Network.node4.wlan[0].radio radioMode:vector ETV
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, vector"
+vector 42 Network.node4.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 43 Network.node5.wlan[0].radio radioMode:vector ETV
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, vector"
+vector 44 Network.node5.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+attr interpolationmode sample-hold
+attr source powerConsumptionChanged
+attr title "Power consumption, vector"
+vector 45 Network.node1.wlan[0].radio receptionState:vector ETV
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, vector"
+vector 46 Network.node2.wlan[0].radio receptionState:vector ETV
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, vector"
+vector 47 Network.node3.wlan[0].radio receptionState:vector ETV
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, vector"
+vector 48 Network.node4.wlan[0].radio receptionState:vector ETV
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, vector"
+vector 49 Network.node5.wlan[0].radio receptionState:vector ETV
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, vector"
+0	8853 8 0 0 0 0 1 0 0 0 0
+1	8861 8 0 0 0 0 1 0 0 0 0
+2	8869 8 0 0 0 0 1 0 0 0 0
+3	8877 8 0 0 0 0 1 0 0 0 0
+4	8885 8 0 0 0 0 1 0 0 0 0
+5	8893 8 0 0 0 0 1 0 0 0 0
+6	8901 8 0 0 0 0 1 0 0 0 0
+7	8909 8 0 0 0 0 1 0 0 0 0
+8	8917 8 0 0 0 0 1 0 0 0 0
+9	8925 8 0 0 0 0 1 0 0 0 0
+10	8933 9 0 0 0 0 1 0 0 0 0
+11	8942 9 0 0 0 0 1 0 0 0 0
+12	8951 9 0 0 0 0 1 0 0 0 0
+13	8960 9 0 0 0 0 1 0 0 0 0
+14	8969 9 0 0 0 0 1 0 0 0 0
+15	8978 9 0 0 0 0 1 0 0 0 0
+16	8987 9 0 0 0 0 1 0 0 0 0
+17	8996 9 0 0 0 0 1 0 0 0 0
+18	9005 9 0 0 0 0 1 0 0 0 0
+19	9014 9 0 0 0 0 1 0 0 0 0
+20	9023 9 0 0 0 0 1 0 0 0 0
+21	9032 9 0 0 0 0 1 0 0 0 0
+22	9041 9 0 0 0 0 1 0 0 0 0
+23	9050 9 0 0 0 0 1 0 0 0 0
+24	9059 9 0 0 0 0 1 0 0 0 0
+25	9068 9 0 0 0 0 1 0 0 0 0
+26	9077 9 0 0 0 0 1 0 0 0 0
+27	9086 9 0 0 0 0 1 0 0 0 0
+28	9095 9 0 0 0 0 1 0 0 0 0
+29	9104 9 0 0 0 0 1 0 0 0 0
+30	9113 49 0 0 0 0 5 0 5e-06 5e-06 2.5e-11
+31	9162 49 0 0 0 0 5 0 5e-06 5e-06 2.5e-11
+32	9211 49 0 0 0 0 5 0 5e-06 5e-06 2.5e-11
+33	9260 49 0 0 0 0 5 0 5e-06 5e-06 2.5e-11
+34	9309 49 0 0 0 0 5 0 5e-06 5e-06 2.5e-11
+35	9358 27 0 0 0 0 3 0 2 2 4
+36	9385 40 0 0 0 0 4 0 5e-06 5e-06 2.5e-11
+37	9425 27 0 0 0 0 3 0 2 2 4
+38	9452 40 0 0 0 0 4 0 5e-06 5e-06 2.5e-11
+39	9492 27 0 0 0 0 3 0 2 2 4
+40	9519 40 0 0 0 0 4 0 5e-06 5e-06 2.5e-11
+41	9559 27 0 0 0 0 3 0 2 2 4
+42	9586 40 0 0 0 0 4 0 5e-06 5e-06 2.5e-11
+43	9626 27 0 0 0 0 3 0 2 2 4
+44	9653 40 0 0 0 0 4 0 5e-06 5e-06 2.5e-11
+45	9693 9 0 0 0 0 1 1 1 1 1
+46	9702 9 0 0 0 0 1 1 1 1 1
+47	9711 9 0 0 0 0 1 1 1 1 1
+48	9720 9 0 0 0 0 1 1 1 1 1
+49	9729 9 0 0 0 0 1 1 1 1 1
+

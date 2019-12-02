@@ -15,10 +15,6 @@
 
 #include "Node.h"
 
-using namespace omnetpp;
-
-Define_Module(Node);
-
 Node::Node() {
     // TODO Auto-generated constructor stub
 
@@ -29,10 +25,14 @@ Node::~Node() {
 }
 
 void Node::initialize(){
+    callRefreshDisplay();
 }
 
-void Node::handleMessage(cMessage *input_message){
-    cMessage *output_message = new cMessage("NODE_REPLY!");
-    send(output_message, "output_gate");
-}
+void Node::handleMessage(){
 
+}
+void Node::callRefreshDisplay(){
+    // refresh statistics
+    cDisplayString& dispStr = getDisplayString();
+    dispStr.setTagArg("p", 1, 300);
+}

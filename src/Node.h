@@ -13,16 +13,23 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
+#ifndef NODE_H_
+#define NODE_H_
+
 #include <omnetpp.h>
 
 using namespace omnetpp;
 
-class Node: public cSimpleModule {
+class Node : public cSimpleModule{
 public:
     Node();
     virtual ~Node();
 protected:
     virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
+    virtual void handleMessage();
+    virtual void callRefreshDisplay();
 };
 
+Define_Module(Node);
+
+#endif /* NODE_H_ */
