@@ -1,14 +1,14 @@
 version 2
-run General-0-20191202-02:56:00-24908
+run General-0-20191209-15:55:29-11275
 attr configname General
-attr datetime 20191202-02:56:00
+attr datetime 20191209-15:55:29
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Network
-attr processid 24908
+attr processid 11275
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -28,6 +28,14 @@ param **.node*.mobility.speed "truncnormal(20mps, 8mps)"
 param **.node*.mobility.updateInterval 100ms
 param **.node*.numPppInterfaces 3
 param **.visualizer.**.displayPositions true
+param **.node*.hasUdp true
+param **.node*.numApps 3
+param **.node*.app[*].typename "\"PingApp\""
+param **.node2.app[0].destAddr "\"node1\""
+param **.node1.app[1].destAddr "\"node3\""
+param **.node1.app[2].destAddr "\"node4\""
+param **.node2.app[1].destAddr "\"node5\""
+param *.node*.app[*].startTime 0s
 
 scalar Network.node1.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
@@ -183,7 +191,7 @@ bin	1	0
 scalar Network.node1.ppp[0].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node1.ppp[0].queue queueLength:timeavg 0
+scalar Network.node1.ppp[0].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node1.ppp[0].queue packetReceived:count 0
@@ -200,7 +208,7 @@ scalar Network.node1.ppp[0].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node1.ppp[0].ppp transmissionState:timeavg 0
+scalar Network.node1.ppp[0].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -253,28 +261,77 @@ attr interpolationmode none
 attr source packetDropReasonIsInterfaceDown(packetDropped)
 attr title "packet drop: interface down, sum(packetBytes)"
 statistic Network.node1.ppp[1].queue queueingTime:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
 field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr title "queueing time, histogram"
 bin	-inf	0
-bin	0	0
-bin	1	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 scalar Network.node1.ppp[1].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node1.ppp[1].queue queueLength:timeavg 0
+scalar Network.node1.ppp[1].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
-scalar Network.node1.ppp[1].queue packetReceived:count 0
+scalar Network.node1.ppp[1].queue packetReceived:count 1
 attr interpolationmode none
 attr title "received packets, count"
-scalar Network.node1.ppp[1].queue packetReceived:sum(packetBytes) 0
+scalar Network.node1.ppp[1].queue packetReceived:sum(packetBytes) 84
 attr interpolationmode none
 attr title "received packets, sum(packetBytes)"
 scalar Network.node1.ppp[1].queue dropPk:count 0
@@ -285,7 +342,7 @@ scalar Network.node1.ppp[1].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node1.ppp[1].ppp transmissionState:timeavg 0
+scalar Network.node1.ppp[1].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -297,19 +354,19 @@ scalar Network.node1.ppp[1].ppp rxPkOk:sum(packetBytes) 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, sum(packetBytes)"
-scalar Network.node1.ppp[1].ppp txPk:count 0
+scalar Network.node1.ppp[1].ppp txPk:count 1
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, count"
-scalar Network.node1.ppp[1].ppp txPk:sum(packetBytes) 0
+scalar Network.node1.ppp[1].ppp txPk:sum(packetBytes) 91
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, sum(packetBytes)"
-scalar Network.node1.ppp[1].ppp rcvdPkFromHl:count 0
+scalar Network.node1.ppp[1].ppp rcvdPkFromHl:count 1
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, count"
-scalar Network.node1.ppp[1].ppp rcvdPkFromHl:sum(packetBytes) 0
+scalar Network.node1.ppp[1].ppp rcvdPkFromHl:sum(packetBytes) 84
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, sum(packetBytes)"
@@ -338,28 +395,77 @@ attr interpolationmode none
 attr source packetDropReasonIsInterfaceDown(packetDropped)
 attr title "packet drop: interface down, sum(packetBytes)"
 statistic Network.node1.ppp[2].queue queueingTime:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
 field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr title "queueing time, histogram"
 bin	-inf	0
-bin	0	0
-bin	1	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 scalar Network.node1.ppp[2].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node1.ppp[2].queue queueLength:timeavg 0
+scalar Network.node1.ppp[2].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
-scalar Network.node1.ppp[2].queue packetReceived:count 0
+scalar Network.node1.ppp[2].queue packetReceived:count 1
 attr interpolationmode none
 attr title "received packets, count"
-scalar Network.node1.ppp[2].queue packetReceived:sum(packetBytes) 0
+scalar Network.node1.ppp[2].queue packetReceived:sum(packetBytes) 84
 attr interpolationmode none
 attr title "received packets, sum(packetBytes)"
 scalar Network.node1.ppp[2].queue dropPk:count 0
@@ -370,7 +476,7 @@ scalar Network.node1.ppp[2].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node1.ppp[2].ppp transmissionState:timeavg 0
+scalar Network.node1.ppp[2].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -382,19 +488,19 @@ scalar Network.node1.ppp[2].ppp rxPkOk:sum(packetBytes) 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, sum(packetBytes)"
-scalar Network.node1.ppp[2].ppp txPk:count 0
+scalar Network.node1.ppp[2].ppp txPk:count 1
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, count"
-scalar Network.node1.ppp[2].ppp txPk:sum(packetBytes) 0
+scalar Network.node1.ppp[2].ppp txPk:sum(packetBytes) 91
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, sum(packetBytes)"
-scalar Network.node1.ppp[2].ppp rcvdPkFromHl:count 0
+scalar Network.node1.ppp[2].ppp rcvdPkFromHl:count 1
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, count"
-scalar Network.node1.ppp[2].ppp rcvdPkFromHl:sum(packetBytes) 0
+scalar Network.node1.ppp[2].ppp rcvdPkFromHl:sum(packetBytes) 84
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, sum(packetBytes)"
@@ -516,6 +622,90 @@ scalar Network.node1.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
+scalar Network.node1.app[0] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node1.app[0] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node1.app[0] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node1.app[0] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node1.app[0] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node1.app[1] "Pings sent" 1
+scalar Network.node1.app[1] "ping loss rate (%)" 100
+scalar Network.node1.app[1] "ping out-of-order rate (%)" 0
+scalar Network.node1.app[1] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node1.app[1] pingTxSeq:count 1
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node1.app[1] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node1.app[1] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node1.app[1] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node1.app[2] "Pings sent" 1
+scalar Network.node1.app[2] "ping loss rate (%)" 100
+scalar Network.node1.app[2] "ping out-of-order rate (%)" 0
+scalar Network.node1.app[2] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node1.app[2] pingTxSeq:count 1
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node1.app[2] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node1.app[2] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node1.app[2] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node2.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
@@ -544,7 +734,7 @@ scalar Network.node2.wlan[0].mac nbRecvdAcks 0
 scalar Network.node2.wlan[0].mac nbTxAcks 0
 scalar Network.node2.wlan[0].mac nbDuplicates 0
 scalar Network.node2.wlan[0].mac meanBackoff 0
-scalar Network.node2.wlan[0].mac nbBackoffs 0
+scalar Network.node2.wlan[0].mac nbBackoffs 1
 scalar Network.node2.wlan[0].mac backoffDurations 0
 scalar Network.node2.wlan[0].mac packetDropNotAddressToUs:count 0
 attr interpolationmode none
@@ -655,28 +845,77 @@ bin	-inf	0
 bin	0	0
 bin	1	0
 statistic Network.node2.ppp[0].queue queueingTime:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
 field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr title "queueing time, histogram"
 bin	-inf	0
-bin	0	0
-bin	1	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 scalar Network.node2.ppp[0].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node2.ppp[0].queue queueLength:timeavg 0
+scalar Network.node2.ppp[0].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
-scalar Network.node2.ppp[0].queue packetReceived:count 0
+scalar Network.node2.ppp[0].queue packetReceived:count 1
 attr interpolationmode none
 attr title "received packets, count"
-scalar Network.node2.ppp[0].queue packetReceived:sum(packetBytes) 0
+scalar Network.node2.ppp[0].queue packetReceived:sum(packetBytes) 84
 attr interpolationmode none
 attr title "received packets, sum(packetBytes)"
 scalar Network.node2.ppp[0].queue dropPk:count 0
@@ -687,7 +926,7 @@ scalar Network.node2.ppp[0].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node2.ppp[0].ppp transmissionState:timeavg 0
+scalar Network.node2.ppp[0].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -755,7 +994,7 @@ bin	1	0
 scalar Network.node2.ppp[1].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node2.ppp[1].queue queueLength:timeavg 0
+scalar Network.node2.ppp[1].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node2.ppp[1].queue packetReceived:count 0
@@ -772,7 +1011,7 @@ scalar Network.node2.ppp[1].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node2.ppp[1].ppp transmissionState:timeavg 0
+scalar Network.node2.ppp[1].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -840,7 +1079,7 @@ bin	1	0
 scalar Network.node2.ppp[2].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node2.ppp[2].queue queueLength:timeavg 0
+scalar Network.node2.ppp[2].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node2.ppp[2].queue packetReceived:count 0
@@ -857,7 +1096,7 @@ scalar Network.node2.ppp[2].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node2.ppp[2].ppp transmissionState:timeavg 0
+scalar Network.node2.ppp[2].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -961,7 +1200,7 @@ scalar Network.node2.ipv4.arp arpResolutionFailed:count 0
 attr title "ARP failed resolutions, count"
 scalar Network.node2.ipv4.arp arpResolutionCompleted:count 0
 attr title "ARP completed resolutions, count"
-scalar Network.node2.ipv4.arp arpResolutionInitiated:count 0
+scalar Network.node2.ipv4.arp arpResolutionInitiated:count 1
 attr title "ARP initiated resolutions, count"
 scalar Network.node2.ipv4.arp arpReplySent:count 0
 attr source arpReplySent
@@ -969,10 +1208,10 @@ attr title "ARP replies sent, count"
 scalar Network.node2.ipv4.arp arpReplySent:sum(packetBytes) 0
 attr source arpReplySent
 attr title "ARP replies sent, sum(packetBytes)"
-scalar Network.node2.ipv4.arp arpRequestSent:count 0
+scalar Network.node2.ipv4.arp arpRequestSent:count 1
 attr source arpRequestSent
 attr title "ARP request sent, count"
-scalar Network.node2.ipv4.arp arpRequestSent:sum(packetBytes) 0
+scalar Network.node2.ipv4.arp arpRequestSent:sum(packetBytes) 28
 attr source arpRequestSent
 attr title "ARP request sent, sum(packetBytes)"
 scalar Network.node2.udp packetReceived:count 0
@@ -1003,6 +1242,90 @@ scalar Network.node2.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
+scalar Network.node2.app[0] "Pings sent" 1
+scalar Network.node2.app[0] "ping loss rate (%)" 100
+scalar Network.node2.app[0] "ping out-of-order rate (%)" 0
+scalar Network.node2.app[0] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node2.app[0] pingTxSeq:count 1
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node2.app[0] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node2.app[0] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node2.app[0] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node2.app[1] "Pings sent" 1
+scalar Network.node2.app[1] "ping loss rate (%)" 100
+scalar Network.node2.app[1] "ping out-of-order rate (%)" 0
+scalar Network.node2.app[1] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node2.app[1] pingTxSeq:count 1
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node2.app[1] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node2.app[1] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node2.app[1] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node2.app[2] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node2.app[2] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node2.app[2] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node2.app[2] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node2.app[2] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node3.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
@@ -1157,7 +1480,7 @@ bin	1	0
 scalar Network.node3.ppp[0].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node3.ppp[0].queue queueLength:timeavg 0
+scalar Network.node3.ppp[0].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node3.ppp[0].queue packetReceived:count 0
@@ -1174,7 +1497,7 @@ scalar Network.node3.ppp[0].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node3.ppp[0].ppp transmissionState:timeavg 0
+scalar Network.node3.ppp[0].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -1242,7 +1565,7 @@ bin	1	0
 scalar Network.node3.ppp[1].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node3.ppp[1].queue queueLength:timeavg 0
+scalar Network.node3.ppp[1].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node3.ppp[1].queue packetReceived:count 0
@@ -1259,7 +1582,7 @@ scalar Network.node3.ppp[1].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node3.ppp[1].ppp transmissionState:timeavg 0
+scalar Network.node3.ppp[1].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -1327,7 +1650,7 @@ bin	1	0
 scalar Network.node3.ppp[2].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node3.ppp[2].queue queueLength:timeavg 0
+scalar Network.node3.ppp[2].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node3.ppp[2].queue packetReceived:count 0
@@ -1344,7 +1667,7 @@ scalar Network.node3.ppp[2].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node3.ppp[2].ppp transmissionState:timeavg 0
+scalar Network.node3.ppp[2].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -1490,6 +1813,84 @@ scalar Network.node3.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
+scalar Network.node3.app[0] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node3.app[0] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node3.app[0] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node3.app[0] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node3.app[0] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node3.app[1] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node3.app[1] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node3.app[1] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node3.app[1] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node3.app[1] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node3.app[2] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node3.app[2] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node3.app[2] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node3.app[2] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node3.app[2] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node4.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
@@ -1644,7 +2045,7 @@ bin	1	0
 scalar Network.node4.ppp[0].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node4.ppp[0].queue queueLength:timeavg 0
+scalar Network.node4.ppp[0].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node4.ppp[0].queue packetReceived:count 0
@@ -1661,7 +2062,7 @@ scalar Network.node4.ppp[0].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node4.ppp[0].ppp transmissionState:timeavg 0
+scalar Network.node4.ppp[0].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -1729,7 +2130,7 @@ bin	1	0
 scalar Network.node4.ppp[1].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node4.ppp[1].queue queueLength:timeavg 0
+scalar Network.node4.ppp[1].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node4.ppp[1].queue packetReceived:count 0
@@ -1746,7 +2147,7 @@ scalar Network.node4.ppp[1].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node4.ppp[1].ppp transmissionState:timeavg 0
+scalar Network.node4.ppp[1].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -1814,7 +2215,7 @@ bin	1	0
 scalar Network.node4.ppp[2].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node4.ppp[2].queue queueLength:timeavg 0
+scalar Network.node4.ppp[2].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node4.ppp[2].queue packetReceived:count 0
@@ -1831,7 +2232,7 @@ scalar Network.node4.ppp[2].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node4.ppp[2].ppp transmissionState:timeavg 0
+scalar Network.node4.ppp[2].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -1977,6 +2378,84 @@ scalar Network.node4.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
+scalar Network.node4.app[0] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node4.app[0] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node4.app[0] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node4.app[0] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node4.app[0] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.app[1] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node4.app[1] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node4.app[1] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node4.app[1] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node4.app[1] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.app[2] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node4.app[2] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node4.app[2] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node4.app[2] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node4.app[2] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node5.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
@@ -2131,7 +2610,7 @@ bin	1	0
 scalar Network.node5.ppp[0].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node5.ppp[0].queue queueLength:timeavg 0
+scalar Network.node5.ppp[0].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node5.ppp[0].queue packetReceived:count 0
@@ -2148,7 +2627,7 @@ scalar Network.node5.ppp[0].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node5.ppp[0].ppp transmissionState:timeavg 0
+scalar Network.node5.ppp[0].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -2216,7 +2695,7 @@ bin	1	0
 scalar Network.node5.ppp[1].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node5.ppp[1].queue queueLength:timeavg 0
+scalar Network.node5.ppp[1].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node5.ppp[1].queue packetReceived:count 0
@@ -2233,7 +2712,7 @@ scalar Network.node5.ppp[1].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node5.ppp[1].ppp transmissionState:timeavg 0
+scalar Network.node5.ppp[1].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -2301,7 +2780,7 @@ bin	1	0
 scalar Network.node5.ppp[2].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
-scalar Network.node5.ppp[2].queue queueLength:timeavg 0
+scalar Network.node5.ppp[2].queue queueLength:timeavg -nan
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
 scalar Network.node5.ppp[2].queue packetReceived:count 0
@@ -2318,7 +2797,7 @@ scalar Network.node5.ppp[2].queue dropPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropped
 attr title "dropped packets, sum(packetBytes)"
-scalar Network.node5.ppp[2].ppp transmissionState:timeavg 0
+scalar Network.node5.ppp[2].ppp transmissionState:timeavg -nan
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
@@ -2464,6 +2943,84 @@ scalar Network.node5.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
+scalar Network.node5.app[0] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node5.app[0] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node5.app[0] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node5.app[0] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node5.app[0] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node5.app[1] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node5.app[1] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node5.app[1] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node5.app[1] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node5.app[1] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node5.app[2] pingRxSeq:count 0
+attr interpolationmode none
+attr title "ping rx seq, count"
+scalar Network.node5.app[2] pingTxSeq:count 0
+attr interpolationmode none
+attr title "ping tx seq, count"
+scalar Network.node5.app[2] numOutOfOrderArrivals:last nan
+attr interpolationmode none
+attr title "ping out-of-order arrivals, last"
+scalar Network.node5.app[2] numLost:last nan
+attr interpolationmode none
+attr title "pings lost, last"
+statistic Network.node5.app[2] rtt:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "ping round-trip time, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.radioMedium.propagation "Arrival computation count" 0
 scalar Network.radioMedium "transmission count" 0
 scalar Network.radioMedium "signal send count" 0

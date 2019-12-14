@@ -1,14 +1,14 @@
 version 2
-run General-0-20191202-02:56:00-24908
+run General-0-20191209-15:55:29-11275
 attr configname General
-attr datetime 20191202-02:56:00
+attr datetime 20191209-15:55:29
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Network
-attr processid 24908
+attr processid 11275
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -28,6 +28,14 @@ param **.node*.mobility.speed "truncnormal(20mps, 8mps)"
 param **.node*.mobility.updateInterval 100ms
 param **.node*.numPppInterfaces 3
 param **.visualizer.**.displayPositions true
+param **.node*.hasUdp true
+param **.node*.numApps 3
+param **.node*.app[*].typename "\"PingApp\""
+param **.node2.app[0].destAddr "\"node1\""
+param **.node1.app[1].destAddr "\"node3\""
+param **.node1.app[2].destAddr "\"node4\""
+param **.node2.app[1].destAddr "\"node5\""
+param *.node*.app[*].startTime 0s
 
 vector 0 Network.node1.ppp[0].queue queueLength:vector ETV
 attr interpolationmode sample-hold
@@ -214,12 +222,63 @@ vector 49 Network.node5.wlan[0].radio receptionState:vector ETV
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, vector"
+vector 50 Network.node1.app[1] pingTxSeq:vector ETV
+attr interpolationmode none
+attr title "ping tx seq, vector"
+vector 51 Network.node1.app[2] pingTxSeq:vector ETV
+attr interpolationmode none
+attr title "ping tx seq, vector"
+vector 52 Network.node2.app[0] pingTxSeq:vector ETV
+attr interpolationmode none
+attr title "ping tx seq, vector"
+vector 53 Network.node2.app[1] pingTxSeq:vector ETV
+attr interpolationmode none
+attr title "ping tx seq, vector"
+vector 54 Network.node2.ipv4.arp arpRequestSent:vector(packetBytes) ETV
+attr source arpRequestSent
+attr title "ARP request sent, vector(packetBytes)"
+vector 55 Network.node1.ppp[1].queue packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "received packets, vector(packetBytes)"
+vector 56 Network.node1.ppp[1].queue queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time, vector"
+vector 57 Network.node1.ppp[2].queue packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "received packets, vector(packetBytes)"
+vector 58 Network.node1.ppp[2].queue queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time, vector"
+vector 59 Network.node2.ppp[0].queue packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "received packets, vector(packetBytes)"
+vector 60 Network.node2.ppp[0].queue queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time, vector"
+vector 61 Network.node1.ppp[1].ppp rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 62 Network.node1.ppp[1].ppp txPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets transmitted, vector(packetBytes)"
+vector 63 Network.node1.ppp[2].ppp rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 64 Network.node1.ppp[2].ppp txPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets transmitted, vector(packetBytes)"
 0	0	0	0
 1	0	0	0
 2	0	0	0
 3	0	0	0
+3	17	0	1
 4	0	0	0
 5	0	0	0
+5	18	0	1
 6	0	0	0
 7	0	0	0
 8	0	0	0
@@ -309,4 +368,19 @@ attr title "Radio reception state, vector"
 47	0	0	1
 48	0	0	1
 49	0	0	1
+50	1	0	0
+51	2	0	0
+52	3	0	0
+53	4	0	0
+54	12	0	28
+55	13	0	84
+56	13	0	0
+57	14	0	84
+58	14	0	0
+59	15	0	84
+60	15	0	0
+61	17	0	84
+62	17	0	91
+63	18	0	84
+64	18	0	91
 
