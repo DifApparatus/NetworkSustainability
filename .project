@@ -3,6 +3,7 @@
 	<name>NetworkSustainability</name>
 	<comment></comment>
 	<projects>
+		<project>NetworkSustainability</project>
 		<project>inet4</project>
 	</projects>
 	<buildSpec>

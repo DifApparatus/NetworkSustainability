@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for NetworkSustainability
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -KINET4_PROJ=../../inet4 -DINET_IMPORT -L$$\(INET4_PROJ\)/src -lINET$$\(D\)
+#  opp_makemake -f --deep -KNETWORKSUSTAINABILITY_PROJ=.. -KINET4_PROJ=../../inet4 -DINET_IMPORT -I. -I$$\(INET4_PROJ\)/src -L$$\(INET4_PROJ\)/src -lINET$$\(D\)
 #
 
 # Name of target to be created (-o option)
@@ -16,7 +16,7 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(QTENV_LIBS) $(CMDENV_LI
 #USERIF_LIBS = $(QTENV_LIBS)
 
 # C++ include paths (with -I)
-INCLUDE_PATH =
+INCLUDE_PATH = -I. -I$(INET4_PROJ)/src
 
 # Additional object and library files to link with
 EXTRA_OBJS =
@@ -30,7 +30,7 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/MySensorNode.o $O/Node.o
+OBJS = $O/MySensorNode.o $O/MyUdpBasicApp.o $O/Node.o
 
 # Message files
 MSGFILES =
@@ -39,6 +39,7 @@ MSGFILES =
 SMFILES =
 
 # Other makefile variables (-K)
+NETWORKSUSTAINABILITY_PROJ=..
 INET4_PROJ=../../inet4
 
 #------------------------------------------------------------------------------

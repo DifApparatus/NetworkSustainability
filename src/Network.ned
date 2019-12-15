@@ -15,6 +15,9 @@
 
 package networksustainability;
 
+import inet.applications.contract.IApp;
+import inet.applications.pingapp.PingApp;
+import inet.applications.tcpapp.TcpBasicClientApp;
 import inet.applications.udpapp.UdpBasicApp;
 import inet.networklayer.configurator.ipv4.Ipv4FlatNetworkConfigurator;
 import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
@@ -22,46 +25,30 @@ import inet.node.base.ApplicationLayerNodeBase;
 import inet.node.inet.AdhocHost;
 import inet.node.inet.SensorNode;
 import inet.node.inet.WirelessHost;
+import inet.transportlayer.contract.IUdp;
 import inet.visualizer.mobility.MobilityVisualizer;
 import inet.physicallayer.ieee802154.packetlevel.Ieee802154NarrowbandScalarRadioMedium;
-
 
 //
 // TODO auto-generated type
 //
-
-simple MySensorNode
-{
-    gates:
-        input in;
-        output out;
-}
-
 network Network
 {
     @display("bgb=600,400");
-    types:
-        module MySensorNode extends SensorNode
-        {
-            submodules:
-
-            connections:
-        }
-
     submodules:
-        node1: MySensorNode {
+        node1: SensorNode {
             @display("p=253,152;t=1;r=50");
         }
-        node2: MySensorNode {
+        node2: SensorNode {
             @display("p=191,223;t=2;r=50");
         }
-        node3: MySensorNode {
+        node3: SensorNode {
             @display("p=318,66;t=3;r=50");
         }
-        node4: MySensorNode {
+        node4: SensorNode {
             @display("p=344,232;t=4;r=50");
         }
-        node5: MySensorNode {
+        node5: SensorNode {
             @display("p=409,138;t=5;r=50");
         }
         radioMedium: Ieee802154NarrowbandScalarRadioMedium {
