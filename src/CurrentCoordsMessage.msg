@@ -13,18 +13,13 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef MYUDPBASICAPP_H_
-#define MYUDPBASICAPP_H_
 
-#include "inet/applications/udpapp/UdpBasicApp.h"
-
-namespace inet{
-
-class MyUdpBasicApp : public UdpBasicApp {
-    protected:
-        void initialize(int stage) override;
-        void sendPacket() override;
-        void processPacket(Packet *pk) override;
-    };
-}// namespace inet
-#endif /* MYUDPBASICAPP_H_ */
+cplusplus {{
+#include "inet/applications/base/ApplicationPacket_m.h"
+}}
+class inet::ApplicationPacket;
+packet CurrentCoordsMessage extends ApplicationPacket{
+    int x;
+	int y;
+	int z;
+}

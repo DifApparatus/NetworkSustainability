@@ -1,14 +1,14 @@
 version 2
-run General-0-20191215-16:21:23-14039
+run General-0-20191216-03:49:13-31551
 attr configname General
-attr datetime 20191215-16:21:23
+attr datetime 20191216-03:49:13
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Network
-attr processid 14039
+attr processid 31551
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -20,6 +20,7 @@ param **.constraintAreaMinZ 0m
 param **.constraintAreaMaxX 600m
 param **.constraintAreaMaxY 400m
 param **.constraintAreaMaxZ 0m
+param *.node*.ipv4.arp.typename "\"GlobalArp\""
 param **.node*.mobility.typename "\"MassMobility\""
 param **.node*.mobility.initFromDisplayString true
 param **.node*.mobility.changeInterval "truncnormal(2s, 0.5s)"
@@ -31,12 +32,17 @@ param **.visualizer.**.displayPositions true
 param **.node*.hasUdp true
 param **.node*.numApps 3
 param **.node*.app[*].typename "\"MyUdpBasicApp\""
-param **.node*.app[*].destPort 1024
-param **.node*.app[*].messageLength 1000B
+param **.node*.app[*].messageLength 12B
 param **.node*.app[*].sendInterval 10s
-param *.node*.app[*].startTime 0s
+param **.node*.app[*].startTime 0s
 param **.node*.app[*].stopTime 10day
 param **.node*.app[*].packetName "\"Coords\""
+param **.node*.app[0].destPort 1024
+param **.node*.app[0].localPort 1024
+param **.node*.app[1].destPort 1025
+param **.node*.app[1].localPort 1025
+param **.node*.app[2].destPort 1026
+param **.node*.app[2].localPort 1026
 param **.node2.app[0].destAddresses "\"node1\""
 param **.node1.app[1].destAddresses "\"node3\""
 param **.node1.app[2].destAddresses "\"node4\""
@@ -251,62 +257,32 @@ vector 55 Network.node2.udp packetSent:vector(packetBytes) ETV
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, vector(packetBytes)"
-vector 56 Network.node2.ipv4.arp arpRequestSent:vector(packetBytes) ETV
-attr source arpRequestSent
-attr title "ARP request sent, vector(packetBytes)"
-vector 57 Network.node1.ppp[1].queue packetReceived:vector(packetBytes) ETV
+vector 56 Network.node1.ppp[1].queue packetReceived:vector(packetBytes) ETV
 attr interpolationmode none
 attr title "received packets, vector(packetBytes)"
-vector 58 Network.node1.ppp[1].queue queueingTime:vector ETV
+vector 57 Network.node1.ppp[1].queue queueingTime:vector ETV
 attr interpolationmode none
 attr title "queueing time, vector"
-vector 59 Network.node1.ppp[2].queue packetReceived:vector(packetBytes) ETV
+vector 58 Network.node1.ppp[2].queue packetReceived:vector(packetBytes) ETV
 attr interpolationmode none
 attr title "received packets, vector(packetBytes)"
-vector 60 Network.node1.ppp[2].queue queueingTime:vector ETV
+vector 59 Network.node1.ppp[2].queue queueingTime:vector ETV
 attr interpolationmode none
 attr title "queueing time, vector"
-vector 61 Network.node2.ppp[0].queue packetReceived:vector(packetBytes) ETV
+vector 60 Network.node2.ppp[0].queue packetReceived:vector(packetBytes) ETV
 attr interpolationmode none
 attr title "received packets, vector(packetBytes)"
-vector 62 Network.node2.ppp[0].queue queueingTime:vector ETV
+vector 61 Network.node2.ppp[0].queue queueingTime:vector ETV
 attr interpolationmode none
 attr title "queueing time, vector"
-vector 63 Network.node1.ppp[1].ppp rcvdPkFromHl:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceivedFromUpper
-attr title "packets received from higher layer, vector(packetBytes)"
-vector 64 Network.node1.ppp[1].ppp txPk:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSentToLower
-attr title "packets transmitted, vector(packetBytes)"
-vector 65 Network.node1.ppp[2].ppp rcvdPkFromHl:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceivedFromUpper
-attr title "packets received from higher layer, vector(packetBytes)"
-vector 66 Network.node1.ppp[2].ppp txPk:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSentToLower
-attr title "packets transmitted, vector(packetBytes)"
-vector 67 Network.node2.ppp[0].ppp rcvdPkFromHl:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceivedFromUpper
-attr title "packets received from higher layer, vector(packetBytes)"
-vector 68 Network.node2.ppp[0].ppp txPk:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSentToLower
-attr title "packets transmitted, vector(packetBytes)"
 0	0	0	0
 1	0	0	0
 2	0	0	0
 3	0	0	0
-3	43	0	1
 4	0	0	0
 5	0	0	0
-5	44	0	1
 6	0	0	0
 7	0	0	0
-7	45	0	1
 8	0	0	0
 9	0	0	0
 10	0	0	0
@@ -394,78 +370,303 @@ attr title "packets transmitted, vector(packetBytes)"
 47	0	0	1
 48	0	0	1
 49	0	0	1
-50	2	0	1000
-51	3	0	1000
-52	4	0	1000
-53	5	0	1000
-54	18	0	1008
-54	20	0	1008
-55	22	0	1008
-55	24	0	1008
-56	38	0	28
-57	39	0	1028
-58	39	0	0
-59	40	0	1028
-60	40	0	0
-61	41	0	1028
-62	41	0	0
-63	43	0	1028
-64	43	0	1035
-65	44	0	1028
-66	44	0	1035
-67	45	0	1028
-68	45	0	1035
-vector 69 Network.node3.ppp[0].ppp rxPkOk:vector(packetBytes) ETV
+50	2	0	12
+51	3	0	12
+52	4	0	12
+53	5	0	12
+54	18	0	20
+54	20	0	20
+55	22	0	20
+55	24	0	20
+56	39	0	40
+57	39	0	0
+58	40	0	40
+59	40	0	0
+60	41	0	40
+61	41	0	0
+vector 62 Network.node1.ppp[1].ppp rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 63 Network.node1.ppp[1].ppp txPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets transmitted, vector(packetBytes)"
+vector 64 Network.node1.ppp[2].ppp rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 65 Network.node1.ppp[2].ppp txPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets transmitted, vector(packetBytes)"
+vector 66 Network.node2.ppp[0].ppp rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 67 Network.node2.ppp[0].ppp txPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets transmitted, vector(packetBytes)"
+vector 68 Network.node3.ppp[0].ppp rxPkOk:vector(packetBytes) ETV
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, vector(packetBytes)"
-vector 70 Network.node3.ppp[0].ppp passedUpPk:vector(packetBytes) ETV
+vector 69 Network.node3.ppp[0].ppp passedUpPk:vector(packetBytes) ETV
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, vector(packetBytes)"
-vector 71 Network.node4.ppp[0].ppp rxPkOk:vector(packetBytes) ETV
+vector 70 Network.node4.ppp[0].ppp rxPkOk:vector(packetBytes) ETV
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, vector(packetBytes)"
-vector 72 Network.node4.ppp[0].ppp passedUpPk:vector(packetBytes) ETV
+vector 71 Network.node4.ppp[0].ppp passedUpPk:vector(packetBytes) ETV
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, vector(packetBytes)"
-vector 73 Network.node1.ppp[0].ppp rxPkOk:vector(packetBytes) ETV
+vector 72 Network.node1.ppp[0].ppp rxPkOk:vector(packetBytes) ETV
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, vector(packetBytes)"
-vector 74 Network.node1.ppp[0].ppp passedUpPk:vector(packetBytes) ETV
+vector 73 Network.node1.ppp[0].ppp passedUpPk:vector(packetBytes) ETV
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, vector(packetBytes)"
-vector 75 Network.node3.udp packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 76 Network.node3.udp droppedPkWrongPort:vector(count) ETV
-attr interpolationmode none
-attr source packetDropReasonIsNoPortFound(packetDropped)
-attr title "packets dropped (wrong port), vector(count)"
-vector 77 Network.node4.udp packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 78 Network.node4.udp droppedPkWrongPort:vector(count) ETV
-attr interpolationmode none
-attr source packetDropReasonIsNoPortFound(packetDropped)
-attr title "packets dropped (wrong port), vector(count)"
+3	43	0	1
 3	47	0	0
+5	44	0	1
 5	49	0	0
+7	45	0	1
 7	51	0	0
-69	46	0	1035
-70	46	0	1028
-71	48	0	1035
-72	48	0	1028
-73	50	0	1035
-74	50	0	1028
-75	55	0	1008
-76	55	0	1
-77	56	0	1008
-78	56	0	1
+62	43	0	40
+63	43	0	47
+64	44	0	40
+65	44	0	47
+66	45	0	40
+67	45	0	47
+68	46	0	47
+69	46	0	40
+70	48	0	47
+71	48	0	40
+72	50	0	47
+73	50	0	40
+vector 74 Network.node3.udp packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, vector(packetBytes)"
+vector 75 Network.node3.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed up, vector(count)"
+74	55	0	20
+75	55	0	1
+vector 76 Network.node4.udp packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, vector(packetBytes)"
+vector 77 Network.node4.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed up, vector(count)"
+vector 78 Network.node1.udp packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, vector(packetBytes)"
+vector 79 Network.node1.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed up, vector(count)"
+vector 80 Network.node3.app[1] packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, vector(packetBytes)"
+vector 81 Network.node3.app[1] rcvdPkLifetime:vector ETV
+attr interpolationmode none
+attr source dataAge(packetReceived)
+attr title "received packet lifetime, vector"
+attr unit s
+vector 82 Network.node4.app[2] packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, vector(packetBytes)"
+vector 83 Network.node4.app[2] rcvdPkLifetime:vector ETV
+attr interpolationmode none
+attr source dataAge(packetReceived)
+attr title "received packet lifetime, vector"
+attr unit s
+vector 84 Network.node1.app[0] packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, vector(packetBytes)"
+vector 85 Network.node1.app[0] rcvdPkLifetime:vector ETV
+attr interpolationmode none
+attr source dataAge(packetReceived)
+attr title "received packet lifetime, vector"
+attr unit s
+vector 86 Network.node2.energyStorage residualEnergyCapacity:vector ETV
+attr interpolationmode linear
+attr source residualEnergyCapacityChanged
+attr title "Residual energy capacity, vector"
+vector 87 Network.node2.wlan[0].radio transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, vector"
+vector 88 Network.node1.energyStorage residualEnergyCapacity:vector ETV
+attr interpolationmode linear
+attr source residualEnergyCapacityChanged
+attr title "Residual energy capacity, vector"
+vector 89 Network.node4.energyStorage residualEnergyCapacity:vector ETV
+attr interpolationmode linear
+attr source residualEnergyCapacityChanged
+attr title "Residual energy capacity, vector"
+vector 90 Network.node1.wlan[0].mac packetDropNotAddressToUs:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, vector(packetBytes)"
+vector 91 Network.node4.wlan[0].mac packetDropNotAddressToUs:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, vector(packetBytes)"
+30	64	0.002560314383	0
+30	64	0.002560314383	0.05
+30	69	0.004320314383	5e-06
+30	69	0.004320314383	5e-06
+31	62	0.002368	0
+31	62	0.002368	0
+31	62	0.002368	0.005
+31	63	0.00256	0
+31	63	0.00256	0.075
+31	68	0.00432	0.005
+31	68	0.00432	0
+31	68	0.00432	5e-06
+31	68	0.00432	5e-06
+31	68	0.00432	5e-06
+33	65	0.002560511203	0
+33	65	0.002560511203	0.05
+33	71	0.004320511203	5e-06
+33	71	0.004320511203	5e-06
+36	64	0.002560314383	0
+36	64	0.002560314383	0.05
+36	69	0.004320314383	5e-06
+36	69	0.004320314383	5e-06
+37	62	0.002368	3
+37	68	0.00432	2
+38	62	0.002368	0
+38	62	0.002368	0
+38	62	0.002368	0.005
+38	63	0.00256	0
+38	63	0.00256	0.075
+38	68	0.00432	0.005
+38	68	0.00432	0
+38	68	0.00432	5e-06
+38	68	0.00432	5e-06
+38	68	0.00432	5e-06
+42	65	0.002560511203	0
+42	65	0.002560511203	0.05
+42	71	0.004320511203	5e-06
+42	71	0.004320511203	5e-06
+45	64	0.002560314383	3
+45	69	0.004320314383	1
+46	62	0.002368	0
+46	68	0.00432	1
+48	65	0.002560511203	3
+48	71	0.004320511203	1
+76	56	0	20
+77	56	0	1
+78	57	0	20
+79	57	0	1
+80	58	0	12
+81	58	0	0
+82	59	0	12
+83	59	0	0
+84	60	0	12
+85	60	0	0
+86	62	0.002368	-1.184e-08
+86	63	0.00256	-9.7184e-07
+86	68	0.00432	-0.00013297184
+87	62	0.002368	1
+87	63	0.00256	2
+87	68	0.00432	1
+87	68	0.00432	0
+88	64	0.002560314383	-1.2801571915e-08
+88	69	0.004320314383	-8.8012801571915e-05
+89	65	0.002560511203	-1.2802556015e-08
+89	71	0.004320511203	-8.8012802556015e-05
+90	70	0.004320314383	49
+91	72	0.004320511203	49
+vector 92 Network.node1.app[0] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 93 Network.node1.app[1] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 94 Network.node1.app[2] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 95 Network.node2.app[0] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 96 Network.node2.app[1] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 97 Network.node2.app[2] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 98 Network.node3.app[0] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 99 Network.node3.app[1] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 100 Network.node3.app[2] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 101 Network.node4.app[0] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 102 Network.node4.app[1] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 103 Network.node4.app[2] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 104 Network.node5.app[0] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 105 Network.node5.app[1] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+vector 106 Network.node5.app[2] throughput:vector ETV
+attr source throughput(packetReceived)
+attr title "throughput, vector"
+attr unit bps
+92	76	0.00712	13483.146067416
+93	76	0.00712	0
+94	76	0.00712	0
+95	76	0.00712	0
+96	76	0.00712	0
+97	76	0.00712	0
+98	76	0.00712	0
+99	76	0.00712	13483.146067416
+100	76	0.00712	0
+101	76	0.00712	0
+102	76	0.00712	0
+103	76	0.00712	13483.146067416
+104	76	0.00712	0
+105	76	0.00712	0
+106	76	0.00712	0
 
