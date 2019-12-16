@@ -1,14 +1,14 @@
 version 2
-run General-0-20191216-03:49:13-31551
+run General-0-20191217-02:46:50-14217
 attr configname General
-attr datetime 20191216-03:49:13
+attr datetime 20191217-02:46:50
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Network
-attr processid 31551
+attr processid 14217
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -33,7 +33,7 @@ param **.node*.hasUdp true
 param **.node*.numApps 3
 param **.node*.app[*].typename "\"MyUdpBasicApp\""
 param **.node*.app[*].messageLength 12B
-param **.node*.app[*].sendInterval 10s
+param **.node*.app[*].sendInterval 1s
 param **.node*.app[*].startTime 0s
 param **.node*.app[*].stopTime 10day
 param **.node*.app[*].packetName "\"Coords\""
@@ -47,8 +47,18 @@ param **.node2.app[0].destAddresses "\"node1\""
 param **.node1.app[1].destAddresses "\"node3\""
 param **.node1.app[2].destAddresses "\"node4\""
 param **.node2.app[1].destAddresses "\"node5\""
+param **.node*.numWlanInterfaces 4
+param **.node*.wlan[*].radio.typename "\"UnitDiskRadio\""
+param **.node*.wlan[*].radio.transmitter.typename "\"UnitDiskTransmitter\""
+param **.node*.wlan[*].radio.transmitter.bitrate 10000000000bps
+param **.node*.wlan[*].radio.transmitter.communicationRange 120m
+param **.node*.wlan[*].radio.receiver.typename "\"UnitDiskReceiver\""
+param **.wlan[*].radio.displayCommunicationRange true
+param **.wlan[*].radio.receiver.ignoreInterference true
+param **.wlan[*].radio.radioMediumModule "\"unitDiskRadioMedium\""
+param **.unitDiskRadioMedium.rangeFilter "\"communicationRange\""
 
-scalar Network.node1.energyStorage residualEnergyCapacity:last -8.8012801571915e-05
+scalar Network.node1.energyStorage residualEnergyCapacity:last -9.8210628828e-07
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -73,16 +83,16 @@ scalar Network.node1.wlan[0].mac nbRxFrames 0
 scalar Network.node1.wlan[0].mac nbDroppedFrames 0
 scalar Network.node1.wlan[0].mac nbMissedAcks 0
 scalar Network.node1.wlan[0].mac nbRecvdAcks 0
-scalar Network.node1.wlan[0].mac nbTxAcks 0
+scalar Network.node1.wlan[0].mac nbTxAcks 1
 scalar Network.node1.wlan[0].mac nbDuplicates 0
-scalar Network.node1.wlan[0].mac meanBackoff 0
-scalar Network.node1.wlan[0].mac nbBackoffs 0
-scalar Network.node1.wlan[0].mac backoffDurations 0
-scalar Network.node1.wlan[0].mac packetDropNotAddressToUs:count 1
+scalar Network.node1.wlan[0].mac meanBackoff 0.00224
+scalar Network.node1.wlan[0].mac nbBackoffs 2
+scalar Network.node1.wlan[0].mac backoffDurations 0.00448
+scalar Network.node1.wlan[0].mac packetDropNotAddressToUs:count 0
 attr interpolationmode none
 attr source packetDropReasonIsNotAddressedToUs(packetDropped)
 attr title "packet drop: not addressed to us, count"
-scalar Network.node1.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 49
+scalar Network.node1.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropReasonIsNotAddressedToUs(packetDropped)
 attr title "packet drop: not addressed to us, sum(packetBytes)"
@@ -122,81 +132,31 @@ scalar Network.node1.wlan[0].mac linkBroken:count 0
 attr interpolationmode none
 attr source linkBroken
 attr title "link break, count"
-scalar Network.node1.wlan[0].radio radioMode:count 3
+scalar Network.node1.wlan[0].radio radioMode:count 5
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node1.wlan[0].radio receptionState:count 3
+scalar Network.node1.wlan[0].radio receptionState:count 5
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
-scalar Network.node1.wlan[0].radio transmissionState:count 0
+scalar Network.node1.wlan[0].radio transmissionState:count 4
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, count"
 statistic Network.node1.wlan[0].radio minSnir:histogram
-field count 1
-field mean 4.2356483391351
-field stddev -nan
-field min 4.2356483391351
-field max 4.2356483391351
-field sum 4.2356483391351
-field sqrsum 17.940716852818
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
 attr source minimumSnir(packetSentToUpper)
 attr title "Min SNIR, histogram"
 bin	-inf	0
-bin	3.72	0
-bin	3.74	0
-bin	3.76	0
-bin	3.78	0
-bin	3.8	0
-bin	3.82	0
-bin	3.84	0
-bin	3.86	0
-bin	3.88	0
-bin	3.9	0
-bin	3.92	0
-bin	3.94	0
-bin	3.96	0
-bin	3.98	0
-bin	4	0
-bin	4.02	0
-bin	4.04	0
-bin	4.06	0
-bin	4.08	0
-bin	4.1	0
-bin	4.12	0
-bin	4.14	0
-bin	4.16	0
-bin	4.18	0
-bin	4.2	0
-bin	4.22	1
-bin	4.24	0
-bin	4.26	0
-bin	4.28	0
-bin	4.3	0
-bin	4.32	0
-bin	4.34	0
-bin	4.36	0
-bin	4.38	0
-bin	4.4	0
-bin	4.42	0
-bin	4.44	0
-bin	4.46	0
-bin	4.48	0
-bin	4.5	0
-bin	4.52	0
-bin	4.54	0
-bin	4.56	0
-bin	4.58	0
-bin	4.6	0
-bin	4.62	0
-bin	4.64	0
-bin	4.66	0
-bin	4.68	0
-bin	4.7	0
-bin	4.72	0
-bin	4.74	0
+bin	0	0
+bin	1	0
 statistic Network.node1.wlan[0].radio packetErrorRate:histogram
 field count 1
 field mean 0
@@ -261,67 +221,195 @@ bin	0.48	0
 bin	0.5	0
 statistic Network.node1.wlan[0].radio bitErrorRate:histogram
 field count 1
-field mean 1.6101691044045e-18
+field mean 0
 field stddev -nan
-field min 1.6101691044045e-18
-field max 1.6101691044045e-18
-field sum 1.6101691044045e-18
-field sqrsum 2.5926445447789e-36
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
 attr source bitErrorRate(packetSentToUpper)
 attr title "Bit error rate, histogram"
 bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
 bin	0	1
-bin	0.01	0
 bin	0.02	0
-bin	0.03	0
 bin	0.04	0
-bin	0.05	0
 bin	0.06	0
-bin	0.07	0
 bin	0.08	0
-bin	0.09	0
 bin	0.1	0
-bin	0.11	0
 bin	0.12	0
-bin	0.13	0
 bin	0.14	0
-bin	0.15	0
 bin	0.16	0
-bin	0.17	0
 bin	0.18	0
-bin	0.19	0
 bin	0.2	0
-bin	0.21	0
 bin	0.22	0
-bin	0.23	0
 bin	0.24	0
-bin	0.25	0
 bin	0.26	0
-bin	0.27	0
 bin	0.28	0
-bin	0.29	0
 bin	0.3	0
-bin	0.31	0
 bin	0.32	0
-bin	0.33	0
 bin	0.34	0
-bin	0.35	0
 bin	0.36	0
-bin	0.37	0
 bin	0.38	0
-bin	0.39	0
 bin	0.4	0
-bin	0.41	0
 bin	0.42	0
-bin	0.43	0
 bin	0.44	0
-bin	0.45	0
 bin	0.46	0
-bin	0.47	0
 bin	0.48	0
-bin	0.49	0
 bin	0.5	0
 statistic Network.node1.wlan[0].radio symbolErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node1.wlan[1].mac nbTxFrames 0
+scalar Network.node1.wlan[1].mac nbRxFrames 0
+scalar Network.node1.wlan[1].mac nbDroppedFrames 0
+scalar Network.node1.wlan[1].mac nbMissedAcks 0
+scalar Network.node1.wlan[1].mac nbRecvdAcks 0
+scalar Network.node1.wlan[1].mac nbTxAcks 0
+scalar Network.node1.wlan[1].mac nbDuplicates 0
+scalar Network.node1.wlan[1].mac meanBackoff 0
+scalar Network.node1.wlan[1].mac nbBackoffs 0
+scalar Network.node1.wlan[1].mac backoffDurations 0
+scalar Network.node1.wlan[1].mac packetDropNotAddressToUs:count 2
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node1.wlan[1].mac packetDropNotAddressToUs:sum(packetBytes) 54
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node1.wlan[1].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node1.wlan[1].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node1.wlan[1].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node1.wlan[1].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node1.wlan[1].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node1.wlan[1].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node1.wlan[1].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node1.wlan[1].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node1.wlan[1].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node1.wlan[1].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node1.wlan[1].radio receptionState:count 5
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node1.wlan[1].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node1.wlan[1].radio minSnir:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -329,11 +417,727 @@ field min nan
 field max nan
 field sum 0
 field sqrsum 0
-attr source symbolErrorRate(packetSentToUpper)
-attr title "Symbol error rate, histogram"
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
 bin	-inf	0
 bin	0	0
 bin	1	0
+statistic Network.node1.wlan[1].radio packetErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node1.wlan[1].radio bitErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node1.wlan[1].radio symbolErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node1.wlan[2].mac nbTxFrames 0
+scalar Network.node1.wlan[2].mac nbRxFrames 0
+scalar Network.node1.wlan[2].mac nbDroppedFrames 0
+scalar Network.node1.wlan[2].mac nbMissedAcks 0
+scalar Network.node1.wlan[2].mac nbRecvdAcks 0
+scalar Network.node1.wlan[2].mac nbTxAcks 0
+scalar Network.node1.wlan[2].mac nbDuplicates 0
+scalar Network.node1.wlan[2].mac meanBackoff 0
+scalar Network.node1.wlan[2].mac nbBackoffs 0
+scalar Network.node1.wlan[2].mac backoffDurations 0
+scalar Network.node1.wlan[2].mac packetDropNotAddressToUs:count 2
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node1.wlan[2].mac packetDropNotAddressToUs:sum(packetBytes) 54
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node1.wlan[2].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node1.wlan[2].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node1.wlan[2].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node1.wlan[2].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node1.wlan[2].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node1.wlan[2].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node1.wlan[2].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node1.wlan[2].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node1.wlan[2].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node1.wlan[2].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node1.wlan[2].radio receptionState:count 5
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node1.wlan[2].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node1.wlan[2].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node1.wlan[2].radio packetErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node1.wlan[2].radio bitErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node1.wlan[2].radio symbolErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node1.wlan[3].mac nbTxFrames 0
+scalar Network.node1.wlan[3].mac nbRxFrames 0
+scalar Network.node1.wlan[3].mac nbDroppedFrames 0
+scalar Network.node1.wlan[3].mac nbMissedAcks 0
+scalar Network.node1.wlan[3].mac nbRecvdAcks 0
+scalar Network.node1.wlan[3].mac nbTxAcks 0
+scalar Network.node1.wlan[3].mac nbDuplicates 0
+scalar Network.node1.wlan[3].mac meanBackoff 0
+scalar Network.node1.wlan[3].mac nbBackoffs 0
+scalar Network.node1.wlan[3].mac backoffDurations 0
+scalar Network.node1.wlan[3].mac packetDropNotAddressToUs:count 2
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node1.wlan[3].mac packetDropNotAddressToUs:sum(packetBytes) 54
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node1.wlan[3].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node1.wlan[3].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node1.wlan[3].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node1.wlan[3].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node1.wlan[3].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node1.wlan[3].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node1.wlan[3].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node1.wlan[3].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node1.wlan[3].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node1.wlan[3].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node1.wlan[3].radio receptionState:count 5
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node1.wlan[3].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node1.wlan[3].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node1.wlan[3].radio packetErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node1.wlan[3].radio bitErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node1.wlan[3].radio symbolErrorRate:histogram
+field count 2
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	2
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 statistic Network.node1.ppp[0].queue queueingTime:histogram
 field count 0
 field mean -nan
@@ -371,11 +1175,11 @@ scalar Network.node1.ppp[0].ppp transmissionState:timeavg 0
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
-scalar Network.node1.ppp[0].ppp rxPkOk:count 1
+scalar Network.node1.ppp[0].ppp rxPkOk:count 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, count"
-scalar Network.node1.ppp[0].ppp rxPkOk:sum(packetBytes) 47
+scalar Network.node1.ppp[0].ppp rxPkOk:sum(packetBytes) 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, sum(packetBytes)"
@@ -395,11 +1199,11 @@ scalar Network.node1.ppp[0].ppp rcvdPkFromHl:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, sum(packetBytes)"
-scalar Network.node1.ppp[0].ppp passedUpPk:count 1
+scalar Network.node1.ppp[0].ppp passedUpPk:count 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, count"
-scalar Network.node1.ppp[0].ppp passedUpPk:sum(packetBytes) 40
+scalar Network.node1.ppp[0].ppp passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
@@ -420,77 +1224,28 @@ attr interpolationmode none
 attr source packetDropReasonIsInterfaceDown(packetDropped)
 attr title "packet drop: interface down, sum(packetBytes)"
 statistic Network.node1.ppp[1].queue queueingTime:histogram
-field count 1
-field mean 0
-field stddev -nan
-field min 0
-field max 0
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
 field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr title "queueing time, histogram"
 bin	-inf	0
-bin	-0.5	0
-bin	-0.48	0
-bin	-0.46	0
-bin	-0.44	0
-bin	-0.42	0
-bin	-0.4	0
-bin	-0.38	0
-bin	-0.36	0
-bin	-0.34	0
-bin	-0.32	0
-bin	-0.3	0
-bin	-0.28	0
-bin	-0.26	0
-bin	-0.24	0
-bin	-0.22	0
-bin	-0.2	0
-bin	-0.18	0
-bin	-0.16	0
-bin	-0.14	0
-bin	-0.12	0
-bin	-0.1	0
-bin	-0.08	0
-bin	-0.06	0
-bin	-0.04	0
-bin	-0.02	0
-bin	0	1
-bin	0.02	0
-bin	0.04	0
-bin	0.06	0
-bin	0.08	0
-bin	0.1	0
-bin	0.12	0
-bin	0.14	0
-bin	0.16	0
-bin	0.18	0
-bin	0.2	0
-bin	0.22	0
-bin	0.24	0
-bin	0.26	0
-bin	0.28	0
-bin	0.3	0
-bin	0.32	0
-bin	0.34	0
-bin	0.36	0
-bin	0.38	0
-bin	0.4	0
-bin	0.42	0
-bin	0.44	0
-bin	0.46	0
-bin	0.48	0
-bin	0.5	0
+bin	0	0
+bin	1	0
 scalar Network.node1.ppp[1].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
 scalar Network.node1.ppp[1].queue queueLength:timeavg 0
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
-scalar Network.node1.ppp[1].queue packetReceived:count 1
+scalar Network.node1.ppp[1].queue packetReceived:count 0
 attr interpolationmode none
 attr title "received packets, count"
-scalar Network.node1.ppp[1].queue packetReceived:sum(packetBytes) 40
+scalar Network.node1.ppp[1].queue packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr title "received packets, sum(packetBytes)"
 scalar Network.node1.ppp[1].queue dropPk:count 0
@@ -513,19 +1268,19 @@ scalar Network.node1.ppp[1].ppp rxPkOk:sum(packetBytes) 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, sum(packetBytes)"
-scalar Network.node1.ppp[1].ppp txPk:count 1
+scalar Network.node1.ppp[1].ppp txPk:count 0
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, count"
-scalar Network.node1.ppp[1].ppp txPk:sum(packetBytes) 47
+scalar Network.node1.ppp[1].ppp txPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, sum(packetBytes)"
-scalar Network.node1.ppp[1].ppp rcvdPkFromHl:count 1
+scalar Network.node1.ppp[1].ppp rcvdPkFromHl:count 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, count"
-scalar Network.node1.ppp[1].ppp rcvdPkFromHl:sum(packetBytes) 40
+scalar Network.node1.ppp[1].ppp rcvdPkFromHl:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, sum(packetBytes)"
@@ -554,77 +1309,28 @@ attr interpolationmode none
 attr source packetDropReasonIsInterfaceDown(packetDropped)
 attr title "packet drop: interface down, sum(packetBytes)"
 statistic Network.node1.ppp[2].queue queueingTime:histogram
-field count 1
-field mean 0
-field stddev -nan
-field min 0
-field max 0
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
 field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr title "queueing time, histogram"
 bin	-inf	0
-bin	-0.5	0
-bin	-0.48	0
-bin	-0.46	0
-bin	-0.44	0
-bin	-0.42	0
-bin	-0.4	0
-bin	-0.38	0
-bin	-0.36	0
-bin	-0.34	0
-bin	-0.32	0
-bin	-0.3	0
-bin	-0.28	0
-bin	-0.26	0
-bin	-0.24	0
-bin	-0.22	0
-bin	-0.2	0
-bin	-0.18	0
-bin	-0.16	0
-bin	-0.14	0
-bin	-0.12	0
-bin	-0.1	0
-bin	-0.08	0
-bin	-0.06	0
-bin	-0.04	0
-bin	-0.02	0
-bin	0	1
-bin	0.02	0
-bin	0.04	0
-bin	0.06	0
-bin	0.08	0
-bin	0.1	0
-bin	0.12	0
-bin	0.14	0
-bin	0.16	0
-bin	0.18	0
-bin	0.2	0
-bin	0.22	0
-bin	0.24	0
-bin	0.26	0
-bin	0.28	0
-bin	0.3	0
-bin	0.32	0
-bin	0.34	0
-bin	0.36	0
-bin	0.38	0
-bin	0.4	0
-bin	0.42	0
-bin	0.44	0
-bin	0.46	0
-bin	0.48	0
-bin	0.5	0
+bin	0	0
+bin	1	0
 scalar Network.node1.ppp[2].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
 scalar Network.node1.ppp[2].queue queueLength:timeavg 0
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
-scalar Network.node1.ppp[2].queue packetReceived:count 1
+scalar Network.node1.ppp[2].queue packetReceived:count 0
 attr interpolationmode none
 attr title "received packets, count"
-scalar Network.node1.ppp[2].queue packetReceived:sum(packetBytes) 40
+scalar Network.node1.ppp[2].queue packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr title "received packets, sum(packetBytes)"
 scalar Network.node1.ppp[2].queue dropPk:count 0
@@ -647,19 +1353,19 @@ scalar Network.node1.ppp[2].ppp rxPkOk:sum(packetBytes) 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, sum(packetBytes)"
-scalar Network.node1.ppp[2].ppp txPk:count 1
+scalar Network.node1.ppp[2].ppp txPk:count 0
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, count"
-scalar Network.node1.ppp[2].ppp txPk:sum(packetBytes) 47
+scalar Network.node1.ppp[2].ppp txPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, sum(packetBytes)"
-scalar Network.node1.ppp[2].ppp rcvdPkFromHl:count 1
+scalar Network.node1.ppp[2].ppp rcvdPkFromHl:count 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, count"
-scalar Network.node1.ppp[2].ppp rcvdPkFromHl:sum(packetBytes) 40
+scalar Network.node1.ppp[2].ppp rcvdPkFromHl:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, sum(packetBytes)"
@@ -775,12 +1481,12 @@ attr source packetReceived
 attr title "packets received, sum(packetBytes)"
 statistic Network.node1.app[0] rcvdPkLifetime:stats
 field count 1
-field mean 0
+field mean 0.000320363214
 field stddev -nan
-field min 0
-field max 0
-field sum 0
-field sqrsum 0
+field min 0.000320363214
+field max 0.000320363214
+field sum 0.000320363214
+field sqrsum 1.0263258888441e-07
 attr interpolationmode none
 attr source dataAge(packetReceived)
 attr title "received packet lifetime, stats"
@@ -853,7 +1559,7 @@ scalar Network.node1.app[2] packetSent:sum(packetBytes) 12
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node2.energyStorage residualEnergyCapacity:last -0.00013297184
+scalar Network.node2.energyStorage residualEnergyCapacity:last -1.9722125765e-06
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -873,16 +1579,16 @@ scalar Network.node2.lo[0].lo passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
-scalar Network.node2.wlan[0].mac nbTxFrames 1
+scalar Network.node2.wlan[0].mac nbTxFrames 2
 scalar Network.node2.wlan[0].mac nbRxFrames 0
 scalar Network.node2.wlan[0].mac nbDroppedFrames 0
-scalar Network.node2.wlan[0].mac nbMissedAcks 1
-scalar Network.node2.wlan[0].mac nbRecvdAcks 0
+scalar Network.node2.wlan[0].mac nbMissedAcks 0
+scalar Network.node2.wlan[0].mac nbRecvdAcks 1
 scalar Network.node2.wlan[0].mac nbTxAcks 0
 scalar Network.node2.wlan[0].mac nbDuplicates 0
-scalar Network.node2.wlan[0].mac meanBackoff 0.00224
+scalar Network.node2.wlan[0].mac meanBackoff 0.00032
 scalar Network.node2.wlan[0].mac nbBackoffs 2
-scalar Network.node2.wlan[0].mac backoffDurations 0.00448
+scalar Network.node2.wlan[0].mac backoffDurations 0.00064
 scalar Network.node2.wlan[0].mac packetDropNotAddressToUs:count 0
 attr interpolationmode none
 attr source packetDropReasonIsNotAddressedToUs(packetDropped)
@@ -927,15 +1633,15 @@ scalar Network.node2.wlan[0].mac linkBroken:count 0
 attr interpolationmode none
 attr source linkBroken
 attr title "link break, count"
-scalar Network.node2.wlan[0].radio radioMode:count 5
+scalar Network.node2.wlan[0].radio radioMode:count 7
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node2.wlan[0].radio receptionState:count 3
+scalar Network.node2.wlan[0].radio receptionState:count 7
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
-scalar Network.node2.wlan[0].radio transmissionState:count 4
+scalar Network.node2.wlan[0].radio transmissionState:count 8
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, count"
@@ -953,45 +1659,6 @@ bin	-inf	0
 bin	0	0
 bin	1	0
 statistic Network.node2.wlan[0].radio packetErrorRate:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
-field sum 0
-field sqrsum 0
-attr source packetErrorRate(packetSentToUpper)
-attr title "Packet error rate, histogram"
-bin	-inf	0
-bin	0	0
-bin	1	0
-statistic Network.node2.wlan[0].radio bitErrorRate:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
-field sum 0
-field sqrsum 0
-attr source bitErrorRate(packetSentToUpper)
-attr title "Bit error rate, histogram"
-bin	-inf	0
-bin	0	0
-bin	1	0
-statistic Network.node2.wlan[0].radio symbolErrorRate:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
-field sum 0
-field sqrsum 0
-attr source symbolErrorRate(packetSentToUpper)
-attr title "Symbol error rate, histogram"
-bin	-inf	0
-bin	0	0
-bin	1	0
-statistic Network.node2.ppp[0].queue queueingTime:histogram
 field count 1
 field mean 0
 field stddev -nan
@@ -999,8 +1666,8 @@ field min 0
 field max 0
 field sum 0
 field sqrsum 0
-attr interpolationmode none
-attr title "queueing time, histogram"
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
 bin	-inf	0
 bin	-0.5	0
 bin	-0.48	0
@@ -1053,16 +1720,948 @@ bin	0.44	0
 bin	0.46	0
 bin	0.48	0
 bin	0.5	0
+statistic Network.node2.wlan[0].radio bitErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node2.wlan[0].radio symbolErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node2.wlan[1].mac nbTxFrames 0
+scalar Network.node2.wlan[1].mac nbRxFrames 0
+scalar Network.node2.wlan[1].mac nbDroppedFrames 0
+scalar Network.node2.wlan[1].mac nbMissedAcks 0
+scalar Network.node2.wlan[1].mac nbRecvdAcks 0
+scalar Network.node2.wlan[1].mac nbTxAcks 0
+scalar Network.node2.wlan[1].mac nbDuplicates 0
+scalar Network.node2.wlan[1].mac meanBackoff 0
+scalar Network.node2.wlan[1].mac nbBackoffs 0
+scalar Network.node2.wlan[1].mac backoffDurations 0
+scalar Network.node2.wlan[1].mac packetDropNotAddressToUs:count 3
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node2.wlan[1].mac packetDropNotAddressToUs:sum(packetBytes) 103
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node2.wlan[1].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node2.wlan[1].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node2.wlan[1].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node2.wlan[1].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node2.wlan[1].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node2.wlan[1].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node2.wlan[1].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node2.wlan[1].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node2.wlan[1].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node2.wlan[1].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node2.wlan[1].radio receptionState:count 7
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node2.wlan[1].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node2.wlan[1].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node2.wlan[1].radio packetErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node2.wlan[1].radio bitErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node2.wlan[1].radio symbolErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node2.wlan[2].mac nbTxFrames 0
+scalar Network.node2.wlan[2].mac nbRxFrames 0
+scalar Network.node2.wlan[2].mac nbDroppedFrames 0
+scalar Network.node2.wlan[2].mac nbMissedAcks 0
+scalar Network.node2.wlan[2].mac nbRecvdAcks 0
+scalar Network.node2.wlan[2].mac nbTxAcks 0
+scalar Network.node2.wlan[2].mac nbDuplicates 0
+scalar Network.node2.wlan[2].mac meanBackoff 0
+scalar Network.node2.wlan[2].mac nbBackoffs 0
+scalar Network.node2.wlan[2].mac backoffDurations 0
+scalar Network.node2.wlan[2].mac packetDropNotAddressToUs:count 3
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node2.wlan[2].mac packetDropNotAddressToUs:sum(packetBytes) 103
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node2.wlan[2].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node2.wlan[2].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node2.wlan[2].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node2.wlan[2].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node2.wlan[2].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node2.wlan[2].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node2.wlan[2].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node2.wlan[2].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node2.wlan[2].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node2.wlan[2].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node2.wlan[2].radio receptionState:count 7
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node2.wlan[2].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node2.wlan[2].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node2.wlan[2].radio packetErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node2.wlan[2].radio bitErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node2.wlan[2].radio symbolErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node2.wlan[3].mac nbTxFrames 0
+scalar Network.node2.wlan[3].mac nbRxFrames 0
+scalar Network.node2.wlan[3].mac nbDroppedFrames 0
+scalar Network.node2.wlan[3].mac nbMissedAcks 0
+scalar Network.node2.wlan[3].mac nbRecvdAcks 0
+scalar Network.node2.wlan[3].mac nbTxAcks 0
+scalar Network.node2.wlan[3].mac nbDuplicates 0
+scalar Network.node2.wlan[3].mac meanBackoff 0
+scalar Network.node2.wlan[3].mac nbBackoffs 0
+scalar Network.node2.wlan[3].mac backoffDurations 0
+scalar Network.node2.wlan[3].mac packetDropNotAddressToUs:count 2
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node2.wlan[3].mac packetDropNotAddressToUs:sum(packetBytes) 54
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node2.wlan[3].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node2.wlan[3].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node2.wlan[3].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node2.wlan[3].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node2.wlan[3].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node2.wlan[3].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node2.wlan[3].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node2.wlan[3].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node2.wlan[3].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node2.wlan[3].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node2.wlan[3].radio receptionState:count 7
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node2.wlan[3].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node2.wlan[3].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node2.wlan[3].radio packetErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node2.wlan[3].radio bitErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node2.wlan[3].radio symbolErrorRate:histogram
+field count 3
+field mean 0
+field stddev 0
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	3
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node2.ppp[0].queue queueingTime:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr title "queueing time, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node2.ppp[0].queue queueLength:max 0
 attr interpolationmode sample-hold
 attr title "queue length, max"
 scalar Network.node2.ppp[0].queue queueLength:timeavg 0
 attr interpolationmode sample-hold
 attr title "queue length, timeavg"
-scalar Network.node2.ppp[0].queue packetReceived:count 1
+scalar Network.node2.ppp[0].queue packetReceived:count 0
 attr interpolationmode none
 attr title "received packets, count"
-scalar Network.node2.ppp[0].queue packetReceived:sum(packetBytes) 40
+scalar Network.node2.ppp[0].queue packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr title "received packets, sum(packetBytes)"
 scalar Network.node2.ppp[0].queue dropPk:count 0
@@ -1085,19 +2684,19 @@ scalar Network.node2.ppp[0].ppp rxPkOk:sum(packetBytes) 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, sum(packetBytes)"
-scalar Network.node2.ppp[0].ppp txPk:count 1
+scalar Network.node2.ppp[0].ppp txPk:count 0
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, count"
-scalar Network.node2.ppp[0].ppp txPk:sum(packetBytes) 47
+scalar Network.node2.ppp[0].ppp txPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets transmitted, sum(packetBytes)"
-scalar Network.node2.ppp[0].ppp rcvdPkFromHl:count 1
+scalar Network.node2.ppp[0].ppp rcvdPkFromHl:count 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, count"
-scalar Network.node2.ppp[0].ppp rcvdPkFromHl:sum(packetBytes) 40
+scalar Network.node2.ppp[0].ppp rcvdPkFromHl:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, sum(packetBytes)"
@@ -1461,7 +3060,7 @@ scalar Network.node2.app[2] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node3.energyStorage residualEnergyCapacity:last nan
+scalar Network.node3.energyStorage residualEnergyCapacity:last -1.29744546e-08
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -1491,11 +3090,11 @@ scalar Network.node3.wlan[0].mac nbDuplicates 0
 scalar Network.node3.wlan[0].mac meanBackoff 0
 scalar Network.node3.wlan[0].mac nbBackoffs 0
 scalar Network.node3.wlan[0].mac backoffDurations 0
-scalar Network.node3.wlan[0].mac packetDropNotAddressToUs:count 0
+scalar Network.node3.wlan[0].mac packetDropNotAddressToUs:count 1
 attr interpolationmode none
 attr source packetDropReasonIsNotAddressedToUs(packetDropped)
 attr title "packet drop: not addressed to us, count"
-scalar Network.node3.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 0
+scalar Network.node3.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 5
 attr interpolationmode none
 attr source packetDropReasonIsNotAddressedToUs(packetDropped)
 attr title "packet drop: not addressed to us, sum(packetBytes)"
@@ -1539,7 +3138,7 @@ scalar Network.node3.wlan[0].radio radioMode:count 3
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node3.wlan[0].radio receptionState:count 1
+scalar Network.node3.wlan[0].radio receptionState:count 3
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
@@ -1561,32 +3160,258 @@ bin	-inf	0
 bin	0	0
 bin	1	0
 statistic Network.node3.wlan[0].radio packetErrorRate:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
 field sum 0
 field sqrsum 0
 attr source packetErrorRate(packetSentToUpper)
 attr title "Packet error rate, histogram"
 bin	-inf	0
-bin	0	0
-bin	1	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 statistic Network.node3.wlan[0].radio bitErrorRate:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
 field sum 0
 field sqrsum 0
 attr source bitErrorRate(packetSentToUpper)
 attr title "Bit error rate, histogram"
 bin	-inf	0
-bin	0	0
-bin	1	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 statistic Network.node3.wlan[0].radio symbolErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node3.wlan[1].mac nbTxFrames 0
+scalar Network.node3.wlan[1].mac nbRxFrames 0
+scalar Network.node3.wlan[1].mac nbDroppedFrames 0
+scalar Network.node3.wlan[1].mac nbMissedAcks 0
+scalar Network.node3.wlan[1].mac nbRecvdAcks 0
+scalar Network.node3.wlan[1].mac nbTxAcks 0
+scalar Network.node3.wlan[1].mac nbDuplicates 0
+scalar Network.node3.wlan[1].mac meanBackoff 0
+scalar Network.node3.wlan[1].mac nbBackoffs 0
+scalar Network.node3.wlan[1].mac backoffDurations 0
+scalar Network.node3.wlan[1].mac packetDropNotAddressToUs:count 1
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node3.wlan[1].mac packetDropNotAddressToUs:sum(packetBytes) 5
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node3.wlan[1].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node3.wlan[1].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node3.wlan[1].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node3.wlan[1].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node3.wlan[1].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node3.wlan[1].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node3.wlan[1].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node3.wlan[1].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node3.wlan[1].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node3.wlan[1].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node3.wlan[1].radio receptionState:count 3
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node3.wlan[1].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node3.wlan[1].radio minSnir:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -1594,11 +3419,727 @@ field min nan
 field max nan
 field sum 0
 field sqrsum 0
-attr source symbolErrorRate(packetSentToUpper)
-attr title "Symbol error rate, histogram"
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
 bin	-inf	0
 bin	0	0
 bin	1	0
+statistic Network.node3.wlan[1].radio packetErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node3.wlan[1].radio bitErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node3.wlan[1].radio symbolErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node3.wlan[2].mac nbTxFrames 0
+scalar Network.node3.wlan[2].mac nbRxFrames 0
+scalar Network.node3.wlan[2].mac nbDroppedFrames 0
+scalar Network.node3.wlan[2].mac nbMissedAcks 0
+scalar Network.node3.wlan[2].mac nbRecvdAcks 0
+scalar Network.node3.wlan[2].mac nbTxAcks 0
+scalar Network.node3.wlan[2].mac nbDuplicates 0
+scalar Network.node3.wlan[2].mac meanBackoff 0
+scalar Network.node3.wlan[2].mac nbBackoffs 0
+scalar Network.node3.wlan[2].mac backoffDurations 0
+scalar Network.node3.wlan[2].mac packetDropNotAddressToUs:count 1
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node3.wlan[2].mac packetDropNotAddressToUs:sum(packetBytes) 5
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node3.wlan[2].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node3.wlan[2].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node3.wlan[2].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node3.wlan[2].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node3.wlan[2].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node3.wlan[2].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node3.wlan[2].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node3.wlan[2].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node3.wlan[2].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node3.wlan[2].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node3.wlan[2].radio receptionState:count 3
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node3.wlan[2].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node3.wlan[2].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node3.wlan[2].radio packetErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node3.wlan[2].radio bitErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node3.wlan[2].radio symbolErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node3.wlan[3].mac nbTxFrames 0
+scalar Network.node3.wlan[3].mac nbRxFrames 0
+scalar Network.node3.wlan[3].mac nbDroppedFrames 0
+scalar Network.node3.wlan[3].mac nbMissedAcks 0
+scalar Network.node3.wlan[3].mac nbRecvdAcks 0
+scalar Network.node3.wlan[3].mac nbTxAcks 0
+scalar Network.node3.wlan[3].mac nbDuplicates 0
+scalar Network.node3.wlan[3].mac meanBackoff 0
+scalar Network.node3.wlan[3].mac nbBackoffs 0
+scalar Network.node3.wlan[3].mac backoffDurations 0
+scalar Network.node3.wlan[3].mac packetDropNotAddressToUs:count 1
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node3.wlan[3].mac packetDropNotAddressToUs:sum(packetBytes) 5
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node3.wlan[3].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node3.wlan[3].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node3.wlan[3].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node3.wlan[3].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node3.wlan[3].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node3.wlan[3].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node3.wlan[3].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node3.wlan[3].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node3.wlan[3].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node3.wlan[3].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node3.wlan[3].radio receptionState:count 3
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node3.wlan[3].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node3.wlan[3].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node3.wlan[3].radio packetErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node3.wlan[3].radio bitErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+statistic Network.node3.wlan[3].radio symbolErrorRate:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 statistic Network.node3.ppp[0].queue queueingTime:histogram
 field count 0
 field mean -nan
@@ -1636,11 +4177,11 @@ scalar Network.node3.ppp[0].ppp transmissionState:timeavg 0
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
-scalar Network.node3.ppp[0].ppp rxPkOk:count 1
+scalar Network.node3.ppp[0].ppp rxPkOk:count 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, count"
-scalar Network.node3.ppp[0].ppp rxPkOk:sum(packetBytes) 47
+scalar Network.node3.ppp[0].ppp rxPkOk:sum(packetBytes) 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, sum(packetBytes)"
@@ -1660,11 +4201,11 @@ scalar Network.node3.ppp[0].ppp rcvdPkFromHl:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, sum(packetBytes)"
-scalar Network.node3.ppp[0].ppp passedUpPk:count 1
+scalar Network.node3.ppp[0].ppp passedUpPk:count 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, count"
-scalar Network.node3.ppp[0].ppp passedUpPk:sum(packetBytes) 40
+scalar Network.node3.ppp[0].ppp passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
@@ -1902,11 +4443,11 @@ scalar Network.node3.ipv4.ip packetDropUndefined:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropReasonIsUndefined(packetDropped)
 attr title "packet drop: undefined, sum(packetBytes)"
-scalar Network.node3.udp packetReceived:count 1
+scalar Network.node3.udp packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, count"
-scalar Network.node3.udp packetReceived:sum(packetBytes) 20
+scalar Network.node3.udp packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
@@ -1918,7 +4459,7 @@ scalar Network.node3.udp packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node3.udp passedUpPk:count 1
+scalar Network.node3.udp passedUpPk:count 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed up, count"
@@ -1961,21 +4502,21 @@ attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
 scalar Network.node3.app[1] "packets sent" 0
-scalar Network.node3.app[1] "packets received" 1
-scalar Network.node3.app[1] packetReceived:count 1
+scalar Network.node3.app[1] "packets received" 0
+scalar Network.node3.app[1] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, count"
-scalar Network.node3.app[1] packetReceived:sum(packetBytes) 12
+scalar Network.node3.app[1] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
 statistic Network.node3.app[1] rcvdPkLifetime:stats
-field count 1
-field mean 0
-field stddev -nan
-field min 0
-field max 0
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
 field sum 0
 field sqrsum 0
 attr interpolationmode none
@@ -2020,7 +4561,7 @@ scalar Network.node3.app[2] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node4.energyStorage residualEnergyCapacity:last -8.8012802556015e-05
+scalar Network.node4.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -2050,11 +4591,11 @@ scalar Network.node4.wlan[0].mac nbDuplicates 0
 scalar Network.node4.wlan[0].mac meanBackoff 0
 scalar Network.node4.wlan[0].mac nbBackoffs 0
 scalar Network.node4.wlan[0].mac backoffDurations 0
-scalar Network.node4.wlan[0].mac packetDropNotAddressToUs:count 1
+scalar Network.node4.wlan[0].mac packetDropNotAddressToUs:count 0
 attr interpolationmode none
 attr source packetDropReasonIsNotAddressedToUs(packetDropped)
 attr title "packet drop: not addressed to us, count"
-scalar Network.node4.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 49
+scalar Network.node4.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropReasonIsNotAddressedToUs(packetDropped)
 attr title "packet drop: not addressed to us, sum(packetBytes)"
@@ -2098,7 +4639,7 @@ scalar Network.node4.wlan[0].radio radioMode:count 3
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node4.wlan[0].radio receptionState:count 3
+scalar Network.node4.wlan[0].radio receptionState:count 1
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
@@ -2107,218 +4648,399 @@ attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, count"
 statistic Network.node4.wlan[0].radio minSnir:histogram
-field count 1
-field mean 0.85148532425024
-field stddev -nan
-field min 0.85148532425024
-field max 0.85148532425024
-field sum 0.85148532425024
-field sqrsum 0.72502725741354
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
 attr source minimumSnir(packetSentToUpper)
 attr title "Min SNIR, histogram"
 bin	-inf	0
-bin	0.34	0
-bin	0.36	0
-bin	0.38	0
-bin	0.4	0
-bin	0.42	0
-bin	0.44	0
-bin	0.46	0
-bin	0.48	0
-bin	0.5	0
-bin	0.52	0
-bin	0.54	0
-bin	0.56	0
-bin	0.58	0
-bin	0.6	0
-bin	0.62	0
-bin	0.64	0
-bin	0.66	0
-bin	0.68	0
-bin	0.7	0
-bin	0.72	0
-bin	0.74	0
-bin	0.76	0
-bin	0.78	0
-bin	0.8	0
-bin	0.82	0
-bin	0.84	1
-bin	0.86	0
-bin	0.88	0
-bin	0.9	0
-bin	0.92	0
-bin	0.94	0
-bin	0.96	0
-bin	0.98	0
+bin	0	0
 bin	1	0
-bin	1.02	0
-bin	1.04	0
-bin	1.06	0
-bin	1.08	0
-bin	1.1	0
-bin	1.12	0
-bin	1.14	0
-bin	1.16	0
-bin	1.18	0
-bin	1.2	0
-bin	1.22	0
-bin	1.24	0
-bin	1.26	0
-bin	1.28	0
-bin	1.3	0
-bin	1.32	0
-bin	1.34	0
-bin	1.36	0
 statistic Network.node4.wlan[0].radio packetErrorRate:histogram
-field count 1
-field mean 0.23918777346703
-field stddev -nan
-field min 0.23918777346703
-field max 0.23918777346703
-field sum 0.23918777346703
-field sqrsum 0.057210790976115
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
 attr source packetErrorRate(packetSentToUpper)
 attr title "Packet error rate, histogram"
 bin	-inf	0
 bin	0	0
-bin	0.01	0
-bin	0.02	0
-bin	0.03	0
-bin	0.04	0
-bin	0.05	0
-bin	0.06	0
-bin	0.07	0
-bin	0.08	0
-bin	0.09	0
-bin	0.1	0
-bin	0.11	0
-bin	0.12	0
-bin	0.13	0
-bin	0.14	0
-bin	0.15	0
-bin	0.16	0
-bin	0.17	0
-bin	0.18	0
-bin	0.19	0
-bin	0.2	0
-bin	0.21	0
-bin	0.22	0
-bin	0.23	1
-bin	0.24	0
-bin	0.25	0
-bin	0.26	0
-bin	0.27	0
-bin	0.28	0
-bin	0.29	0
-bin	0.3	0
-bin	0.31	0
-bin	0.32	0
-bin	0.33	0
-bin	0.34	0
-bin	0.35	0
-bin	0.36	0
-bin	0.37	0
-bin	0.38	0
-bin	0.39	0
-bin	0.4	0
-bin	0.41	0
-bin	0.42	0
-bin	0.43	0
-bin	0.44	0
-bin	0.45	0
-bin	0.46	0
-bin	0.47	0
-bin	0.48	0
-bin	0.49	0
-bin	0.5	0
-bin	0.51	0
-bin	0.52	0
-bin	0.53	0
-bin	0.54	0
-bin	0.55	0
-bin	0.56	0
-bin	0.57	0
-bin	0.58	0
-bin	0.59	0
-bin	0.6	0
-bin	0.61	0
-bin	0.62	0
-bin	0.63	0
-bin	0.64	0
-bin	0.65	0
-bin	0.66	0
-bin	0.67	0
-bin	0.68	0
-bin	0.69	0
-bin	0.7	0
-bin	0.71	0
-bin	0.72	0
-bin	0.73	0
-bin	0.74	0
+bin	1	0
 statistic Network.node4.wlan[0].radio bitErrorRate:histogram
-field count 1
-field mean 0.00066979690263806
-field stddev -nan
-field min 0.00066979690263806
-field max 0.00066979690263806
-field sum 0.00066979690263806
-field sqrsum 4.4862789078354e-07
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
 attr source bitErrorRate(packetSentToUpper)
 attr title "Bit error rate, histogram"
 bin	-inf	0
-bin	0	1
-bin	0.01	0
-bin	0.02	0
-bin	0.03	0
-bin	0.04	0
-bin	0.05	0
-bin	0.06	0
-bin	0.07	0
-bin	0.08	0
-bin	0.09	0
-bin	0.1	0
-bin	0.11	0
-bin	0.12	0
-bin	0.13	0
-bin	0.14	0
-bin	0.15	0
-bin	0.16	0
-bin	0.17	0
-bin	0.18	0
-bin	0.19	0
-bin	0.2	0
-bin	0.21	0
-bin	0.22	0
-bin	0.23	0
-bin	0.24	0
-bin	0.25	0
-bin	0.26	0
-bin	0.27	0
-bin	0.28	0
-bin	0.29	0
-bin	0.3	0
-bin	0.31	0
-bin	0.32	0
-bin	0.33	0
-bin	0.34	0
-bin	0.35	0
-bin	0.36	0
-bin	0.37	0
-bin	0.38	0
-bin	0.39	0
-bin	0.4	0
-bin	0.41	0
-bin	0.42	0
-bin	0.43	0
-bin	0.44	0
-bin	0.45	0
-bin	0.46	0
-bin	0.47	0
-bin	0.48	0
-bin	0.49	0
-bin	0.5	0
-bin	0.51	0
+bin	0	0
+bin	1	0
 statistic Network.node4.wlan[0].radio symbolErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.wlan[1].mac nbTxFrames 0
+scalar Network.node4.wlan[1].mac nbRxFrames 0
+scalar Network.node4.wlan[1].mac nbDroppedFrames 0
+scalar Network.node4.wlan[1].mac nbMissedAcks 0
+scalar Network.node4.wlan[1].mac nbRecvdAcks 0
+scalar Network.node4.wlan[1].mac nbTxAcks 0
+scalar Network.node4.wlan[1].mac nbDuplicates 0
+scalar Network.node4.wlan[1].mac meanBackoff 0
+scalar Network.node4.wlan[1].mac nbBackoffs 0
+scalar Network.node4.wlan[1].mac backoffDurations 0
+scalar Network.node4.wlan[1].mac packetDropNotAddressToUs:count 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node4.wlan[1].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node4.wlan[1].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node4.wlan[1].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node4.wlan[1].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node4.wlan[1].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node4.wlan[1].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node4.wlan[1].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node4.wlan[1].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node4.wlan[1].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node4.wlan[1].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node4.wlan[1].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node4.wlan[1].radio receptionState:count 1
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node4.wlan[1].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node4.wlan[1].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[1].radio packetErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[1].radio bitErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[1].radio symbolErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.wlan[2].mac nbTxFrames 0
+scalar Network.node4.wlan[2].mac nbRxFrames 0
+scalar Network.node4.wlan[2].mac nbDroppedFrames 0
+scalar Network.node4.wlan[2].mac nbMissedAcks 0
+scalar Network.node4.wlan[2].mac nbRecvdAcks 0
+scalar Network.node4.wlan[2].mac nbTxAcks 0
+scalar Network.node4.wlan[2].mac nbDuplicates 0
+scalar Network.node4.wlan[2].mac meanBackoff 0
+scalar Network.node4.wlan[2].mac nbBackoffs 0
+scalar Network.node4.wlan[2].mac backoffDurations 0
+scalar Network.node4.wlan[2].mac packetDropNotAddressToUs:count 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node4.wlan[2].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node4.wlan[2].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node4.wlan[2].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node4.wlan[2].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node4.wlan[2].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node4.wlan[2].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node4.wlan[2].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node4.wlan[2].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node4.wlan[2].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node4.wlan[2].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node4.wlan[2].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node4.wlan[2].radio receptionState:count 1
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node4.wlan[2].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node4.wlan[2].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[2].radio packetErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[2].radio bitErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[2].radio symbolErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.wlan[3].mac nbTxFrames 0
+scalar Network.node4.wlan[3].mac nbRxFrames 0
+scalar Network.node4.wlan[3].mac nbDroppedFrames 0
+scalar Network.node4.wlan[3].mac nbMissedAcks 0
+scalar Network.node4.wlan[3].mac nbRecvdAcks 0
+scalar Network.node4.wlan[3].mac nbTxAcks 0
+scalar Network.node4.wlan[3].mac nbDuplicates 0
+scalar Network.node4.wlan[3].mac meanBackoff 0
+scalar Network.node4.wlan[3].mac nbBackoffs 0
+scalar Network.node4.wlan[3].mac backoffDurations 0
+scalar Network.node4.wlan[3].mac packetDropNotAddressToUs:count 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node4.wlan[3].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node4.wlan[3].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node4.wlan[3].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node4.wlan[3].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node4.wlan[3].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node4.wlan[3].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node4.wlan[3].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node4.wlan[3].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node4.wlan[3].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node4.wlan[3].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node4.wlan[3].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node4.wlan[3].radio receptionState:count 1
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node4.wlan[3].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node4.wlan[3].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[3].radio packetErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[3].radio bitErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node4.wlan[3].radio symbolErrorRate:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -2368,11 +5090,11 @@ scalar Network.node4.ppp[0].ppp transmissionState:timeavg 0
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "tx state, timeavg"
-scalar Network.node4.ppp[0].ppp rxPkOk:count 1
+scalar Network.node4.ppp[0].ppp rxPkOk:count 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, count"
-scalar Network.node4.ppp[0].ppp rxPkOk:sum(packetBytes) 47
+scalar Network.node4.ppp[0].ppp rxPkOk:sum(packetBytes) 0
 attr interpolationmode none
 attr source rxPkOk
 attr title "packets received OK, sum(packetBytes)"
@@ -2392,11 +5114,11 @@ scalar Network.node4.ppp[0].ppp rcvdPkFromHl:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, sum(packetBytes)"
-scalar Network.node4.ppp[0].ppp passedUpPk:count 1
+scalar Network.node4.ppp[0].ppp passedUpPk:count 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, count"
-scalar Network.node4.ppp[0].ppp passedUpPk:sum(packetBytes) 40
+scalar Network.node4.ppp[0].ppp passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
@@ -2634,11 +5356,11 @@ scalar Network.node4.ipv4.ip packetDropUndefined:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetDropReasonIsUndefined(packetDropped)
 attr title "packet drop: undefined, sum(packetBytes)"
-scalar Network.node4.udp packetReceived:count 1
+scalar Network.node4.udp packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, count"
-scalar Network.node4.udp packetReceived:sum(packetBytes) 20
+scalar Network.node4.udp packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
@@ -2650,7 +5372,7 @@ scalar Network.node4.udp packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node4.udp passedUpPk:count 1
+scalar Network.node4.udp passedUpPk:count 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed up, count"
@@ -2723,21 +5445,21 @@ attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
 scalar Network.node4.app[2] "packets sent" 0
-scalar Network.node4.app[2] "packets received" 1
-scalar Network.node4.app[2] packetReceived:count 1
+scalar Network.node4.app[2] "packets received" 0
+scalar Network.node4.app[2] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, count"
-scalar Network.node4.app[2] packetReceived:sum(packetBytes) 12
+scalar Network.node4.app[2] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
 statistic Network.node4.app[2] rcvdPkLifetime:stats
-field count 1
-field mean 0
-field stddev -nan
-field min 0
-field max 0
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
 field sum 0
 field sqrsum 0
 attr interpolationmode none
@@ -2878,6 +5600,360 @@ bin	-inf	0
 bin	0	0
 bin	1	0
 statistic Network.node5.wlan[0].radio symbolErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node5.wlan[1].mac nbTxFrames 0
+scalar Network.node5.wlan[1].mac nbRxFrames 0
+scalar Network.node5.wlan[1].mac nbDroppedFrames 0
+scalar Network.node5.wlan[1].mac nbMissedAcks 0
+scalar Network.node5.wlan[1].mac nbRecvdAcks 0
+scalar Network.node5.wlan[1].mac nbTxAcks 0
+scalar Network.node5.wlan[1].mac nbDuplicates 0
+scalar Network.node5.wlan[1].mac meanBackoff 0
+scalar Network.node5.wlan[1].mac nbBackoffs 0
+scalar Network.node5.wlan[1].mac backoffDurations 0
+scalar Network.node5.wlan[1].mac packetDropNotAddressToUs:count 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node5.wlan[1].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node5.wlan[1].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node5.wlan[1].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node5.wlan[1].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node5.wlan[1].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node5.wlan[1].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node5.wlan[1].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node5.wlan[1].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node5.wlan[1].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node5.wlan[1].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node5.wlan[1].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node5.wlan[1].radio receptionState:count 1
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node5.wlan[1].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node5.wlan[1].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[1].radio packetErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[1].radio bitErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[1].radio symbolErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node5.wlan[2].mac nbTxFrames 0
+scalar Network.node5.wlan[2].mac nbRxFrames 0
+scalar Network.node5.wlan[2].mac nbDroppedFrames 0
+scalar Network.node5.wlan[2].mac nbMissedAcks 0
+scalar Network.node5.wlan[2].mac nbRecvdAcks 0
+scalar Network.node5.wlan[2].mac nbTxAcks 0
+scalar Network.node5.wlan[2].mac nbDuplicates 0
+scalar Network.node5.wlan[2].mac meanBackoff 0
+scalar Network.node5.wlan[2].mac nbBackoffs 0
+scalar Network.node5.wlan[2].mac backoffDurations 0
+scalar Network.node5.wlan[2].mac packetDropNotAddressToUs:count 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node5.wlan[2].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node5.wlan[2].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node5.wlan[2].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node5.wlan[2].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node5.wlan[2].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node5.wlan[2].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node5.wlan[2].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node5.wlan[2].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node5.wlan[2].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node5.wlan[2].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node5.wlan[2].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node5.wlan[2].radio receptionState:count 1
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node5.wlan[2].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node5.wlan[2].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[2].radio packetErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[2].radio bitErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[2].radio symbolErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source symbolErrorRate(packetSentToUpper)
+attr title "Symbol error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node5.wlan[3].mac nbTxFrames 0
+scalar Network.node5.wlan[3].mac nbRxFrames 0
+scalar Network.node5.wlan[3].mac nbDroppedFrames 0
+scalar Network.node5.wlan[3].mac nbMissedAcks 0
+scalar Network.node5.wlan[3].mac nbRecvdAcks 0
+scalar Network.node5.wlan[3].mac nbTxAcks 0
+scalar Network.node5.wlan[3].mac nbDuplicates 0
+scalar Network.node5.wlan[3].mac meanBackoff 0
+scalar Network.node5.wlan[3].mac nbBackoffs 0
+scalar Network.node5.wlan[3].mac backoffDurations 0
+scalar Network.node5.wlan[3].mac packetDropNotAddressToUs:count 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node5.wlan[3].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
+scalar Network.node5.wlan[3].mac packetDropIncorrectlyReceived:count 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, count"
+scalar Network.node5.wlan[3].mac packetDropIncorrectlyReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
+attr title "packet drop: incorrectly received, sum(packetBytes)"
+scalar Network.node5.wlan[3].mac packetDropQueueOverlow:count 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, count"
+scalar Network.node5.wlan[3].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsQueueOverflow(packetDropped)
+attr title "packet drop: queue overflow, sum(packetBytes)"
+scalar Network.node5.wlan[3].mac packetDropRetryLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, count"
+scalar Network.node5.wlan[3].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsRetryLimitReached(packetDropped)
+attr title "packet drop: retry limit reached, sum(packetBytes)"
+scalar Network.node5.wlan[3].mac packetDropBackoffLimitReached:count 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, count"
+scalar Network.node5.wlan[3].mac packetDropBackoffLimitReached:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropReasonIsCongestion(packetDropped)
+attr title "packet drop: backoff limit reached, sum(packetBytes)"
+scalar Network.node5.wlan[3].mac linkBroken:count 0
+attr interpolationmode none
+attr source linkBroken
+attr title "link break, count"
+scalar Network.node5.wlan[3].radio radioMode:count 3
+attr interpolationmode sample-hold
+attr source radioModeChanged
+attr title "Radio mode, count"
+scalar Network.node5.wlan[3].radio receptionState:count 1
+attr interpolationmode sample-hold
+attr source receptionStateChanged
+attr title "Radio reception state, count"
+scalar Network.node5.wlan[3].radio transmissionState:count 0
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, count"
+statistic Network.node5.wlan[3].radio minSnir:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source minimumSnir(packetSentToUpper)
+attr title "Min SNIR, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[3].radio packetErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source packetErrorRate(packetSentToUpper)
+attr title "Packet error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[3].radio bitErrorRate:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr source bitErrorRate(packetSentToUpper)
+attr title "Bit error rate, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+statistic Network.node5.wlan[3].radio symbolErrorRate:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -3311,23 +6387,23 @@ scalar Network.node5.app[2] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.radioMedium.propagation "Arrival computation count" 4
-scalar Network.radioMedium "transmission count" 1
-scalar Network.radioMedium "signal send count" 4
-scalar Network.radioMedium "reception computation count" 4
-scalar Network.radioMedium "interference computation count" 18
-scalar Network.radioMedium "reception decision computation count" 2
-scalar Network.radioMedium "listening decision computation count" 12
-scalar Network.radioMedium "reception cache hit" 81.818181818182
+scalar Network.unitDiskRadioMedium.propagation "Arrival computation count" 57
+scalar Network.unitDiskRadioMedium "transmission count" 3
+scalar Network.unitDiskRadioMedium "signal send count" 57
+scalar Network.unitDiskRadioMedium "reception computation count" 41
+scalar Network.unitDiskRadioMedium "interference computation count" 146
+scalar Network.unitDiskRadioMedium "reception decision computation count" 21
+scalar Network.unitDiskRadioMedium "listening decision computation count" 84
+scalar Network.unitDiskRadioMedium "reception cache hit" 81.938325991189
 attr unit %
-scalar Network.radioMedium "interference cache hit" 66.666666666667
+scalar Network.unitDiskRadioMedium "interference cache hit" 66.666666666667
 attr unit %
-scalar Network.radioMedium "noise cache hit" 0
+scalar Network.unitDiskRadioMedium "noise cache hit" 0
 attr unit %
-scalar Network.radioMedium "snir cache hit" 50
+scalar Network.unitDiskRadioMedium "snir cache hit" 50
 attr unit %
-scalar Network.radioMedium "reception decision cache hit" 50
+scalar Network.unitDiskRadioMedium "reception decision cache hit" 50
 attr unit %
-scalar Network.radioMedium "reception result cache hit" 0
+scalar Network.unitDiskRadioMedium "reception result cache hit" 0
 attr unit %
 

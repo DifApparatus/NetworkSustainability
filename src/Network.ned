@@ -25,6 +25,7 @@ import inet.node.base.ApplicationLayerNodeBase;
 import inet.node.inet.AdhocHost;
 import inet.node.inet.SensorNode;
 import inet.node.inet.WirelessHost;
+import inet.physicallayer.unitdisk.UnitDiskRadioMedium;
 import inet.transportlayer.contract.IUdp;
 import inet.visualizer.mobility.MobilityVisualizer;
 import inet.physicallayer.ieee802154.packetlevel.Ieee802154NarrowbandScalarRadioMedium;
@@ -37,28 +38,28 @@ network Network
     @display("bgb=600,400");
     submodules:
         node1: SensorNode {
-            @display("p=253,152;t=1;r=50");
+            @display("p=253,152;t=1;");
         }
         node2: SensorNode {
-            @display("p=191,223;t=2;r=50");
+            @display("p=191,223;t=2;");
         }
         node3: SensorNode {
-            @display("p=318,66;t=3;r=50");
+            @display("p=318,66;t=3;");
         }
         node4: SensorNode {
-            @display("p=344,232;t=4;r=50");
+            @display("p=344,232;t=4;");
         }
         node5: SensorNode {
-            @display("p=409,138;t=5;r=50");
-        }
-        radioMedium: Ieee802154NarrowbandScalarRadioMedium {
-            @display("p=77,65");
+            @display("p=409,138;t=5;");
         }
         configurator: Ipv4NetworkConfigurator {
             @display("p=171,30");
         }
         visualizer: MobilityVisualizer {
             @display("p=477,242");
+        }
+        unitDiskRadioMedium: UnitDiskRadioMedium {
+            @display("p=52,74");
         }
     connections allowunconnected:
         node2.pppg[0] <--> ned.DatarateChannel <--> node1.pppg[0];
