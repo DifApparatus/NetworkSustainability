@@ -62,10 +62,6 @@ namespace inet{
            payload->addTag<CreationTimeTag>()->setCreationTime(simTime());
 
            packet->insertAtBack(payload);
-
-           //PacketPrinter printer; // turns packets into human readable strings
-           //printer.printPacket(std::cout, packet); // print to standard output
-
            L3Address destAddr = chooseDestAddr();
 
            emit(packetSentSignal, packet);
@@ -87,10 +83,11 @@ namespace inet{
             int y = coords.getY();
             int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
             EV_INFO << "=================================================================================================" << distance << endl;
+            EV_INFO << "Received packet: " << UdpSocket::getReceivedPacketInfo(pk) << endl;
             EV_INFO << "DISTANCE TO NEIGHBOUR EQUALS " << distance << endl;
+            numReceived++;
+
         }
-        EV_INFO << "Received packet: " << UdpSocket::getReceivedPacketInfo(pk) << endl;
         delete pk;
-        numReceived++;
     }
 }//namespace inet

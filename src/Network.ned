@@ -27,8 +27,11 @@ import inet.node.inet.SensorNode;
 import inet.node.inet.WirelessHost;
 import inet.physicallayer.unitdisk.UnitDiskRadioMedium;
 import inet.transportlayer.contract.IUdp;
+import inet.visualizer.integrated.IntegratedVisualizer;
 import inet.visualizer.mobility.MobilityVisualizer;
 import inet.physicallayer.ieee802154.packetlevel.Ieee802154NarrowbandScalarRadioMedium;
+import inet.visualizer.physicallayer.PhysicalLinkVisualizer;
+
 
 //
 // TODO auto-generated type
@@ -53,17 +56,13 @@ network Network
             @display("p=409,138;t=5;");
         }
         configurator: Ipv4NetworkConfigurator {
-            @display("p=171,30");
-        }
-        visualizer: MobilityVisualizer {
-            @display("p=477,242");
+            @display("p=51,27");
         }
         unitDiskRadioMedium: UnitDiskRadioMedium {
-            @display("p=52,74");
+            @display("p=48,82");
+        }
+        integratedVisualizer: IntegratedVisualizer {
+            @display("p=51,145");
         }
     connections allowunconnected:
-        node2.pppg[0] <--> ned.DatarateChannel <--> node1.pppg[0];
-        node1.pppg[1] <--> ned.DatarateChannel <--> node3.pppg[0];
-        node1.pppg[2] <--> ned.DatarateChannel <--> node4.pppg[0];
-        node4.pppg[1] <--> ned.DatarateChannel <--> node5.pppg[0];
 }
