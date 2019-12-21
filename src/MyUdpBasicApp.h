@@ -23,9 +23,12 @@ namespace inet{
 class MyUdpBasicApp : public UdpBasicBurst {
     protected:
         void initialize(int stage) override;
-        void sendPacket();
-        void sendPacket(char* str);
+        virtual Packet *createPacket() override;
+        virtual void generateBurst() override;
+        virtual void handleMessageWhenUp(cMessage *msg) override;
+        virtual void socketDataArrived(UdpSocket *socket, Packet *packet) override;
         void processPacket(Packet *pk) override;
+        void sendBroadcastCoords();
     };
 }// namespace inet
 #endif /* MYUDPBASICAPP_H_ */

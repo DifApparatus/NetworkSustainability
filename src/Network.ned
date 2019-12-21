@@ -20,6 +20,7 @@ import inet.applications.pingapp.PingApp;
 import inet.applications.tcpapp.TcpBasicClientApp;
 import inet.applications.udpapp.UdpBasicApp;
 import inet.applications.udpapp.UdpBasicBurst;
+import inet.linklayer.configurator.L2NetworkConfigurator;
 import inet.networklayer.common.InterfaceTable;
 import inet.networklayer.configurator.ipv4.Ipv4FlatNetworkConfigurator;
 import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;

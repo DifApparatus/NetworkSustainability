@@ -1,14 +1,14 @@
 version 2
-run General-0-20191221-16:32:29-28476
+run General-0-20191221-21:23:35-9011
 attr configname General
-attr datetime 20191221-16:32:29
+attr datetime 20191221-21:23:35
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Network
-attr processid 28476
+attr processid 9011
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -29,26 +29,32 @@ param **.node*.mobility.speed "truncnormal(20mps, 8mps)"
 param **.node*.mobility.updateInterval 100ms
 param **.integratedVisualizer.*.mobilityVisualizer.displayPositions true
 param **.node*.hasUdp true
-param **.node*.numApps 4
+param **.node*.ipv4.ip.limitedBroadcast true
+param **.node*.numApps 2
 param **.node*.app[*].typename "\"MyUdpBasicApp\""
 param **.node*.app[*].messageLength 12B
 param **.node*.app[*].delayLimit 1s
 param **.node*.app[*].sendInterval 1s
 param **.node*.app[*].startTime 0s
 param **.node*.app[*].stopTime 10day
-param **.node*.app[*].packetName "\"Coords\""
 param **.node*.app[0].destPort 1024
 param **.node*.app[0].localPort 1024
 param **.node*.app[1].destPort 1025
 param **.node*.app[1].localPort 1025
-param **.node*.app[2].destPort 1026
-param **.node*.app[2].localPort 1026
-param **.node*.app[3].destPort 1027
-param **.node*.app[3].localPort 1027
-param **.node1.app[0].destAddresses "moduleListByPath(\"**.node2\",\"**.node4\")"
+param **.node1.app[0].destAddresses "moduleListByPath(\"**.node2\",\"**.node3\",\"**.node4\")"
+param **.node1.app[1].destAddresses "\"\""
+param **.node2.app[0].destAddresses "\"node1\""
+param **.node2.app[1].destAddresses "\"\""
+param **.node3.app[0].destAddresses "\"node1\""
+param **.node3.app[1].destAddresses "\"\""
+param **.node4.app[0].destAddresses "moduleListByPath(\"**.node1\",\"**.node5\")"
+param **.node4.app[1].destAddresses "\"\""
+param **.node5.app[0].destAddresses "\"node4\""
+param **.node5.app[1].destAddresses "\"\""
 param **.node*.app[*].chooseDestAddrMode "\"perBurst\""
 param **.node*.app[*].burstDuration 1s
 param **.node*.app[*].sleepDuration 0s
+param **.node*.wlan[*].mac.promiscuous true
 param **.node*.wlan[*].typename "\"AckingWirelessInterface\""
 param **.node*.wlan[*].mac.useAck false
 param **.node*.wlan[*].mac.fullDuplex true
@@ -56,8 +62,7 @@ param **.node*.wlan[*].bitrate 10000000000bps
 param **.node*.numWlanInterfaces 1
 param **.node*.wlan[*].radio.typename "\"UnitDiskRadio\""
 param **.node*.wlan[*].radio.transmitter.typename "\"UnitDiskTransmitter\""
-param **.node*.wlan[*].radio.transmitter.bitrate 10000000000bps
-param **.node*.wlan[*].radio.transmitter.communicationRange 200m
+param **.node*.wlan[*].radio.transmitter.communicationRange 100m
 param **.node*.wlan[*].radio.receiver.typename "\"UnitDiskReceiver\""
 param **.wlan[*].radio.displayCommunicationRange true
 param **.wlan[*].radio.receiver.ignoreInterference true
@@ -65,12 +70,12 @@ param **.wlan[*].radio.radioMediumModule "\"unitDiskRadioMedium\""
 param *.unitDiskRadioMedium.rangeFilter "\"communicationRange\""
 param *.unitDiskRadioMedium.signalAnalogRepresentation "\"unitDisk\""
 param *.integratedVisualizer.*.mediumVisualizer.mediumModule "\"unitDiskRadioMedium\""
-param *.integratedVisualizer.*.mediumVisualizer.packetFilter "\"*Coords*\""
+param *.integratedVisualizer.*.mediumVisualizer.packetFilter "\"*Coords_*\""
 param *.integratedVisualizer.*.dataLinkVisualizer.displayLinks true
-param *.integratedVisualizer.*.dataLinkVisualizer.packetFilter "\"Coords*\""
-param *.integratedVisualizer.*.physicalLinkVisualizer.packetFilter "\"Coords*\""
-param *.integratedVisualizer.*.transportConnectionVisualizer.displayTransportConnections true
-param *.integratedVisualizer.*.networkConnectionVisualizer.displayNetworkConnections true
+param *.integratedVisualizer.*.dataLinkVisualizer.packetFilter "\"Coords_*\""
+param *.integratedVisualizer.*.physicalLinkVisualizer.packetFilter "\"Coords_*\""
+param *.integratedVisualizer.*.mediumVisualizer.displaySignals true
+param *.integratedVisualizer.*.mediumVisualizer.signalOpacity 0.05
 
 vector 0 Network.node1.wlan[0].queue queueLength:vector ETV
 attr interpolationmode sample-hold
@@ -191,36 +196,202 @@ vector 30 Network.node1.app[0] packetSent:vector(packetBytes) ETV
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, vector(packetBytes)"
-vector 31 Network.node1.udp packetSent:vector(packetBytes) ETV
+vector 31 Network.node2.app[0] packetSent:vector(packetBytes) ETV
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, vector(packetBytes)"
-vector 32 Network.node1.wlan[0].queue packetReceived:vector(packetBytes) ETV
+vector 32 Network.node3.app[0] packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 33 Network.node4.app[0] packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 34 Network.node5.app[0] packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 35 Network.node1.udp packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 36 Network.node2.udp packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 37 Network.node3.udp packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 38 Network.node4.udp packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 39 Network.node5.udp packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 40 Network.node1.wlan[0].queue packetReceived:vector(packetBytes) ETV
 attr interpolationmode none
 attr title "received packets, vector(packetBytes)"
-vector 33 Network.node1.wlan[0].queue queueingTime:vector ETV
+vector 41 Network.node1.wlan[0].queue queueingTime:vector ETV
 attr interpolationmode none
 attr title "queueing time, vector"
-vector 34 Network.node1.wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
+vector 42 Network.node2.wlan[0].queue packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "received packets, vector(packetBytes)"
+vector 43 Network.node2.wlan[0].queue queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time, vector"
+vector 44 Network.node3.wlan[0].queue packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "received packets, vector(packetBytes)"
+vector 45 Network.node3.wlan[0].queue queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time, vector"
+vector 46 Network.node4.wlan[0].queue packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "received packets, vector(packetBytes)"
+vector 47 Network.node4.wlan[0].queue queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time, vector"
+vector 48 Network.node5.wlan[0].queue packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "received packets, vector(packetBytes)"
+vector 49 Network.node5.wlan[0].queue queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time, vector"
+vector 50 Network.node1.wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
 attr interpolationmode none
 attr source packetReceivedFromUpper
 attr title "packets received from higher layer, vector(packetBytes)"
-vector 35 Network.node1.wlan[0].mac sentDownPk:vector(packetBytes) ETV
+vector 51 Network.node1.wlan[0].mac sentDownPk:vector(packetBytes) ETV
 attr interpolationmode none
 attr source packetSentToLower
 attr title "packets sent to lower layer, vector(packetBytes)"
-vector 36 Network.node1.energyStorage residualEnergyCapacity:vector ETV
+vector 52 Network.node2.wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 53 Network.node2.wlan[0].mac sentDownPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, vector(packetBytes)"
+vector 54 Network.node3.wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 55 Network.node3.wlan[0].mac sentDownPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, vector(packetBytes)"
+vector 56 Network.node4.wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 57 Network.node4.wlan[0].mac sentDownPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, vector(packetBytes)"
+vector 58 Network.node5.wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 59 Network.node5.wlan[0].mac sentDownPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, vector(packetBytes)"
+vector 60 Network.node1.energyStorage residualEnergyCapacity:vector ETV
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, vector"
-vector 37 Network.node2.energyStorage residualEnergyCapacity:vector ETV
+vector 61 Network.node2.energyStorage residualEnergyCapacity:vector ETV
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, vector"
+vector 62 Network.node3.energyStorage residualEnergyCapacity:vector ETV
+attr interpolationmode linear
+attr source residualEnergyCapacityChanged
+attr title "Residual energy capacity, vector"
+vector 63 Network.node4.energyStorage residualEnergyCapacity:vector ETV
+attr interpolationmode linear
+attr source residualEnergyCapacityChanged
+attr title "Residual energy capacity, vector"
+vector 64 Network.node5.energyStorage residualEnergyCapacity:vector ETV
+attr interpolationmode linear
+attr source residualEnergyCapacityChanged
+attr title "Residual energy capacity, vector"
+vector 65 Network.node2.wlan[0].mac rcvdPkFromLl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, vector(packetBytes)"
+vector 66 Network.node2.wlan[0].mac passedUpPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, vector(packetBytes)"
+vector 67 Network.node1.wlan[0].mac rcvdPkFromLl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, vector(packetBytes)"
+vector 68 Network.node1.wlan[0].mac passedUpPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, vector(packetBytes)"
+vector 69 Network.node2.udp packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, vector(packetBytes)"
+vector 70 Network.node2.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed up, vector(count)"
+vector 71 Network.node1.udp packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, vector(packetBytes)"
+vector 72 Network.node1.udp passedUpPk:vector(count) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed up, vector(count)"
+vector 73 Network.node2.lo[0].lo rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 74 Network.node2.lo[0].lo passedUpPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, vector(packetBytes)"
+vector 75 Network.node1.lo[0].lo rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 76 Network.node1.lo[0].lo passedUpPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, vector(packetBytes)"
+vector 77 Network.node2.udp droppedPkWrongPort:vector(count) ETV
+attr interpolationmode none
+attr source packetDropReasonIsNoPortFound(packetDropped)
+attr title "packets dropped (wrong port), vector(count)"
+vector 78 Network.node1.udp droppedPkWrongPort:vector(count) ETV
+attr interpolationmode none
+attr source packetDropReasonIsNoPortFound(packetDropped)
+attr title "packets dropped (wrong port), vector(count)"
+vector 79 Network.node2.ipv4.ip packetDropForwardingDisabled:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetDropReasonIsForwardingDisabled(packetDropped)
+attr title "packet drop: forwarding disabled, vector(packetBytes)"
 0	0	0	0
+0	38	0	1
+0	39	0	2
+0	55	0.0000000424	1
+0	64	0.0000000848	0
 1	0	0	0
 2	0	0	0
 3	0	0	0
+3	43	0	1
+3	58	0.0000000424	0
 4	0	0	0
 5	0	0	0
 5	0	0	0
@@ -228,36 +399,90 @@ attr title "Residual energy capacity, vector"
 5	0	0	0
 5	0	0	5e-06
 5	0	0	0.005005
-5	45	0	5e-06
-5	45	0	0.075005
-5	46	0.0000000424	0.005005
-5	46	0.0000000424	0.005005
+5	50	0	5e-06
+5	50	0	0.075005
+5	55	0.0000000424	0.005005
+5	55	0.0000000424	0.005005
+5	62	0.0000000424	5e-06
+5	62	0.0000000424	0.075005
+5	64	0.0000000848	0.005005
+5	64	0.0000000848	0.005005
+5	67	0.0000000848	5e-06
+5	67	0.0000000848	0.075005
+5	68	0.0000001272	0.005005
+5	68	0.0000001272	0.005005
+5	70	0.000000314418	0.005
+5	70	0.000000314418	0.055
+5	73	0.000000356818	0.005005
+5	73	0.000000356818	0.005005
+5	97	0.000000356818	5e-06
+5	97	0.000000356818	0.075005
+5	107	0.000000399218	0.005005
+5	107	0.000000399218	0.005005
+5	153	0.000000671236	0.005
+5	153	0.000000671236	0.055
+5	157	0.000000713636	0.005005
+5	157	0.000000713636	0.005005
 6	0	0	0
 6	0	0	0
 6	0	0	0
 6	0	0	0
 6	0	0	5e-06
 6	0	0	0.005005
-6	47	0.000000314418	0.005
-6	47	0.000000314418	0.055
+6	51	0	5e-06
+6	51	0	0.075005
+6	56	0.0000000424	0.005005
+6	56	0.0000000424	0.005005
+6	69	0.000000314418	0.005
+6	69	0.000000314418	0.055
+6	72	0.000000356818	0.0051
+6	72	0.000000356818	0.0051
+6	95	0.000000356818	0.0001
+6	95	0.000000356818	0.0751
+6	104	0.000000399218	0.075
+6	104	0.000000399218	0.125
+6	106	0.000000399218	0.055
+6	106	0.000000399218	0.055
+6	118	0.000000441618	0.005005
+6	118	0.000000441618	0.005005
+6	154	0.000000671236	0.005
+6	154	0.000000671236	0.055
+6	158	0.000000713636	0.005005
+6	158	0.000000713636	0.005005
 7	0	0	0
 7	0	0	0
 7	0	0	0
 7	0	0	0
 7	0	0	5e-06
 7	0	0	0.005005
+7	52	0	5e-06
+7	52	0	0.075005
+7	57	0.0000000424	0.005005
+7	57	0.0000000424	0.005005
 8	0	0	0
 8	0	0	0
 8	0	0	0
 8	0	0	0
 8	0	0	5e-06
 8	0	0	0.005005
+8	53	0	5e-06
+8	53	0	0.075005
+8	58	0.0000000424	0.005005
+8	58	0.0000000424	0.005005
+8	63	0.0000000424	5e-06
+8	63	0.0000000424	0.075005
+8	65	0.0000000848	0.005005
+8	65	0.0000000848	0.005005
 9	0	0	0
 9	0	0	0
 9	0	0	0
 9	0	0	0
 9	0	0	5e-06
 9	0	0	0.005005
+9	54	0	5e-06
+9	54	0	0.075005
+9	59	0.0000000424	0.005005
+9	59	0.0000000424	0.005005
 10	0	0	0
 10	0	0	0
 10	0	0	4
@@ -266,10 +491,30 @@ attr title "Residual energy capacity, vector"
 11	0	0	0
 11	0	0	5e-06
 11	0	0	0.005005
-11	45	0	5e-06
-11	45	0	0.075005
-11	46	0.0000000424	0.005005
-11	46	0.0000000424	0.005005
+11	50	0	5e-06
+11	50	0	0.075005
+11	55	0.0000000424	0.005005
+11	55	0.0000000424	0.005005
+11	62	0.0000000424	5e-06
+11	62	0.0000000424	0.075005
+11	64	0.0000000848	0.005005
+11	64	0.0000000848	0.005005
+11	67	0.0000000848	5e-06
+11	67	0.0000000848	0.075005
+11	68	0.0000001272	0.005005
+11	68	0.0000001272	0.005005
+11	70	0.000000314418	0.005
+11	70	0.000000314418	0.055
+11	73	0.000000356818	0.005005
+11	73	0.000000356818	0.005005
+11	97	0.000000356818	5e-06
+11	97	0.000000356818	0.075005
+11	107	0.000000399218	0.005005
+11	107	0.000000399218	0.005005
+11	153	0.000000671236	0.005
+11	153	0.000000671236	0.055
+11	157	0.000000713636	0.005005
+11	157	0.000000713636	0.005005
 12	0	0	0
 12	0	0	0
 12	0	0	4
@@ -278,8 +523,26 @@ attr title "Residual energy capacity, vector"
 13	0	0	0
 13	0	0	5e-06
 13	0	0	0.005005
-13	47	0.000000314418	0.005
-13	47	0.000000314418	0.055
+13	51	0	5e-06
+13	51	0	0.075005
+13	56	0.0000000424	0.005005
+13	56	0.0000000424	0.005005
+13	69	0.000000314418	0.005
+13	69	0.000000314418	0.055
+13	72	0.000000356818	0.0051
+13	72	0.000000356818	0.0051
+13	95	0.000000356818	0.0001
+13	95	0.000000356818	0.0751
+13	104	0.000000399218	0.075
+13	104	0.000000399218	0.125
+13	106	0.000000399218	0.055
+13	106	0.000000399218	0.055
+13	118	0.000000441618	0.005005
+13	118	0.000000441618	0.005005
+13	154	0.000000671236	0.005
+13	154	0.000000671236	0.055
+13	158	0.000000713636	0.005005
+13	158	0.000000713636	0.005005
 14	0	0	0
 14	0	0	0
 14	0	0	4
@@ -288,6 +551,10 @@ attr title "Residual energy capacity, vector"
 15	0	0	0
 15	0	0	5e-06
 15	0	0	0.005005
+15	52	0	5e-06
+15	52	0	0.075005
+15	57	0.0000000424	0.005005
+15	57	0.0000000424	0.005005
 16	0	0	0
 16	0	0	0
 16	0	0	4
@@ -296,6 +563,14 @@ attr title "Residual energy capacity, vector"
 17	0	0	0
 17	0	0	5e-06
 17	0	0	0.005005
+17	53	0	5e-06
+17	53	0	0.075005
+17	58	0.0000000424	0.005005
+17	58	0.0000000424	0.005005
+17	63	0.0000000424	5e-06
+17	63	0.0000000424	0.075005
+17	65	0.0000000848	0.005005
+17	65	0.0000000848	0.005005
 18	0	0	0
 18	0	0	0
 18	0	0	4
@@ -304,31 +579,474 @@ attr title "Residual energy capacity, vector"
 19	0	0	0
 19	0	0	5e-06
 19	0	0	0.005005
+19	54	0	5e-06
+19	54	0	0.075005
+19	59	0.0000000424	0.005005
+19	59	0.0000000424	0.005005
 20	0	0	1
+20	70	0.000000314418	3
+20	73	0.000000356818	1
+20	153	0.000000671236	3
+20	157	0.000000713636	1
 21	0	0	1
-21	45	0	2
-21	46	0.0000000424	1
+21	50	0	2
+21	55	0.0000000424	1
+21	62	0.0000000424	2
+21	64	0.0000000848	1
+21	67	0.0000000848	2
+21	68	0.0000001272	1
+21	97	0.000000356818	2
+21	107	0.000000399218	1
 22	0	0	1
-22	47	0.000000314418	3
+22	69	0.000000314418	3
+22	72	0.000000356818	2
+22	104	0.000000399218	3
+22	118	0.000000441618	1
+22	154	0.000000671236	3
+22	158	0.000000713636	1
 23	0	0	1
+23	51	0	2
+23	56	0.0000000424	1
+23	95	0.000000356818	2
+23	106	0.000000399218	1
 24	0	0	1
 25	0	0	1
+25	52	0	2
+25	57	0.0000000424	1
 26	0	0	1
 27	0	0	1
+27	53	0	2
+27	58	0.0000000424	1
+27	63	0.0000000424	2
+27	65	0.0000000848	1
 28	0	0	1
 29	0	0	1
+29	54	0	2
+29	59	0.0000000424	1
 30	1	0	12
-31	22	0	20
-32	43	0	40
-33	43	0	0
-34	44	0	40
-35	44	0	41
-36	46	0.0000000424	-3.180212e-09
-37	47	0.000000314418	-1.57366209e-09
-6	48	0.000000356818	0.005005
-6	48	0.000000356818	0.005005
-13	48	0.000000356818	0.005005
-13	48	0.000000356818	0.005005
-22	48	0.000000356818	1
-37	48	0.000000356818	-3.90566209e-09
+30	1	0	12
+30	1	0	12
+30	81	0.000000356818	12
+31	3	0	12
+31	80	0.000000356818	12
+32	5	0	12
+33	7	0	12
+33	7	0	12
+34	9	0	12
+35	12	0	20
+35	13	0	20
+35	14	0	20
+35	83	0.000000356818	20
+36	17	0	20
+36	82	0.000000356818	20
+37	20	0	20
+38	23	0	20
+38	24	0	20
+39	27	0	20
+40	37	0	40
+40	38	0	40
+40	39	0	40
+40	89	0.000000356818	40
+41	37	0	0
+41	55	0.0000000424	4.24e-08
+41	64	0.0000000848	8.48e-08
+41	89	0.000000356818	0
+42	40	0	40
+42	87	0.000000356818	40
+43	40	0	0
+43	87	0.000000356818	0
+44	41	0	40
+45	41	0	0
+46	42	0	40
+46	43	0	40
+47	42	0	0
+47	58	0.0000000424	4.24e-08
+48	44	0	40
+49	44	0	0
+50	45	0	40
+50	60	0.0000000424	40
+50	66	0.0000000848	40
+50	93	0.000000356818	40
+51	45	0	41
+51	60	0.0000000424	41
+51	66	0.0000000848	41
+51	93	0.000000356818	41
+52	46	0	40
+52	91	0.000000356818	40
+53	46	0	41
+53	91	0.000000356818	41
+54	47	0	40
+55	47	0	41
+56	48	0	40
+56	61	0.0000000424	40
+57	48	0	41
+57	61	0.0000000424	41
+58	49	0	40
+59	49	0	41
+60	55	0.0000000424	-3.180212e-09
+60	64	0.0000000848	-6.360424e-09
+60	68	0.0000001272	-9.540636e-09
+60	70	0.000000314418	-1.047766209e-08
+60	73	0.000000356818	-1.280966209e-08
+60	107	0.000000399218	-1.598987409e-08
+60	153	0.000000671236	-1.735132418e-08
+60	157	0.000000713636	-1.968332418e-08
+61	56	0.0000000424	-3.180212e-09
+61	69	0.000000314418	-4.54166209e-09
+61	72	0.000000356818	-6.87366209e-09
+61	104	0.000000399218	-1.005790209e-08
+61	118	0.000000441618	-1.238990209e-08
+61	154	0.000000671236	-1.353914018e-08
+61	158	0.000000713636	-1.587114018e-08
+62	57	0.0000000424	-3.180212e-09
+63	58	0.0000000424	-3.180212e-09
+63	65	0.0000000848	-6.360424e-09
+64	59	0.0000000424	-3.180212e-09
+65	74	0.000000356818	41
+65	119	0.000000441618	41
+65	160	0.000000713636	41
+66	74	0.000000356818	40
+66	119	0.000000441618	40
+66	160	0.000000713636	40
+67	75	0.000000356818	41
+67	159	0.000000713636	41
+68	75	0.000000356818	40
+68	159	0.000000713636	40
+69	78	0.000000356818	20
+69	94	0.000000356818	20
+69	164	0.000000713636	20
+70	78	0.000000356818	1
+71	79	0.000000356818	20
+71	96	0.000000356818	20
+71	163	0.000000713636	20
+72	79	0.000000356818	1
+73	86	0.000000356818	40
+74	86	0.000000356818	40
+75	88	0.000000356818	40
+76	88	0.000000356818	40
+77	94	0.000000356818	1
+77	164	0.000000713636	2
+78	96	0.000000356818	1
+78	163	0.000000713636	2
+79	120	0.000000441618	40
+vector 80 Network.node3.wlan[0].mac rcvdPkFromLl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, vector(packetBytes)"
+vector 81 Network.node3.wlan[0].mac passedUpPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, vector(packetBytes)"
+vector 82 Network.node3.ipv4.ip packetDropForwardingDisabled:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetDropReasonIsForwardingDisabled(packetDropped)
+attr title "packet drop: forwarding disabled, vector(packetBytes)"
+0	258	1	1
+0	259	1	2
+0	275	1.0000000424	1
+0	284	1.0000000848	0
+3	263	1	1
+3	278	1.0000000424	0
+5	270	1	5e-06
+5	270	1	0.075005
+5	275	1.0000000424	0.005005
+5	275	1.0000000424	0.005005
+5	282	1.0000000424	5e-06
+5	282	1.0000000424	0.075005
+5	284	1.0000000848	0.005005
+5	284	1.0000000848	0.005005
+5	287	1.0000000848	5e-06
+5	287	1.0000000848	0.075005
+5	288	1.0000001272	0.005005
+5	288	1.0000001272	0.005005
+5	290	1.000000227489	0.005
+5	290	1.000000227489	0.055
+5	293	1.000000269889	0.005005
+5	293	1.000000269889	0.005005
+5	307	1.000000269889	5e-06
+5	307	1.000000269889	0.075005
+5	309	1.000000301409	0.075
+5	309	1.000000301409	0.125
+5	312	1.000000312289	0.055
+5	312	1.000000312289	0.055
+5	315	1.000000343809	0.005005
+5	315	1.000000343809	0.005005
+5	339	1.000000343809	5e-06
+5	339	1.000000343809	0.075005
+5	348	1.000000386209	0.005005
+5	348	1.000000386209	0.005005
+6	271	1	5e-06
+6	271	1	0.075005
+6	276	1.0000000424	0.005005
+6	276	1.0000000424	0.005005
+6	308	1.000000301409	0.005
+6	308	1.000000301409	0.055
+6	314	1.000000343809	0.0051
+6	314	1.000000343809	0.0051
+6	337	1.000000343809	0.0001
+6	337	1.000000343809	0.0751
+6	345	1.000000386209	0.075
+6	345	1.000000386209	0.125
+6	347	1.000000386209	0.055
+6	347	1.000000386209	0.055
+7	272	1	5e-06
+7	272	1	0.075005
+7	277	1.0000000424	0.005005
+7	277	1.0000000424	0.005005
+7	289	1.000000227489	0.005
+7	289	1.000000227489	0.055
+7	292	1.000000269889	0.0051
+7	292	1.000000269889	0.0051
+7	310	1.000000312289	0.005
+7	310	1.000000312289	0.055
+7	340	1.000000354689	0.005005
+7	340	1.000000354689	0.005005
+8	273	1	5e-06
+8	273	1	0.075005
+8	278	1.0000000424	0.005005
+8	278	1.0000000424	0.005005
+8	283	1.0000000424	5e-06
+8	283	1.0000000424	0.075005
+8	285	1.0000000848	0.005005
+8	285	1.0000000848	0.005005
+9	274	1	5e-06
+9	274	1	0.075005
+9	279	1.0000000424	0.005005
+9	279	1.0000000424	0.005005
+11	270	1	5e-06
+11	270	1	0.075005
+11	275	1.0000000424	0.005005
+11	275	1.0000000424	0.005005
+11	282	1.0000000424	5e-06
+11	282	1.0000000424	0.075005
+11	284	1.0000000848	0.005005
+11	284	1.0000000848	0.005005
+11	287	1.0000000848	5e-06
+11	287	1.0000000848	0.075005
+11	288	1.0000001272	0.005005
+11	288	1.0000001272	0.005005
+11	290	1.000000227489	0.005
+11	290	1.000000227489	0.055
+11	293	1.000000269889	0.005005
+11	293	1.000000269889	0.005005
+11	307	1.000000269889	5e-06
+11	307	1.000000269889	0.075005
+11	309	1.000000301409	0.075
+11	309	1.000000301409	0.125
+11	312	1.000000312289	0.055
+11	312	1.000000312289	0.055
+11	315	1.000000343809	0.005005
+11	315	1.000000343809	0.005005
+11	339	1.000000343809	5e-06
+11	339	1.000000343809	0.075005
+11	348	1.000000386209	0.005005
+11	348	1.000000386209	0.005005
+13	271	1	5e-06
+13	271	1	0.075005
+13	276	1.0000000424	0.005005
+13	276	1.0000000424	0.005005
+13	308	1.000000301409	0.005
+13	308	1.000000301409	0.055
+13	314	1.000000343809	0.0051
+13	314	1.000000343809	0.0051
+13	337	1.000000343809	0.0001
+13	337	1.000000343809	0.0751
+13	345	1.000000386209	0.075
+13	345	1.000000386209	0.125
+13	347	1.000000386209	0.055
+13	347	1.000000386209	0.055
+15	272	1	5e-06
+15	272	1	0.075005
+15	277	1.0000000424	0.005005
+15	277	1.0000000424	0.005005
+15	289	1.000000227489	0.005
+15	289	1.000000227489	0.055
+15	292	1.000000269889	0.0051
+15	292	1.000000269889	0.0051
+15	310	1.000000312289	0.005
+15	310	1.000000312289	0.055
+15	340	1.000000354689	0.005005
+15	340	1.000000354689	0.005005
+17	273	1	5e-06
+17	273	1	0.075005
+17	278	1.0000000424	0.005005
+17	278	1.0000000424	0.005005
+17	283	1.0000000424	5e-06
+17	283	1.0000000424	0.075005
+17	285	1.0000000848	0.005005
+17	285	1.0000000848	0.005005
+19	274	1	5e-06
+19	274	1	0.075005
+19	279	1.0000000424	0.005005
+19	279	1.0000000424	0.005005
+20	290	1.000000227489	3
+20	293	1.000000269889	1
+20	309	1.000000301409	3
+20	315	1.000000343809	1
+21	270	1	2
+21	275	1.0000000424	1
+21	282	1.0000000424	2
+21	284	1.0000000848	1
+21	287	1.0000000848	2
+21	288	1.0000001272	1
+21	307	1.000000269889	2
+21	312	1.000000312289	1
+21	339	1.000000343809	2
+21	348	1.000000386209	1
+22	308	1.000000301409	3
+22	314	1.000000343809	2
+22	345	1.000000386209	3
+23	271	1	2
+23	276	1.0000000424	1
+23	337	1.000000343809	2
+23	347	1.000000386209	1
+24	289	1.000000227489	3
+24	292	1.000000269889	2
+24	310	1.000000312289	3
+24	340	1.000000354689	1
+25	272	1	2
+25	277	1.0000000424	1
+27	273	1	2
+27	278	1.0000000424	1
+27	283	1.0000000424	2
+27	285	1.0000000848	1
+29	274	1	2
+29	279	1.0000000424	1
+30	232	1	12
+30	232	1	12
+30	232	1	12
+30	299	1.000000269889	12
+30	323	1.000000343809	12
+31	233	1	12
+31	322	1.000000343809	12
+32	234	1	12
+33	235	1	12
+33	235	1	12
+34	236	1	12
+35	241	1	20
+35	242	1	20
+35	243	1	20
+35	300	1.000000269889	20
+35	325	1.000000343809	20
+36	244	1	20
+36	324	1.000000343809	20
+37	245	1	20
+38	246	1	20
+38	247	1	20
+39	248	1	20
+40	257	1	40
+40	258	1	40
+40	259	1	40
+40	303	1.000000269889	40
+40	331	1.000000343809	40
+41	257	1	0
+41	275	1.0000000424	4.24e-08
+41	284	1.0000000848	8.48e-08
+41	303	1.000000269889	0
+41	331	1.000000343809	0
+42	260	1	40
+42	329	1.000000343809	40
+43	260	1	0
+43	329	1.000000343809	0
+44	261	1	40
+45	261	1	0
+46	262	1	40
+46	263	1	40
+47	262	1	0
+47	278	1.0000000424	4.24e-08
+48	264	1	40
+49	264	1	0
+50	265	1	40
+50	280	1.0000000424	40
+50	286	1.0000000848	40
+50	305	1.000000269889	40
+50	335	1.000000343809	40
+51	265	1	41
+51	280	1.0000000424	41
+51	286	1.0000000848	41
+51	305	1.000000269889	41
+51	335	1.000000343809	41
+52	266	1	40
+52	333	1.000000343809	40
+53	266	1	41
+53	333	1.000000343809	41
+54	267	1	40
+55	267	1	41
+56	268	1	40
+56	281	1.0000000424	40
+57	268	1	41
+57	281	1.0000000424	41
+58	269	1	40
+59	269	1	41
+60	270	1	-0.005005016111576
+60	275	1.0000000424	-0.005005019291788
+60	284	1.0000000848	-0.005005022472
+60	288	1.0000001272	-0.005005025652212
+60	290	1.000000227489	-0.0050050261541584
+60	293	1.000000269889	-0.0050050284861584
+60	309	1.000000301409	-0.005005030850316
+60	312	1.000000312289	-0.005005032210316
+60	315	1.000000343809	-0.005005033943916
+60	348	1.000000386209	-0.005005037124128
+61	271	1	-0.005005012299392
+61	276	1.0000000424	-0.005005015479604
+61	308	1.000000301409	-0.005005016775944
+61	314	1.000000343809	-0.005005019107944
+61	345	1.000000386209	-0.005005022292184
+62	272	1	-0.005005002968
+62	277	1.0000000424	-0.005005006148212
+62	289	1.000000227489	-0.0050050070745824
+62	292	1.000000269889	-0.0050050094065824
+62	310	1.000000312289	-0.0050050096228224
+62	340	1.000000354689	-0.0050050119548224
+63	273	1	-0.005005005936
+63	278	1.0000000424	-0.005005009116212
+63	285	1.0000000848	-0.005005012296424
+64	274	1	-0.005005002968
+64	279	1.0000000424	-0.005005006148212
+65	316	1.000000343809	41
+66	316	1.000000343809	40
+67	295	1.000000269889	41
+67	317	1.000000343809	41
+68	295	1.000000269889	40
+68	317	1.000000343809	40
+69	320	1.000000343809	20
+69	336	1.000000343809	20
+70	320	1.000000343809	2
+71	298	1.000000269889	20
+71	306	1.000000269889	20
+71	321	1.000000343809	20
+71	338	1.000000343809	20
+72	298	1.000000269889	2
+72	321	1.000000343809	3
+73	328	1.000000343809	40
+74	328	1.000000343809	40
+75	302	1.000000269889	40
+75	330	1.000000343809	40
+76	302	1.000000269889	40
+76	330	1.000000343809	40
+77	336	1.000000343809	3
+78	306	1.000000269889	3
+78	338	1.000000343809	4
+80	294	1.000000269889	41
+80	341	1.000000354689	41
+81	294	1.000000269889	40
+81	341	1.000000354689	40
+82	296	1.000000269889	40
+82	342	1.000000354689	40
+6	354	1.000000428609	0.005005
+6	354	1.000000428609	0.005005
+13	354	1.000000428609	0.005005
+13	354	1.000000428609	0.005005
+22	354	1.000000428609	1
+61	354	1.000000428609	-0.005005024624184
+65	355	1.000000428609	41
+66	355	1.000000428609	40
+79	356	1.000000428609	40
+7	367	1.000000497378	0.005
+7	367	1.000000497378	0.055
+15	367	1.000000497378	0.005
+15	367	1.000000497378	0.055
+24	367	1.000000497378	3
+62	367	1.000000497378	-0.0050050126689809
 

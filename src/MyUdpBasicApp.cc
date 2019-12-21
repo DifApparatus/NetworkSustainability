@@ -40,79 +40,168 @@ namespace inet{
     {
         UdpBasicBurst::initialize(stage);
     }
-    void MyUdpBasicApp::sendPacket()
-       {
-           cModule *host = getContainingNode(this);
-           IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
-           Coord coords = mobility->getCurrentPosition();
+    Packet *MyUdpBasicApp::createPacket()
+    {
+        cModule *host = getContainingNode(this);
+        IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
+        Coord coords = mobility->getCurrentPosition();
 
-           std::ostringstream str;
-           //str << packetName;
-           Packet *packet = new Packet(str.str().c_str());
-           //if(dontFragment)
-               packet->addTagIfAbsent<FragmentationReq>()->setDontFragment(true);
+        char packetName[] = "Coords";
+        std::ostringstream str;
+        str << packetName;
 
-           const auto& payload = makeShared<CurrentCoordsMessage>("CurrentCoordinates");
-           payload->setX(coords.x);
-           payload->setY(coords.y);
-           payload->setZ(0);
-           payload->setChunkLength(B(par("messageLength")));
-           payload->setSequenceNumber(numSent);
-           payload->addTag<CreationTimeTag>()->setCreationTime(simTime());
+        Packet *pk = new Packet(str.str().c_str());
 
-           packet->insertAtBack(payload);
-           //L3Address destAddr = chooseDestAddr();
-           /*for (int i=0;i<destAddresses.size();i++){
-               Packet *copy_packet = packet->dup();
-               emit(packetSentSignal, copy_packet);
-               socket.sendTo(copy_packet, destAddresses[i], destPort);
-               EV_INFO << "==========================================================" << destAddresses[i] <<endl;
-               numSent++;
-           }*/
+        const auto& payload = makeShared<CurrentCoordsMessage>("CurrentCoordinates");
+        payload->setX(coords.x);
+        payload->setY(coords.y);
+        payload->setZ(0);
+        payload->setChunkLength(B(par("messageLength")));
+        payload->setSequenceNumber(numSent);
 
-           /*L3Address *destAddr = new L3Address();
-           Ipv4Address *ipv4 = new Ipv4Address(255,255,255,255);
-           destAddr->set(*ipv4);
-           Packet *copy_packet = packet->dup();
-           emit(packetSentSignal, copy_packet);
-           socket.sendTo(copy_packet, *destAddr, destPort);*/
-           delete packet;
-       }
-    //HORRIBLE method, but...
-    void MyUdpBasicApp::sendPacket(char* broadcast_string){
-        /*cModule *host = getContainingNode(this);
-                   IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
-                   Coord coords = mobility->getCurrentPosition();
+        pk->insertAtBack(payload);
+        pk->addPar("sourceId") = getId();
+        pk->addPar("msgId") = numSent;
 
-                   std::ostringstream str;
-                   str << std::strcat(broadcast_string, packetName);
-                   Packet *packet = new Packet(str.str().c_str());
-                   if(dontFragment)
-                       packet->addTagIfAbsent<FragmentationReq>()->setDontFragment(true);
-                   const auto& payload = makeShared<CurrentCoordsMessage>("CurrentCoordinates");
-                   payload->setX(coords.x);
-                   payload->setY(coords.y);
-                   payload->setZ(0);
-                   payload->setChunkLength(B(par("messageLength")));
-                   payload->setSequenceNumber(numSent);
-                   payload->addTag<CreationTimeTag>()->setCreationTime(simTime());
-                   packet->insertAtBack(payload);
+        return pk;
+    }
+    void MyUdpBasicApp::generateBurst(){
+        simtime_t now = simTime();
 
-                  /* L3Address *destAddr = new L3Address();
-                   Ipv4Address *ipv4 = new Ipv4Address(255,255,255,255);*/
-                   //L3Address destAddr = chooseDestAddr();
-                   //destAddr->set(*ipv4);
-                   //emit(packetSentSignal, packet);
-                   //socket.sendTo(packet, *destAddr, destPort);
-                   //EV_INFO << "+++++++++++++++++++++++++++++++" << packet->getName() << "+++++++++++++++++++++++++++++++++++++\n";
-                   //EV_INFO << "============================================================================\n";*/
+            if (nextPkt < now)
+                nextPkt = now;
 
+            double sendInterval = *sendIntervalPar;
+            if (sendInterval <= 0.0)
+                throw cRuntimeError("The sendInterval parameter must be bigger than 0");
+            nextPkt += sendInterval;
+
+            if (activeBurst && nextBurst <= now) {    // new burst
+                double burstDuration = *burstDurationPar;
+                if (burstDuration < 0.0)
+                    throw cRuntimeError("The burstDuration parameter mustn't be smaller than 0");
+                double sleepDuration = *sleepDurationPar;
+
+                if (burstDuration == 0.0)
+                    activeBurst = false;
+                else {
+                    if (sleepDuration < 0.0)
+                        throw cRuntimeError("The sleepDuration parameter mustn't be smaller than 0");
+                    nextSleep = now + burstDuration;
+                    nextBurst = nextSleep + sleepDuration;
+                }
+
+                if (chooseDestAddrMode == PER_BURST)
+                    destAddr = chooseDestAddr();
+            }
+
+            if (chooseDestAddrMode == PER_SEND)
+                destAddr = chooseDestAddr();
+
+            Packet *payload = createPacket();
+            for (int i = 0; i < destAddresses.size(); i++){
+                Packet *copy_payload = payload->dup();
+                copy_payload->setTimestamp();
+                emit(packetSentSignal, copy_payload);
+                socket.sendTo(copy_payload, destAddresses[i], destPort);
+                numSent++;
+            }
+
+            // Next timer
+            if (activeBurst && nextPkt >= nextSleep)
+                nextPkt = nextBurst;
+
+            if (stopTime >= SIMTIME_ZERO && nextPkt >= stopTime) {
+                timerNext->setKind(STOP);
+                nextPkt = stopTime;
+            }
+            scheduleAt(nextPkt, timerNext);
+    }
+    void MyUdpBasicApp::handleMessageWhenUp(cMessage *msg)
+    {
+        if (msg->isSelfMessage()) {
+            switch (msg->getKind()) {
+                case START:
+                    processStart();
+                    break;
+
+                case SEND:
+                    processSend();
+                    break;
+
+                case STOP:
+                    processStop();
+                    break;
+
+                default:
+                    throw cRuntimeError("Invalid kind %d in self message", (int)msg->getKind());
+            }
+        }
+        else{
+            socket.processMessage(msg);
+        }
+    }
+    void MyUdpBasicApp::socketDataArrived(UdpSocket *socket, Packet *packet)
+    {
+        // process incoming packet
+        processPacket(packet);
     }
     void MyUdpBasicApp::processPacket(Packet *pk)
     {
-        emit(packetReceivedSignal, pk);
-        //EV << "+++++++++++++++++++++++++++++++" << pk->getName() << "+++++++++++++++++++++++++++++++++++++\n";
+        if (pk->getKind() == UDP_I_ERROR) {
+            EV_WARN << "UDP error received\n";
+            delete pk;
+            return;
+        }
+
+        if (pk->hasPar("sourceId") && pk->hasPar("msgId")) {
+            // duplicate control
+            int moduleId = pk->par("sourceId");
+            int msgId = pk->par("msgId");
+            auto it = sourceSequence.find(moduleId);
+            if (it != sourceSequence.end()) {
+                if (it->second >= msgId) {
+                    EV_DEBUG << "Out of order packet: " << UdpSocket::getReceivedPacketInfo(pk) << endl;
+                    emit(outOfOrderPkSignal, pk);
+                    delete pk;
+                    numDuplicated++;
+                    return;
+                }
+                else
+                    it->second = msgId;
+            }
+            else
+                sourceSequence[moduleId] = msgId;
+        }
+
+        if (delayLimit > 0) {
+            if (simTime() - pk->getTimestamp() > delayLimit) {
+                EV_DEBUG << "Old packet: " << UdpSocket::getReceivedPacketInfo(pk) << endl;
+                PacketDropDetails details;
+                details.setReason(CONGESTION);
+                emit(packetDroppedSignal, pk, &details);
+                delete pk;
+                numDeleted++;
+                return;
+            }
+        }
         if ( strcmp(pk->getName(),"Coords") == 0 ){
+                    auto data = pk->popAtBack<CurrentCoordsMessage>();
+                    int neighbour_x = data->getX();
+                    int neighbour_y = data->getY();
+
+                    cModule *host = getContainingNode(this);
+                    IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
+                    Coord coords = mobility->getCurrentPosition();
+                    int x = coords.getX();
+                    int y = coords.getY();
+                    int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
+                    if (distance){
+                        //sendBroadcastCoords(pk->dup());
+                        sendBroadcastCoords();
+                    }
+        }
+        if ( strcmp(pk->getName(),"Coords_BROADCAST") == 0 ){
             auto data = pk->popAtBack<CurrentCoordsMessage>();
             int neighbour_x = data->getX();
             int neighbour_y = data->getY();
@@ -123,19 +212,22 @@ namespace inet{
             int x = coords.getX();
             int y = coords.getY();
             int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
-            if (distance){
-                /*char broadcast_string[] = "_Broadcast";
-                Packet* pk1 = pk->dup();
-                L3Address destAddr = chooseDestAddr();
-                emit(packetSentSignal, pk1);
-                socket.sendTo(pk1, destAddr, destPort);*/
-                //this->sendPacket(broadcast_string);
-            }
-            numReceived++;
+
         }
-        if (strcmp(pk->getName(),"BROADCAST_Coords") == 0 ){
-           EV_INFO << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" <<endl;
-        }
+        numReceived++;
         delete pk;
+    }
+    void MyUdpBasicApp::sendBroadcastCoords(){
+        char broadcast_string[] = "_BROADCAST";
+        Packet *pk = createPacket();
+        char *prName = strdup(pk->getName());
+        pk->setName(strcat(prName,broadcast_string));
+        pk->addPar("sourceId") = getId();
+        pk->addPar("msgId") = numSent;
+        pk->setTimestamp();
+
+        emit(packetSentSignal, pk);
+        socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, destPort);
+        numSent++;
     }
 }//namespace inet
