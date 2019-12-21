@@ -39,6 +39,13 @@ namespace inet{
     void MyUdpBasicApp::initialize(int stage)
     {
         UdpBasicBurst::initialize(stage);
+        //int distances[];
+       // cModule *host = getContainingNode(this);
+        //cPar maxDist = host->getAncestorPar("communicationRange");
+        //broadcastSocket.bind(Ipv4Address("255.255.255.255"), 1025);
+        maxDistance = 150;
+        optimalDistance = maxDistance * 0.5;
+        correctingDistance = maxDistance * 0.7;
     }
     Packet *MyUdpBasicApp::createPacket()
     {
@@ -67,7 +74,6 @@ namespace inet{
     }
     void MyUdpBasicApp::generateBurst(){
         simtime_t now = simTime();
-
             if (nextPkt < now)
                 nextPkt = now;
 
@@ -146,6 +152,51 @@ namespace inet{
         // process incoming packet
         processPacket(packet);
     }
+    void MyUdpBasicApp::processStart()
+    {
+        socket.setOutputGate(gate("socketOut"));
+        socket.bind(localPort);
+        socket.setCallback(this);
+
+        broadcastSocket.setOutputGate(gate("socketOut"));
+        broadcastSocket.bind(1025);
+        broadcastSocket.setBroadcast(true);
+        broadcastSocket.setCallback(this);
+
+        const char *destAddrs = par("destAddresses");
+        cStringTokenizer tokenizer(destAddrs);
+        const char *token;
+        bool excludeLocalDestAddresses = par("excludeLocalDestAddresses");
+
+        IInterfaceTable *ift = getModuleFromPar<IInterfaceTable>(par("interfaceTableModule"), this);
+
+        while ((token = tokenizer.nextToken()) != nullptr) {
+            if (strstr(token, "Broadcast") != nullptr)
+                destAddresses.push_back(Ipv4Address::ALLONES_ADDRESS);
+            else {
+                L3Address addr = L3AddressResolver().resolve(token);
+                if (excludeLocalDestAddresses && ift && ift->isLocalAddress(addr))
+                    continue;
+                destAddresses.push_back(addr);
+            }
+        }
+
+        nextSleep = simTime();
+        nextBurst = simTime();
+        nextPkt = simTime();
+        activeBurst = false;
+
+        isSource = !destAddresses.empty();
+
+        if (isSource) {
+            if (chooseDestAddrMode == ONCE)
+                destAddr = chooseDestAddr();
+
+            activeBurst = true;
+        }
+        timerNext->setKind(SEND);
+        processSend();
+    }
     void MyUdpBasicApp::processPacket(Packet *pk)
     {
         if (pk->getKind() == UDP_I_ERROR) {
@@ -196,8 +247,8 @@ namespace inet{
                     int x = coords.getX();
                     int y = coords.getY();
                     int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
-                    if (distance){
-                        //sendBroadcastCoords(pk->dup());
+
+                    if (distance >= correctingDistance){
                         sendBroadcastCoords();
                     }
         }
@@ -212,7 +263,7 @@ namespace inet{
             int x = coords.getX();
             int y = coords.getY();
             int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
-
+            EV_INFO <<"??????????????????????????????????????????????????????????????????????????\n";
         }
         numReceived++;
         delete pk;
@@ -227,7 +278,7 @@ namespace inet{
         pk->setTimestamp();
 
         emit(packetSentSignal, pk);
-        socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, destPort);
+        socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, 1025);
         numSent++;
     }
 }//namespace inet

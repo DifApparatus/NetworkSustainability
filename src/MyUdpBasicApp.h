@@ -21,6 +21,11 @@
 namespace inet{
 
 class MyUdpBasicApp : public UdpBasicBurst {
+    //int distances[];
+    UdpSocket broadcastSocket;
+    int maxDistance;
+    int optimalDistance;
+    int correctingDistance;
     protected:
         void initialize(int stage) override;
         virtual Packet *createPacket() override;
@@ -28,6 +33,7 @@ class MyUdpBasicApp : public UdpBasicBurst {
         virtual void handleMessageWhenUp(cMessage *msg) override;
         virtual void socketDataArrived(UdpSocket *socket, Packet *packet) override;
         void processPacket(Packet *pk) override;
+        virtual void processStart() override;
         void sendBroadcastCoords();
     };
 }// namespace inet
