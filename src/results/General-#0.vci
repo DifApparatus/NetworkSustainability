@@ -1,15 +1,15 @@
-file 18521 1576889800                                           
+file 11198 1576935165                                           
 version 2
-run General-0-20191221-03:56:27-29799
+run General-0-20191221-16:32:29-28476
 attr configname General
-attr datetime 20191221-03:56:27
+attr datetime 20191221-16:32:29
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Network
-attr processid 29799
+attr processid 28476
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -30,9 +30,10 @@ param **.node*.mobility.speed "truncnormal(20mps, 8mps)"
 param **.node*.mobility.updateInterval 100ms
 param **.integratedVisualizer.*.mobilityVisualizer.displayPositions true
 param **.node*.hasUdp true
-param **.node*.numApps 3
+param **.node*.numApps 4
 param **.node*.app[*].typename "\"MyUdpBasicApp\""
 param **.node*.app[*].messageLength 12B
+param **.node*.app[*].delayLimit 1s
 param **.node*.app[*].sendInterval 1s
 param **.node*.app[*].startTime 0s
 param **.node*.app[*].stopTime 10day
@@ -43,19 +44,21 @@ param **.node*.app[1].destPort 1025
 param **.node*.app[1].localPort 1025
 param **.node*.app[2].destPort 1026
 param **.node*.app[2].localPort 1026
-param **.node1.app[0].destAddresses "\"node2\""
-param **.node1.app[1].destAddresses "\"node3\""
-param **.node1.app[2].destAddresses "\"node4\""
-param **.node2.app[0].destAddresses "\"node1\""
-param **.node3.app[0].destAddresses "\"node1\""
-param **.node4.app[0].destAddresses "\"node1\""
-param **.node4.app[1].destAddresses "\"node5\""
-param **.node5.app[0].destAddresses "\"node4\""
+param **.node*.app[3].destPort 1027
+param **.node*.app[3].localPort 1027
+param **.node1.app[0].destAddresses "moduleListByPath(\"**.node2\",\"**.node4\")"
+param **.node*.app[*].chooseDestAddrMode "\"perBurst\""
+param **.node*.app[*].burstDuration 1s
+param **.node*.app[*].sleepDuration 0s
+param **.node*.wlan[*].typename "\"AckingWirelessInterface\""
+param **.node*.wlan[*].mac.useAck false
+param **.node*.wlan[*].mac.fullDuplex true
+param **.node*.wlan[*].bitrate 10000000000bps
 param **.node*.numWlanInterfaces 1
 param **.node*.wlan[*].radio.typename "\"UnitDiskRadio\""
 param **.node*.wlan[*].radio.transmitter.typename "\"UnitDiskTransmitter\""
 param **.node*.wlan[*].radio.transmitter.bitrate 10000000000bps
-param **.node*.wlan[*].radio.transmitter.communicationRange 75m
+param **.node*.wlan[*].radio.transmitter.communicationRange 200m
 param **.node*.wlan[*].radio.receiver.typename "\"UnitDiskReceiver\""
 param **.wlan[*].radio.displayCommunicationRange true
 param **.wlan[*].radio.receiver.ignoreInterference true
@@ -63,301 +66,198 @@ param **.wlan[*].radio.radioMediumModule "\"unitDiskRadioMedium\""
 param *.unitDiskRadioMedium.rangeFilter "\"communicationRange\""
 param *.unitDiskRadioMedium.signalAnalogRepresentation "\"unitDisk\""
 param *.integratedVisualizer.*.mediumVisualizer.mediumModule "\"unitDiskRadioMedium\""
-param *.integratedVisualizer.*.mediumVisualizer.packetFilter "\"Coords\""
+param *.integratedVisualizer.*.mediumVisualizer.packetFilter "\"*Coords*\""
 param *.integratedVisualizer.*.dataLinkVisualizer.displayLinks true
-param *.integratedVisualizer.*.dataLinkVisualizer.packetFilter "\"Coords\""
-param *.integratedVisualizer.*.physicalLinkVisualizer.packetFilter "\"Coords\""
+param *.integratedVisualizer.*.dataLinkVisualizer.packetFilter "\"Coords*\""
+param *.integratedVisualizer.*.physicalLinkVisualizer.packetFilter "\"Coords*\""
 param *.integratedVisualizer.*.transportConnectionVisualizer.displayTransportConnections true
-param *.integratedVisualizer.*.transportConnectionVisualizer.destinationNodeFilter "\"node1\""
+param *.integratedVisualizer.*.networkConnectionVisualizer.displayNetworkConnections true
 
-vector 0 Network.node1.energyStorage powerConsumption:vector ETV
+vector 0 Network.node1.wlan[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 1 Network.node2.wlan[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 2 Network.node3.wlan[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 3 Network.node4.wlan[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 4 Network.node5.wlan[0].queue queueLength:vector ETV
+attr interpolationmode sample-hold
+attr title "queue length, vector"
+vector 5 Network.node1.energyStorage powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 1 Network.node2.energyStorage powerConsumption:vector ETV
+vector 6 Network.node2.energyStorage powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 2 Network.node3.energyStorage powerConsumption:vector ETV
+vector 7 Network.node3.energyStorage powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 3 Network.node4.energyStorage powerConsumption:vector ETV
+vector 8 Network.node4.energyStorage powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 4 Network.node5.energyStorage powerConsumption:vector ETV
+vector 9 Network.node5.energyStorage powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 5 Network.node1.wlan[0].radio radioMode:vector ETV
+vector 10 Network.node1.wlan[0].radio radioMode:vector ETV
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, vector"
-vector 6 Network.node1.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+vector 11 Network.node1.wlan[0].radio.energyConsumer powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 7 Network.node2.wlan[0].radio radioMode:vector ETV
+vector 12 Network.node2.wlan[0].radio radioMode:vector ETV
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, vector"
-vector 8 Network.node2.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+vector 13 Network.node2.wlan[0].radio.energyConsumer powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 9 Network.node3.wlan[0].radio radioMode:vector ETV
+vector 14 Network.node3.wlan[0].radio radioMode:vector ETV
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, vector"
-vector 10 Network.node3.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+vector 15 Network.node3.wlan[0].radio.energyConsumer powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 11 Network.node4.wlan[0].radio radioMode:vector ETV
+vector 16 Network.node4.wlan[0].radio radioMode:vector ETV
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, vector"
-vector 12 Network.node4.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+vector 17 Network.node4.wlan[0].radio.energyConsumer powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 13 Network.node5.wlan[0].radio radioMode:vector ETV
+vector 18 Network.node5.wlan[0].radio radioMode:vector ETV
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, vector"
-vector 14 Network.node5.wlan[0].radio.energyConsumer powerConsumption:vector ETV
+vector 19 Network.node5.wlan[0].radio.energyConsumer powerConsumption:vector ETV
 attr interpolationmode sample-hold
 attr source powerConsumptionChanged
 attr title "Power consumption, vector"
-vector 15 Network.node1.wlan[0].radio receptionState:vector ETV
+vector 20 Network.node1.wlan[0].radio receptionState:vector ETV
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, vector"
-vector 16 Network.node2.wlan[0].radio receptionState:vector ETV
+vector 21 Network.node1.wlan[0].radio transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, vector"
+vector 22 Network.node2.wlan[0].radio receptionState:vector ETV
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, vector"
-vector 17 Network.node3.wlan[0].radio receptionState:vector ETV
+vector 23 Network.node2.wlan[0].radio transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, vector"
+vector 24 Network.node3.wlan[0].radio receptionState:vector ETV
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, vector"
-vector 18 Network.node4.wlan[0].radio receptionState:vector ETV
+vector 25 Network.node3.wlan[0].radio transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, vector"
+vector 26 Network.node4.wlan[0].radio receptionState:vector ETV
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, vector"
-vector 19 Network.node5.wlan[0].radio receptionState:vector ETV
+vector 27 Network.node4.wlan[0].radio transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, vector"
+vector 28 Network.node5.wlan[0].radio receptionState:vector ETV
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, vector"
-vector 20 Network.node1.app[0] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 21 Network.node1.app[1] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 22 Network.node1.app[2] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 23 Network.node2.app[0] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 24 Network.node3.app[0] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 25 Network.node4.app[0] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 26 Network.node4.app[1] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 27 Network.node5.app[0] packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 28 Network.node1.udp packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 29 Network.node2.udp packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 30 Network.node3.udp packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 31 Network.node4.udp packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 32 Network.node5.udp packetSent:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetSent
-attr title "packets sent, vector(packetBytes)"
-vector 33 Network.node3.energyStorage residualEnergyCapacity:vector ETV
-attr interpolationmode linear
-attr source residualEnergyCapacityChanged
-attr title "Residual energy capacity, vector"
-vector 34 Network.node3.wlan[0].radio transmissionState:vector ETV
+vector 29 Network.node5.wlan[0].radio transmissionState:vector ETV
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, vector"
-vector 35 Network.node5.energyStorage residualEnergyCapacity:vector ETV
+vector 30 Network.node1.app[0] packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 31 Network.node1.udp packetSent:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, vector(packetBytes)"
+vector 32 Network.node1.wlan[0].queue packetReceived:vector(packetBytes) ETV
+attr interpolationmode none
+attr title "received packets, vector(packetBytes)"
+vector 33 Network.node1.wlan[0].queue queueingTime:vector ETV
+attr interpolationmode none
+attr title "queueing time, vector"
+vector 34 Network.node1.wlan[0].mac rcvdPkFromHl:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, vector(packetBytes)"
+vector 35 Network.node1.wlan[0].mac sentDownPk:vector(packetBytes) ETV
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, vector(packetBytes)"
+vector 36 Network.node1.energyStorage residualEnergyCapacity:vector ETV
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, vector"
-vector 36 Network.node5.wlan[0].radio transmissionState:vector ETV
-attr interpolationmode sample-hold
-attr source transmissionStateChanged
-attr title "Radio transmission state, vector"
-vector 37 Network.node1.energyStorage residualEnergyCapacity:vector ETV
+vector 37 Network.node2.energyStorage residualEnergyCapacity:vector ETV
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, vector"
-vector 38 Network.node1.wlan[0].radio transmissionState:vector ETV
-attr interpolationmode sample-hold
-attr source transmissionStateChanged
-attr title "Radio transmission state, vector"
-vector 39 Network.node4.energyStorage residualEnergyCapacity:vector ETV
-attr interpolationmode linear
-attr source residualEnergyCapacityChanged
-attr title "Residual energy capacity, vector"
-vector 40 Network.node4.wlan[0].radio transmissionState:vector ETV
-attr interpolationmode sample-hold
-attr source transmissionStateChanged
-attr title "Radio transmission state, vector"
-vector 41 Network.node2.energyStorage residualEnergyCapacity:vector ETV
-attr interpolationmode linear
-attr source residualEnergyCapacityChanged
-attr title "Residual energy capacity, vector"
-vector 42 Network.node2.wlan[0].radio transmissionState:vector ETV
-attr interpolationmode sample-hold
-attr source transmissionStateChanged
-attr title "Radio transmission state, vector"
-0	10617 244 0 82 0 0.0016000488 15 0 0.075 0.08502 0.0056750001
-1	10861 490 0 139 0 0.0034400976 25 0 0.075 0.170035 0.011350000175
-2	11351 480 0 122 0 0.0028000976 25 0 0.075 0.170035 0.011350000175
-3	11831 246 0 98 0 0.0022400488 15 0 0.075 0.08502 0.0056750001
-4	12077 246 0 63 0 0.0012800488 15 0 0.075 0.08502 0.0056750001
-5	12323 60 0 82 0 0.0016000488 5 0 3 7 17
-6	12383 236 0 82 0 0.0016000488 14 0 0.075 0.08502 0.0056750001
-7	12619 104 0 139 0 0.0034400976 7 0 3 12 30
-8	12723 482 0 139 0 0.0034400976 24 0 0.075 0.170035 0.011350000175
-9	13205 102 0 122 0 0.0028000976 7 0 3 12 30
-10	13307 496 0 122 0 0.0028000976 24 0 0.075 0.170035 0.011350000175
-11	13803 65 0 98 0 0.0022400488 5 0 3 7 17
-12	13868 252 0 98 0 0.0022400488 14 0 0.075 0.08502 0.0056750001
-13	14120 65 0 63 0 0.0012800488 5 0 3 7 17
-14	14185 252 0 63 0 0.0012800488 14 0 0.075 0.08502 0.0056750001
-15	14437 47 0 82 0 0.0016000488 3 0 1 2 2
-16	14484 93 0 139 0 0.0034400976 5 0 1 3 3
-17	14577 91 0 122 0 0.0028000976 5 0 1 3 3
-18	14668 47 0 98 0 0.0022400488 3 0 1 2 2
-19	14715 47 0 63 0 0.0012800488 3 0 1 2 2
-20	14762 10 1 1 0 0 1 12 12 12 144
-21	14772 10 2 2 0 0 1 12 12 12 144
-22	14782 10 3 3 0 0 1 12 12 12 144
-23	14792 10 4 4 0 0 1 12 12 12 144
-24	14802 10 7 7 0 0 1 12 12 12 144
-25	14812 11 10 10 0 0 1 12 12 12 144
-26	14823 11 11 11 0 0 1 12 12 12 144
-27	14834 11 13 13 0 0 1 12 12 12 144
-28	14845 33 17 21 0 0 3 20 20 60 1200
-29	14878 11 23 23 0 0 1 20 20 20 400
-30	14889 11 27 27 0 0 1 20 20 20 400
-31	14900 22 31 33 0 0 2 20 20 40 800
-32	14922 11 36 36 0 0 1 20 20 20 400
-33	14933 178 57 122 0.001088 0.0028000976 6 -1.9394e-06 -5.44e-09 -6.79086e-06 1.03316890524e-11
-34	15111 163 57 122 0.001088 0.0028000976 8 0 2 8 12
-35	15274 81 58 63 0.001088 0.0012800488 3 -9.691e-07 -5.44e-09 -1.93998e-06 1.8712587972e-12
-36	15355 75 58 63 0.001088 0.0012800488 4 0 2 4 6
-37	15430 80 80 82 0.001408 0.0016000488 3 -9.707e-07 -7.04e-09 -1.94478e-06 1.8774744132e-12
-38	15510 74 80 82 0.001408 0.0016000488 4 0 2 4 6
-39	15584 82 94 98 0.002048 0.0022400488 3 -9.739e-07 -1.024e-08 -1.95438e-06 1.8899517252e-12
-40	15666 75 94 98 0.002048 0.0022400488 4 0 2 4 6
-41	15741 182 107 139 0.002368 0.0034400976 6 -1.9426e-06 -1.184e-08 -6.81966e-06 1.03877200284e-11
-42	15923 167 107 139 0.002368 0.0034400976 8 0 2 8 12
-vector 43 Network.node1.app[0] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 44 Network.node1.app[1] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 45 Network.node1.app[2] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 46 Network.node2.app[0] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 47 Network.node2.app[1] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 48 Network.node2.app[2] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 49 Network.node3.app[0] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 50 Network.node3.app[1] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 51 Network.node3.app[2] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 52 Network.node4.app[0] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 53 Network.node4.app[1] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 54 Network.node4.app[2] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 55 Network.node5.app[0] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 56 Network.node5.app[1] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-vector 57 Network.node5.app[2] throughput:vector ETV
-attr source throughput(packetReceived)
-attr title "throughput, vector"
-attr unit bps
-43	18160 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-44	18184 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-45	18208 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-46	18232 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-47	18256 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-48	18280 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-49	18304 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-50	18328 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-51	18352 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-52	18376 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-53	18400 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-54	18424 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-55	18448 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-56	18472 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
-57	18496 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+0	9715 8 0 0 0 0 1 0 0 0 0
+1	9723 8 0 0 0 0 1 0 0 0 0
+2	9731 8 0 0 0 0 1 0 0 0 0
+3	9739 8 0 0 0 0 1 0 0 0 0
+4	9747 8 0 0 0 0 1 0 0 0 0
+5	9755 142 0 46 0 0.0000000424 10 0 0.075005 0.09003 0.00570090015
+6	9897 111 0 47 0 0.000000314418 8 0 0.055 0.06501 0.00307505005
+7	10008 59 0 0 0 0 6 0 0.005005 0.00501 2.505005e-05
+8	10067 59 0 0 0 0 6 0 0.005005 0.00501 2.505005e-05
+9	10126 59 0 0 0 0 6 0 0.005005 0.00501 2.505005e-05
+10	10185 27 0 0 0 0 3 0 4 4 16
+11	10212 143 0 46 0 0.0000000424 9 0 0.075005 0.09003 0.00570090015
+12	10355 27 0 0 0 0 3 0 4 4 16
+13	10382 110 0 47 0 0.000000314418 7 0 0.055 0.06501 0.00307505005
+14	10492 27 0 0 0 0 3 0 4 4 16
+15	10519 56 0 0 0 0 5 0 0.005005 0.00501 2.505005e-05
+16	10575 27 0 0 0 0 3 0 4 4 16
+17	10602 56 0 0 0 0 5 0 0.005005 0.00501 2.505005e-05
+18	10658 27 0 0 0 0 3 0 4 4 16
+19	10685 56 0 0 0 0 5 0 0.005005 0.00501 2.505005e-05
+20	10741 9 0 0 0 0 1 1 1 1 1
+21	10750 40 0 46 0 0.0000000424 3 1 2 4 6
+22	10790 32 0 47 0 0.000000314418 2 1 3 4 10
+23	10822 9 0 0 0 0 1 1 1 1 1
+24	10831 9 0 0 0 0 1 1 1 1 1
+25	10840 9 0 0 0 0 1 1 1 1 1
+26	10849 9 0 0 0 0 1 1 1 1 1
+27	10858 9 0 0 0 0 1 1 1 1 1
+28	10867 9 0 0 0 0 1 1 1 1 1
+29	10876 9 0 0 0 0 1 1 1 1 1
+30	10885 10 1 1 0 0 1 12 12 12 144
+31	10895 11 22 22 0 0 1 20 20 20 400
+32	10906 11 43 43 0 0 1 40 40 40 1600
+33	10917 10 43 43 0 0 1 0 0 0 0
+34	10927 11 44 44 0 0 1 40 40 40 1600
+35	10938 11 44 44 0 0 1 41 41 41 1681
+36	10949 33 46 46 0.0000000424 0.0000000424 1 -3.180212e-09 -3.180212e-09 -3.180212e-09 1.0113748364944e-17
+37	10982 37 47 47 0.000000314418 0.000000314418 1 -1.57366209e-09 -1.57366209e-09 -1.57366209e-09 2.4764123735032e-18
+6	11019 58 48 48 0.000000356818 0.000000356818 2 0.005005 0.005005 0.01001 5.010005e-05
+13	11077 60 48 48 0.000000356818 0.000000356818 2 0.005005 0.005005 0.01001 5.010005e-05
+22	11137 23 48 48 0.000000356818 0.000000356818 1 1 1 1 1
+37	11160 37 48 48 0.000000356818 0.000000356818 1 -3.90566209e-09 -3.90566209e-09 -3.90566209e-09 1.5254196361263e-17
 

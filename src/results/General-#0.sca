@@ -1,14 +1,14 @@
 version 2
-run General-0-20191221-03:56:27-29799
+run General-0-20191221-16:32:29-28476
 attr configname General
-attr datetime 20191221-03:56:27
+attr datetime 20191221-16:32:29
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Network
-attr processid 29799
+attr processid 28476
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -29,9 +29,10 @@ param **.node*.mobility.speed "truncnormal(20mps, 8mps)"
 param **.node*.mobility.updateInterval 100ms
 param **.integratedVisualizer.*.mobilityVisualizer.displayPositions true
 param **.node*.hasUdp true
-param **.node*.numApps 3
+param **.node*.numApps 4
 param **.node*.app[*].typename "\"MyUdpBasicApp\""
 param **.node*.app[*].messageLength 12B
+param **.node*.app[*].delayLimit 1s
 param **.node*.app[*].sendInterval 1s
 param **.node*.app[*].startTime 0s
 param **.node*.app[*].stopTime 10day
@@ -42,19 +43,21 @@ param **.node*.app[1].destPort 1025
 param **.node*.app[1].localPort 1025
 param **.node*.app[2].destPort 1026
 param **.node*.app[2].localPort 1026
-param **.node1.app[0].destAddresses "\"node2\""
-param **.node1.app[1].destAddresses "\"node3\""
-param **.node1.app[2].destAddresses "\"node4\""
-param **.node2.app[0].destAddresses "\"node1\""
-param **.node3.app[0].destAddresses "\"node1\""
-param **.node4.app[0].destAddresses "\"node1\""
-param **.node4.app[1].destAddresses "\"node5\""
-param **.node5.app[0].destAddresses "\"node4\""
+param **.node*.app[3].destPort 1027
+param **.node*.app[3].localPort 1027
+param **.node1.app[0].destAddresses "moduleListByPath(\"**.node2\",\"**.node4\")"
+param **.node*.app[*].chooseDestAddrMode "\"perBurst\""
+param **.node*.app[*].burstDuration 1s
+param **.node*.app[*].sleepDuration 0s
+param **.node*.wlan[*].typename "\"AckingWirelessInterface\""
+param **.node*.wlan[*].mac.useAck false
+param **.node*.wlan[*].mac.fullDuplex true
+param **.node*.wlan[*].bitrate 10000000000bps
 param **.node*.numWlanInterfaces 1
 param **.node*.wlan[*].radio.typename "\"UnitDiskRadio\""
 param **.node*.wlan[*].radio.transmitter.typename "\"UnitDiskTransmitter\""
 param **.node*.wlan[*].radio.transmitter.bitrate 10000000000bps
-param **.node*.wlan[*].radio.transmitter.communicationRange 75m
+param **.node*.wlan[*].radio.transmitter.communicationRange 200m
 param **.node*.wlan[*].radio.receiver.typename "\"UnitDiskReceiver\""
 param **.wlan[*].radio.displayCommunicationRange true
 param **.wlan[*].radio.receiver.ignoreInterference true
@@ -62,14 +65,14 @@ param **.wlan[*].radio.radioMediumModule "\"unitDiskRadioMedium\""
 param *.unitDiskRadioMedium.rangeFilter "\"communicationRange\""
 param *.unitDiskRadioMedium.signalAnalogRepresentation "\"unitDisk\""
 param *.integratedVisualizer.*.mediumVisualizer.mediumModule "\"unitDiskRadioMedium\""
-param *.integratedVisualizer.*.mediumVisualizer.packetFilter "\"Coords\""
+param *.integratedVisualizer.*.mediumVisualizer.packetFilter "\"*Coords*\""
 param *.integratedVisualizer.*.dataLinkVisualizer.displayLinks true
-param *.integratedVisualizer.*.dataLinkVisualizer.packetFilter "\"Coords\""
-param *.integratedVisualizer.*.physicalLinkVisualizer.packetFilter "\"Coords\""
+param *.integratedVisualizer.*.dataLinkVisualizer.packetFilter "\"Coords*\""
+param *.integratedVisualizer.*.physicalLinkVisualizer.packetFilter "\"Coords*\""
 param *.integratedVisualizer.*.transportConnectionVisualizer.displayTransportConnections true
-param *.integratedVisualizer.*.transportConnectionVisualizer.destinationNodeFilter "\"node1\""
+param *.integratedVisualizer.*.networkConnectionVisualizer.displayNetworkConnections true
 
-scalar Network.node1.energyStorage residualEnergyCapacity:last -9.707e-07
+scalar Network.node1.energyStorage residualEnergyCapacity:last -3.180212e-09
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -89,24 +92,120 @@ scalar Network.node1.lo[0].lo passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
-scalar Network.node1.wlan[0].mac nbTxFrames 1
-scalar Network.node1.wlan[0].mac nbRxFrames 0
-scalar Network.node1.wlan[0].mac nbDroppedFrames 0
-scalar Network.node1.wlan[0].mac nbMissedAcks 1
-scalar Network.node1.wlan[0].mac nbRecvdAcks 0
-scalar Network.node1.wlan[0].mac nbTxAcks 0
-scalar Network.node1.wlan[0].mac nbDuplicates 0
-scalar Network.node1.wlan[0].mac meanBackoff 0.00128
-scalar Network.node1.wlan[0].mac nbBackoffs 2
-scalar Network.node1.wlan[0].mac backoffDurations 0.00256
-scalar Network.node1.wlan[0].mac packetDropNotAddressToUs:count 0
+statistic Network.node1.wlan[0].queue queueingTime:histogram
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
+field sum 0
+field sqrsum 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, count"
-scalar Network.node1.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr title "queueing time, histogram"
+bin	-inf	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
+scalar Network.node1.wlan[0].queue queueLength:max 0
+attr interpolationmode sample-hold
+attr title "queue length, max"
+scalar Network.node1.wlan[0].queue queueLength:timeavg 0
+attr interpolationmode sample-hold
+attr title "queue length, timeavg"
+scalar Network.node1.wlan[0].queue packetReceived:count 1
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, sum(packetBytes)"
+attr title "received packets, count"
+scalar Network.node1.wlan[0].queue packetReceived:sum(packetBytes) 40
+attr interpolationmode none
+attr title "received packets, sum(packetBytes)"
+scalar Network.node1.wlan[0].queue dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, count"
+scalar Network.node1.wlan[0].queue dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, sum(packetBytes)"
+scalar Network.node1.wlan[0].mac rcvdPkFromLl:count 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, count"
+scalar Network.node1.wlan[0].mac rcvdPkFromLl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, sum(packetBytes)"
+scalar Network.node1.wlan[0].mac sentDownPk:count 1
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, count"
+scalar Network.node1.wlan[0].mac sentDownPk:sum(packetBytes) 41
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, sum(packetBytes)"
+scalar Network.node1.wlan[0].mac rcvdPkFromHl:count 1
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, count"
+scalar Network.node1.wlan[0].mac rcvdPkFromHl:sum(packetBytes) 40
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, sum(packetBytes)"
+scalar Network.node1.wlan[0].mac passedUpPk:count 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, count"
+scalar Network.node1.wlan[0].mac passedUpPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, sum(packetBytes)"
 scalar Network.node1.wlan[0].mac packetDropIncorrectlyReceived:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
@@ -115,43 +214,35 @@ scalar Network.node1.wlan[0].mac packetDropIncorrectlyReceived:sum(packetBytes) 
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packet drop: incorrectly received, sum(packetBytes)"
-scalar Network.node1.wlan[0].mac packetDropQueueOverlow:count 0
+scalar Network.node1.wlan[0].mac packetDropInterfaceDown:count 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, count"
-scalar Network.node1.wlan[0].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, count"
+scalar Network.node1.wlan[0].mac packetDropInterfaceDown:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, sum(packetBytes)"
-scalar Network.node1.wlan[0].mac packetDropRetryLimitReached:count 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, sum(packetBytes)"
+scalar Network.node1.wlan[0].mac packetDropNotAddressedToUs:count 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, count"
-scalar Network.node1.wlan[0].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node1.wlan[0].mac packetDropNotAddressedToUs:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, sum(packetBytes)"
-scalar Network.node1.wlan[0].mac packetDropBackoffLimitReached:count 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, count"
-scalar Network.node1.wlan[0].mac packetDropBackoffLimitReached:sum(packetBytes) 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, sum(packetBytes)"
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
 scalar Network.node1.wlan[0].mac linkBroken:count 0
 attr interpolationmode none
 attr source linkBroken
 attr title "link break, count"
-scalar Network.node1.wlan[0].radio radioMode:count 5
+scalar Network.node1.wlan[0].radio radioMode:count 3
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node1.wlan[0].radio receptionState:count 3
+scalar Network.node1.wlan[0].radio receptionState:count 1
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
-scalar Network.node1.wlan[0].radio transmissionState:count 4
+scalar Network.node1.wlan[0].radio transmissionState:count 3
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, count"
@@ -263,11 +354,11 @@ scalar Network.node1.udp packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-scalar Network.node1.udp packetSent:count 3
+scalar Network.node1.udp packetSent:count 1
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node1.udp packetSent:sum(packetBytes) 60
+scalar Network.node1.udp packetSent:sum(packetBytes) 20
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
@@ -283,8 +374,9 @@ scalar Network.node1.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
-scalar Network.node1.app[0] "packets sent" 1
-scalar Network.node1.app[0] "packets received" 0
+scalar Network.node1.app[0] "Total sent" 1
+scalar Network.node1.app[0] "Total received" 0
+scalar Network.node1.app[0] "Total deleted" 0
 scalar Network.node1.app[0] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -293,7 +385,7 @@ scalar Network.node1.app[0] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node1.app[0] rcvdPkLifetime:stats
+statistic Network.node1.app[0] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -303,8 +395,11 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node1.app[0] packetSent:count 1
 attr interpolationmode none
 attr source packetSent
@@ -313,8 +408,25 @@ scalar Network.node1.app[0] packetSent:sum(packetBytes) 12
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node1.app[1] "packets sent" 1
-scalar Network.node1.app[1] "packets received" 0
+scalar Network.node1.app[0] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node1.app[0] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node1.app[0] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node1.app[0] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node1.app[1] "Total sent" 0
+scalar Network.node1.app[1] "Total received" 0
+scalar Network.node1.app[1] "Total deleted" 0
 scalar Network.node1.app[1] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -323,7 +435,7 @@ scalar Network.node1.app[1] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node1.app[1] rcvdPkLifetime:stats
+statistic Network.node1.app[1] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -333,18 +445,38 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
-scalar Network.node1.app[1] packetSent:count 1
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node1.app[1] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node1.app[1] packetSent:sum(packetBytes) 12
+scalar Network.node1.app[1] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node1.app[2] "packets sent" 1
-scalar Network.node1.app[2] "packets received" 0
+scalar Network.node1.app[1] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node1.app[1] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node1.app[1] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node1.app[1] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node1.app[2] "Total sent" 0
+scalar Network.node1.app[2] "Total received" 0
+scalar Network.node1.app[2] "Total deleted" 0
 scalar Network.node1.app[2] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -353,7 +485,7 @@ scalar Network.node1.app[2] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node1.app[2] rcvdPkLifetime:stats
+statistic Network.node1.app[2] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -363,17 +495,86 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
-scalar Network.node1.app[2] packetSent:count 1
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node1.app[2] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node1.app[2] packetSent:sum(packetBytes) 12
+scalar Network.node1.app[2] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node2.energyStorage residualEnergyCapacity:last -1.9426e-06
+scalar Network.node1.app[2] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node1.app[2] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node1.app[2] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node1.app[2] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node1.app[3] "Total sent" 0
+scalar Network.node1.app[3] "Total received" 0
+scalar Network.node1.app[3] "Total deleted" 0
+scalar Network.node1.app[3] packetReceived:count 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, count"
+scalar Network.node1.app[3] packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, sum(packetBytes)"
+statistic Network.node1.app[3] endToEndDelay:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr source dataAge(packetReceived)
+attr title "delay, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node1.app[3] packetSent:count 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, count"
+scalar Network.node1.app[3] packetSent:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, sum(packetBytes)"
+scalar Network.node1.app[3] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node1.app[3] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node1.app[3] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node1.app[3] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node2.energyStorage residualEnergyCapacity:last -3.90566209e-09
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -393,24 +594,71 @@ scalar Network.node2.lo[0].lo passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
-scalar Network.node2.wlan[0].mac nbTxFrames 2
-scalar Network.node2.wlan[0].mac nbRxFrames 0
-scalar Network.node2.wlan[0].mac nbDroppedFrames 0
-scalar Network.node2.wlan[0].mac nbMissedAcks 1
-scalar Network.node2.wlan[0].mac nbRecvdAcks 0
-scalar Network.node2.wlan[0].mac nbTxAcks 0
-scalar Network.node2.wlan[0].mac nbDuplicates 0
-scalar Network.node2.wlan[0].mac meanBackoff 0.00112
-scalar Network.node2.wlan[0].mac nbBackoffs 2
-scalar Network.node2.wlan[0].mac backoffDurations 0.00224
-scalar Network.node2.wlan[0].mac packetDropNotAddressToUs:count 0
+statistic Network.node2.wlan[0].queue queueingTime:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, count"
-scalar Network.node2.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr title "queueing time, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node2.wlan[0].queue queueLength:max 0
+attr interpolationmode sample-hold
+attr title "queue length, max"
+scalar Network.node2.wlan[0].queue queueLength:timeavg 0
+attr interpolationmode sample-hold
+attr title "queue length, timeavg"
+scalar Network.node2.wlan[0].queue packetReceived:count 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, sum(packetBytes)"
+attr title "received packets, count"
+scalar Network.node2.wlan[0].queue packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr title "received packets, sum(packetBytes)"
+scalar Network.node2.wlan[0].queue dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, count"
+scalar Network.node2.wlan[0].queue dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, sum(packetBytes)"
+scalar Network.node2.wlan[0].mac rcvdPkFromLl:count 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, count"
+scalar Network.node2.wlan[0].mac rcvdPkFromLl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, sum(packetBytes)"
+scalar Network.node2.wlan[0].mac sentDownPk:count 0
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, count"
+scalar Network.node2.wlan[0].mac sentDownPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, sum(packetBytes)"
+scalar Network.node2.wlan[0].mac rcvdPkFromHl:count 0
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, count"
+scalar Network.node2.wlan[0].mac rcvdPkFromHl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, sum(packetBytes)"
+scalar Network.node2.wlan[0].mac passedUpPk:count 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, count"
+scalar Network.node2.wlan[0].mac passedUpPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, sum(packetBytes)"
 scalar Network.node2.wlan[0].mac packetDropIncorrectlyReceived:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
@@ -419,43 +667,35 @@ scalar Network.node2.wlan[0].mac packetDropIncorrectlyReceived:sum(packetBytes) 
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packet drop: incorrectly received, sum(packetBytes)"
-scalar Network.node2.wlan[0].mac packetDropQueueOverlow:count 0
+scalar Network.node2.wlan[0].mac packetDropInterfaceDown:count 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, count"
-scalar Network.node2.wlan[0].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, count"
+scalar Network.node2.wlan[0].mac packetDropInterfaceDown:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, sum(packetBytes)"
-scalar Network.node2.wlan[0].mac packetDropRetryLimitReached:count 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, sum(packetBytes)"
+scalar Network.node2.wlan[0].mac packetDropNotAddressedToUs:count 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, count"
-scalar Network.node2.wlan[0].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node2.wlan[0].mac packetDropNotAddressedToUs:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, sum(packetBytes)"
-scalar Network.node2.wlan[0].mac packetDropBackoffLimitReached:count 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, count"
-scalar Network.node2.wlan[0].mac packetDropBackoffLimitReached:sum(packetBytes) 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, sum(packetBytes)"
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
 scalar Network.node2.wlan[0].mac linkBroken:count 0
 attr interpolationmode none
 attr source linkBroken
 attr title "link break, count"
-scalar Network.node2.wlan[0].radio radioMode:count 7
+scalar Network.node2.wlan[0].radio radioMode:count 3
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node2.wlan[0].radio receptionState:count 5
+scalar Network.node2.wlan[0].radio receptionState:count 3
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
-scalar Network.node2.wlan[0].radio transmissionState:count 8
+scalar Network.node2.wlan[0].radio transmissionState:count 1
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, count"
@@ -473,44 +713,191 @@ bin	-inf	0
 bin	0	0
 bin	1	0
 statistic Network.node2.wlan[0].radio packetErrorRate:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
 field sum 0
 field sqrsum 0
 attr source packetErrorRate(packetSentToUpper)
 attr title "Packet error rate, histogram"
 bin	-inf	0
-bin	0	0
-bin	1	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 statistic Network.node2.wlan[0].radio bitErrorRate:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
 field sum 0
 field sqrsum 0
 attr source bitErrorRate(packetSentToUpper)
 attr title "Bit error rate, histogram"
 bin	-inf	0
-bin	0	0
-bin	1	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 statistic Network.node2.wlan[0].radio symbolErrorRate:histogram
-field count 0
-field mean -nan
-field stddev nan
-field min nan
-field max nan
+field count 1
+field mean 0
+field stddev -nan
+field min 0
+field max 0
 field sum 0
 field sqrsum 0
 attr source symbolErrorRate(packetSentToUpper)
 attr title "Symbol error rate, histogram"
 bin	-inf	0
-bin	0	0
-bin	1	0
+bin	-0.5	0
+bin	-0.48	0
+bin	-0.46	0
+bin	-0.44	0
+bin	-0.42	0
+bin	-0.4	0
+bin	-0.38	0
+bin	-0.36	0
+bin	-0.34	0
+bin	-0.32	0
+bin	-0.3	0
+bin	-0.28	0
+bin	-0.26	0
+bin	-0.24	0
+bin	-0.22	0
+bin	-0.2	0
+bin	-0.18	0
+bin	-0.16	0
+bin	-0.14	0
+bin	-0.12	0
+bin	-0.1	0
+bin	-0.08	0
+bin	-0.06	0
+bin	-0.04	0
+bin	-0.02	0
+bin	0	1
+bin	0.02	0
+bin	0.04	0
+bin	0.06	0
+bin	0.08	0
+bin	0.1	0
+bin	0.12	0
+bin	0.14	0
+bin	0.16	0
+bin	0.18	0
+bin	0.2	0
+bin	0.22	0
+bin	0.24	0
+bin	0.26	0
+bin	0.28	0
+bin	0.3	0
+bin	0.32	0
+bin	0.34	0
+bin	0.36	0
+bin	0.38	0
+bin	0.4	0
+bin	0.42	0
+bin	0.44	0
+bin	0.46	0
+bin	0.48	0
+bin	0.5	0
 scalar Network.node2.ipv4.ip packetDropAddressResolutionFailed:count 0
 attr interpolationmode none
 attr source packetDropReasonIsAddressResolutionFailed(packetDropped)
@@ -567,11 +954,11 @@ scalar Network.node2.udp packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-scalar Network.node2.udp packetSent:count 1
+scalar Network.node2.udp packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node2.udp packetSent:sum(packetBytes) 20
+scalar Network.node2.udp packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
@@ -587,8 +974,9 @@ scalar Network.node2.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
-scalar Network.node2.app[0] "packets sent" 1
-scalar Network.node2.app[0] "packets received" 0
+scalar Network.node2.app[0] "Total sent" 0
+scalar Network.node2.app[0] "Total received" 0
+scalar Network.node2.app[0] "Total deleted" 0
 scalar Network.node2.app[0] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -597,7 +985,7 @@ scalar Network.node2.app[0] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node2.app[0] rcvdPkLifetime:stats
+statistic Network.node2.app[0] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -607,18 +995,38 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
-scalar Network.node2.app[0] packetSent:count 1
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node2.app[0] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node2.app[0] packetSent:sum(packetBytes) 12
+scalar Network.node2.app[0] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node2.app[1] "packets sent" 0
-scalar Network.node2.app[1] "packets received" 0
+scalar Network.node2.app[0] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node2.app[0] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node2.app[0] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node2.app[0] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node2.app[1] "Total sent" 0
+scalar Network.node2.app[1] "Total received" 0
+scalar Network.node2.app[1] "Total deleted" 0
 scalar Network.node2.app[1] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -627,7 +1035,7 @@ scalar Network.node2.app[1] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node2.app[1] rcvdPkLifetime:stats
+statistic Network.node2.app[1] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -637,8 +1045,11 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node2.app[1] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
@@ -647,8 +1058,25 @@ scalar Network.node2.app[1] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node2.app[2] "packets sent" 0
-scalar Network.node2.app[2] "packets received" 0
+scalar Network.node2.app[1] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node2.app[1] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node2.app[1] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node2.app[1] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node2.app[2] "Total sent" 0
+scalar Network.node2.app[2] "Total received" 0
+scalar Network.node2.app[2] "Total deleted" 0
 scalar Network.node2.app[2] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -657,7 +1085,7 @@ scalar Network.node2.app[2] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node2.app[2] rcvdPkLifetime:stats
+statistic Network.node2.app[2] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -667,8 +1095,11 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node2.app[2] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
@@ -677,7 +1108,73 @@ scalar Network.node2.app[2] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node3.energyStorage residualEnergyCapacity:last -1.9394e-06
+scalar Network.node2.app[2] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node2.app[2] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node2.app[2] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node2.app[2] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node2.app[3] "Total sent" 0
+scalar Network.node2.app[3] "Total received" 0
+scalar Network.node2.app[3] "Total deleted" 0
+scalar Network.node2.app[3] packetReceived:count 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, count"
+scalar Network.node2.app[3] packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, sum(packetBytes)"
+statistic Network.node2.app[3] endToEndDelay:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr source dataAge(packetReceived)
+attr title "delay, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node2.app[3] packetSent:count 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, count"
+scalar Network.node2.app[3] packetSent:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, sum(packetBytes)"
+scalar Network.node2.app[3] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node2.app[3] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node2.app[3] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node2.app[3] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node3.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -697,24 +1194,71 @@ scalar Network.node3.lo[0].lo passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
-scalar Network.node3.wlan[0].mac nbTxFrames 2
-scalar Network.node3.wlan[0].mac nbRxFrames 0
-scalar Network.node3.wlan[0].mac nbDroppedFrames 0
-scalar Network.node3.wlan[0].mac nbMissedAcks 2
-scalar Network.node3.wlan[0].mac nbRecvdAcks 0
-scalar Network.node3.wlan[0].mac nbTxAcks 0
-scalar Network.node3.wlan[0].mac nbDuplicates 0
-scalar Network.node3.wlan[0].mac meanBackoff 0.00053333333333333
-scalar Network.node3.wlan[0].mac nbBackoffs 3
-scalar Network.node3.wlan[0].mac backoffDurations 0.0016
-scalar Network.node3.wlan[0].mac packetDropNotAddressToUs:count 0
+statistic Network.node3.wlan[0].queue queueingTime:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, count"
-scalar Network.node3.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr title "queueing time, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node3.wlan[0].queue queueLength:max 0
+attr interpolationmode sample-hold
+attr title "queue length, max"
+scalar Network.node3.wlan[0].queue queueLength:timeavg 0
+attr interpolationmode sample-hold
+attr title "queue length, timeavg"
+scalar Network.node3.wlan[0].queue packetReceived:count 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, sum(packetBytes)"
+attr title "received packets, count"
+scalar Network.node3.wlan[0].queue packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr title "received packets, sum(packetBytes)"
+scalar Network.node3.wlan[0].queue dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, count"
+scalar Network.node3.wlan[0].queue dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, sum(packetBytes)"
+scalar Network.node3.wlan[0].mac rcvdPkFromLl:count 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, count"
+scalar Network.node3.wlan[0].mac rcvdPkFromLl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, sum(packetBytes)"
+scalar Network.node3.wlan[0].mac sentDownPk:count 0
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, count"
+scalar Network.node3.wlan[0].mac sentDownPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, sum(packetBytes)"
+scalar Network.node3.wlan[0].mac rcvdPkFromHl:count 0
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, count"
+scalar Network.node3.wlan[0].mac rcvdPkFromHl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, sum(packetBytes)"
+scalar Network.node3.wlan[0].mac passedUpPk:count 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, count"
+scalar Network.node3.wlan[0].mac passedUpPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, sum(packetBytes)"
 scalar Network.node3.wlan[0].mac packetDropIncorrectlyReceived:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
@@ -723,43 +1267,35 @@ scalar Network.node3.wlan[0].mac packetDropIncorrectlyReceived:sum(packetBytes) 
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packet drop: incorrectly received, sum(packetBytes)"
-scalar Network.node3.wlan[0].mac packetDropQueueOverlow:count 0
+scalar Network.node3.wlan[0].mac packetDropInterfaceDown:count 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, count"
-scalar Network.node3.wlan[0].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, count"
+scalar Network.node3.wlan[0].mac packetDropInterfaceDown:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, sum(packetBytes)"
-scalar Network.node3.wlan[0].mac packetDropRetryLimitReached:count 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, sum(packetBytes)"
+scalar Network.node3.wlan[0].mac packetDropNotAddressedToUs:count 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, count"
-scalar Network.node3.wlan[0].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node3.wlan[0].mac packetDropNotAddressedToUs:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, sum(packetBytes)"
-scalar Network.node3.wlan[0].mac packetDropBackoffLimitReached:count 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, count"
-scalar Network.node3.wlan[0].mac packetDropBackoffLimitReached:sum(packetBytes) 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, sum(packetBytes)"
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
 scalar Network.node3.wlan[0].mac linkBroken:count 0
 attr interpolationmode none
 attr source linkBroken
 attr title "link break, count"
-scalar Network.node3.wlan[0].radio radioMode:count 7
+scalar Network.node3.wlan[0].radio radioMode:count 3
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node3.wlan[0].radio receptionState:count 5
+scalar Network.node3.wlan[0].radio receptionState:count 1
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
-scalar Network.node3.wlan[0].radio transmissionState:count 8
+scalar Network.node3.wlan[0].radio transmissionState:count 1
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, count"
@@ -871,11 +1407,11 @@ scalar Network.node3.udp packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-scalar Network.node3.udp packetSent:count 1
+scalar Network.node3.udp packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node3.udp packetSent:sum(packetBytes) 20
+scalar Network.node3.udp packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
@@ -891,8 +1427,9 @@ scalar Network.node3.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
-scalar Network.node3.app[0] "packets sent" 1
-scalar Network.node3.app[0] "packets received" 0
+scalar Network.node3.app[0] "Total sent" 0
+scalar Network.node3.app[0] "Total received" 0
+scalar Network.node3.app[0] "Total deleted" 0
 scalar Network.node3.app[0] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -901,7 +1438,7 @@ scalar Network.node3.app[0] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node3.app[0] rcvdPkLifetime:stats
+statistic Network.node3.app[0] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -911,18 +1448,38 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
-scalar Network.node3.app[0] packetSent:count 1
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node3.app[0] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node3.app[0] packetSent:sum(packetBytes) 12
+scalar Network.node3.app[0] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node3.app[1] "packets sent" 0
-scalar Network.node3.app[1] "packets received" 0
+scalar Network.node3.app[0] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node3.app[0] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node3.app[0] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node3.app[0] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node3.app[1] "Total sent" 0
+scalar Network.node3.app[1] "Total received" 0
+scalar Network.node3.app[1] "Total deleted" 0
 scalar Network.node3.app[1] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -931,7 +1488,7 @@ scalar Network.node3.app[1] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node3.app[1] rcvdPkLifetime:stats
+statistic Network.node3.app[1] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -941,8 +1498,11 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node3.app[1] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
@@ -951,8 +1511,25 @@ scalar Network.node3.app[1] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node3.app[2] "packets sent" 0
-scalar Network.node3.app[2] "packets received" 0
+scalar Network.node3.app[1] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node3.app[1] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node3.app[1] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node3.app[1] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node3.app[2] "Total sent" 0
+scalar Network.node3.app[2] "Total received" 0
+scalar Network.node3.app[2] "Total deleted" 0
 scalar Network.node3.app[2] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -961,7 +1538,7 @@ scalar Network.node3.app[2] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node3.app[2] rcvdPkLifetime:stats
+statistic Network.node3.app[2] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -971,8 +1548,11 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node3.app[2] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
@@ -981,7 +1561,73 @@ scalar Network.node3.app[2] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node4.energyStorage residualEnergyCapacity:last -9.739e-07
+scalar Network.node3.app[2] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node3.app[2] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node3.app[2] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node3.app[2] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node3.app[3] "Total sent" 0
+scalar Network.node3.app[3] "Total received" 0
+scalar Network.node3.app[3] "Total deleted" 0
+scalar Network.node3.app[3] packetReceived:count 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, count"
+scalar Network.node3.app[3] packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, sum(packetBytes)"
+statistic Network.node3.app[3] endToEndDelay:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr source dataAge(packetReceived)
+attr title "delay, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node3.app[3] packetSent:count 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, count"
+scalar Network.node3.app[3] packetSent:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, sum(packetBytes)"
+scalar Network.node3.app[3] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node3.app[3] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node3.app[3] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node3.app[3] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node4.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -1001,24 +1647,71 @@ scalar Network.node4.lo[0].lo passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
-scalar Network.node4.wlan[0].mac nbTxFrames 1
-scalar Network.node4.wlan[0].mac nbRxFrames 0
-scalar Network.node4.wlan[0].mac nbDroppedFrames 0
-scalar Network.node4.wlan[0].mac nbMissedAcks 1
-scalar Network.node4.wlan[0].mac nbRecvdAcks 0
-scalar Network.node4.wlan[0].mac nbTxAcks 0
-scalar Network.node4.wlan[0].mac nbDuplicates 0
-scalar Network.node4.wlan[0].mac meanBackoff 0.00128
-scalar Network.node4.wlan[0].mac nbBackoffs 2
-scalar Network.node4.wlan[0].mac backoffDurations 0.00256
-scalar Network.node4.wlan[0].mac packetDropNotAddressToUs:count 0
+statistic Network.node4.wlan[0].queue queueingTime:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, count"
-scalar Network.node4.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr title "queueing time, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.wlan[0].queue queueLength:max 0
+attr interpolationmode sample-hold
+attr title "queue length, max"
+scalar Network.node4.wlan[0].queue queueLength:timeavg 0
+attr interpolationmode sample-hold
+attr title "queue length, timeavg"
+scalar Network.node4.wlan[0].queue packetReceived:count 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, sum(packetBytes)"
+attr title "received packets, count"
+scalar Network.node4.wlan[0].queue packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr title "received packets, sum(packetBytes)"
+scalar Network.node4.wlan[0].queue dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, count"
+scalar Network.node4.wlan[0].queue dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, sum(packetBytes)"
+scalar Network.node4.wlan[0].mac rcvdPkFromLl:count 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, count"
+scalar Network.node4.wlan[0].mac rcvdPkFromLl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, sum(packetBytes)"
+scalar Network.node4.wlan[0].mac sentDownPk:count 0
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, count"
+scalar Network.node4.wlan[0].mac sentDownPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, sum(packetBytes)"
+scalar Network.node4.wlan[0].mac rcvdPkFromHl:count 0
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, count"
+scalar Network.node4.wlan[0].mac rcvdPkFromHl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, sum(packetBytes)"
+scalar Network.node4.wlan[0].mac passedUpPk:count 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, count"
+scalar Network.node4.wlan[0].mac passedUpPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, sum(packetBytes)"
 scalar Network.node4.wlan[0].mac packetDropIncorrectlyReceived:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
@@ -1027,43 +1720,35 @@ scalar Network.node4.wlan[0].mac packetDropIncorrectlyReceived:sum(packetBytes) 
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packet drop: incorrectly received, sum(packetBytes)"
-scalar Network.node4.wlan[0].mac packetDropQueueOverlow:count 0
+scalar Network.node4.wlan[0].mac packetDropInterfaceDown:count 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, count"
-scalar Network.node4.wlan[0].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, count"
+scalar Network.node4.wlan[0].mac packetDropInterfaceDown:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, sum(packetBytes)"
-scalar Network.node4.wlan[0].mac packetDropRetryLimitReached:count 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, sum(packetBytes)"
+scalar Network.node4.wlan[0].mac packetDropNotAddressedToUs:count 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, count"
-scalar Network.node4.wlan[0].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node4.wlan[0].mac packetDropNotAddressedToUs:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, sum(packetBytes)"
-scalar Network.node4.wlan[0].mac packetDropBackoffLimitReached:count 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, count"
-scalar Network.node4.wlan[0].mac packetDropBackoffLimitReached:sum(packetBytes) 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, sum(packetBytes)"
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
 scalar Network.node4.wlan[0].mac linkBroken:count 0
 attr interpolationmode none
 attr source linkBroken
 attr title "link break, count"
-scalar Network.node4.wlan[0].radio radioMode:count 5
+scalar Network.node4.wlan[0].radio radioMode:count 3
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node4.wlan[0].radio receptionState:count 3
+scalar Network.node4.wlan[0].radio receptionState:count 1
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
-scalar Network.node4.wlan[0].radio transmissionState:count 4
+scalar Network.node4.wlan[0].radio transmissionState:count 1
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, count"
@@ -1175,11 +1860,11 @@ scalar Network.node4.udp packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-scalar Network.node4.udp packetSent:count 2
+scalar Network.node4.udp packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node4.udp packetSent:sum(packetBytes) 40
+scalar Network.node4.udp packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
@@ -1195,8 +1880,9 @@ scalar Network.node4.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
-scalar Network.node4.app[0] "packets sent" 1
-scalar Network.node4.app[0] "packets received" 0
+scalar Network.node4.app[0] "Total sent" 0
+scalar Network.node4.app[0] "Total received" 0
+scalar Network.node4.app[0] "Total deleted" 0
 scalar Network.node4.app[0] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -1205,7 +1891,7 @@ scalar Network.node4.app[0] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node4.app[0] rcvdPkLifetime:stats
+statistic Network.node4.app[0] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -1215,18 +1901,38 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
-scalar Network.node4.app[0] packetSent:count 1
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.app[0] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node4.app[0] packetSent:sum(packetBytes) 12
+scalar Network.node4.app[0] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node4.app[1] "packets sent" 1
-scalar Network.node4.app[1] "packets received" 0
+scalar Network.node4.app[0] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node4.app[0] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node4.app[0] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node4.app[0] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node4.app[1] "Total sent" 0
+scalar Network.node4.app[1] "Total received" 0
+scalar Network.node4.app[1] "Total deleted" 0
 scalar Network.node4.app[1] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -1235,7 +1941,7 @@ scalar Network.node4.app[1] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node4.app[1] rcvdPkLifetime:stats
+statistic Network.node4.app[1] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -1245,18 +1951,38 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
-scalar Network.node4.app[1] packetSent:count 1
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.app[1] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node4.app[1] packetSent:sum(packetBytes) 12
+scalar Network.node4.app[1] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node4.app[2] "packets sent" 0
-scalar Network.node4.app[2] "packets received" 0
+scalar Network.node4.app[1] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node4.app[1] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node4.app[1] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node4.app[1] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node4.app[2] "Total sent" 0
+scalar Network.node4.app[2] "Total received" 0
+scalar Network.node4.app[2] "Total deleted" 0
 scalar Network.node4.app[2] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -1265,7 +1991,7 @@ scalar Network.node4.app[2] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node4.app[2] rcvdPkLifetime:stats
+statistic Network.node4.app[2] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -1275,8 +2001,11 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node4.app[2] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
@@ -1285,7 +2014,73 @@ scalar Network.node4.app[2] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node5.energyStorage residualEnergyCapacity:last -9.691e-07
+scalar Network.node4.app[2] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node4.app[2] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node4.app[2] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node4.app[2] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node4.app[3] "Total sent" 0
+scalar Network.node4.app[3] "Total received" 0
+scalar Network.node4.app[3] "Total deleted" 0
+scalar Network.node4.app[3] packetReceived:count 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, count"
+scalar Network.node4.app[3] packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, sum(packetBytes)"
+statistic Network.node4.app[3] endToEndDelay:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr source dataAge(packetReceived)
+attr title "delay, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node4.app[3] packetSent:count 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, count"
+scalar Network.node4.app[3] packetSent:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, sum(packetBytes)"
+scalar Network.node4.app[3] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node4.app[3] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node4.app[3] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node4.app[3] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node5.energyStorage residualEnergyCapacity:last nan
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, last"
@@ -1305,24 +2100,71 @@ scalar Network.node5.lo[0].lo passedUpPk:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSentToUpper
 attr title "packets passed to higher layer, sum(packetBytes)"
-scalar Network.node5.wlan[0].mac nbTxFrames 1
-scalar Network.node5.wlan[0].mac nbRxFrames 0
-scalar Network.node5.wlan[0].mac nbDroppedFrames 0
-scalar Network.node5.wlan[0].mac nbMissedAcks 1
-scalar Network.node5.wlan[0].mac nbRecvdAcks 0
-scalar Network.node5.wlan[0].mac nbTxAcks 0
-scalar Network.node5.wlan[0].mac nbDuplicates 0
-scalar Network.node5.wlan[0].mac meanBackoff 0.0016
-scalar Network.node5.wlan[0].mac nbBackoffs 2
-scalar Network.node5.wlan[0].mac backoffDurations 0.0032
-scalar Network.node5.wlan[0].mac packetDropNotAddressToUs:count 0
+statistic Network.node5.wlan[0].queue queueingTime:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, count"
-scalar Network.node5.wlan[0].mac packetDropNotAddressToUs:sum(packetBytes) 0
+attr title "queueing time, histogram"
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node5.wlan[0].queue queueLength:max 0
+attr interpolationmode sample-hold
+attr title "queue length, max"
+scalar Network.node5.wlan[0].queue queueLength:timeavg 0
+attr interpolationmode sample-hold
+attr title "queue length, timeavg"
+scalar Network.node5.wlan[0].queue packetReceived:count 0
 attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, sum(packetBytes)"
+attr title "received packets, count"
+scalar Network.node5.wlan[0].queue packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr title "received packets, sum(packetBytes)"
+scalar Network.node5.wlan[0].queue dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, count"
+scalar Network.node5.wlan[0].queue dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "dropped packets, sum(packetBytes)"
+scalar Network.node5.wlan[0].mac rcvdPkFromLl:count 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, count"
+scalar Network.node5.wlan[0].mac rcvdPkFromLl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromLower
+attr title "packets received from lower layer, sum(packetBytes)"
+scalar Network.node5.wlan[0].mac sentDownPk:count 0
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, count"
+scalar Network.node5.wlan[0].mac sentDownPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToLower
+attr title "packets sent to lower layer, sum(packetBytes)"
+scalar Network.node5.wlan[0].mac rcvdPkFromHl:count 0
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, count"
+scalar Network.node5.wlan[0].mac rcvdPkFromHl:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceivedFromUpper
+attr title "packets received from higher layer, sum(packetBytes)"
+scalar Network.node5.wlan[0].mac passedUpPk:count 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, count"
+scalar Network.node5.wlan[0].mac passedUpPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSentToUpper
+attr title "packets passed to higher layer, sum(packetBytes)"
 scalar Network.node5.wlan[0].mac packetDropIncorrectlyReceived:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
@@ -1331,43 +2173,35 @@ scalar Network.node5.wlan[0].mac packetDropIncorrectlyReceived:sum(packetBytes) 
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packet drop: incorrectly received, sum(packetBytes)"
-scalar Network.node5.wlan[0].mac packetDropQueueOverlow:count 0
+scalar Network.node5.wlan[0].mac packetDropInterfaceDown:count 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, count"
-scalar Network.node5.wlan[0].mac packetDropQueueOverlow:sum(packetBytes) 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, count"
+scalar Network.node5.wlan[0].mac packetDropInterfaceDown:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsQueueOverflow(packetDropped)
-attr title "packet drop: queue overflow, sum(packetBytes)"
-scalar Network.node5.wlan[0].mac packetDropRetryLimitReached:count 0
+attr source packetDropReasonIsInterfaceDown(packetDropped)
+attr title "packet drop: interface down, sum(packetBytes)"
+scalar Network.node5.wlan[0].mac packetDropNotAddressedToUs:count 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, count"
-scalar Network.node5.wlan[0].mac packetDropRetryLimitReached:sum(packetBytes) 0
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, count"
+scalar Network.node5.wlan[0].mac packetDropNotAddressedToUs:sum(packetBytes) 0
 attr interpolationmode none
-attr source packetDropReasonIsRetryLimitReached(packetDropped)
-attr title "packet drop: retry limit reached, sum(packetBytes)"
-scalar Network.node5.wlan[0].mac packetDropBackoffLimitReached:count 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, count"
-scalar Network.node5.wlan[0].mac packetDropBackoffLimitReached:sum(packetBytes) 0
-attr interpolationmode none
-attr source packetDropReasonIsCongestion(packetDropped)
-attr title "packet drop: backoff limit reached, sum(packetBytes)"
+attr source packetDropReasonIsNotAddressedToUs(packetDropped)
+attr title "packet drop: not addressed to us, sum(packetBytes)"
 scalar Network.node5.wlan[0].mac linkBroken:count 0
 attr interpolationmode none
 attr source linkBroken
 attr title "link break, count"
-scalar Network.node5.wlan[0].radio radioMode:count 5
+scalar Network.node5.wlan[0].radio radioMode:count 3
 attr interpolationmode sample-hold
 attr source radioModeChanged
 attr title "Radio mode, count"
-scalar Network.node5.wlan[0].radio receptionState:count 3
+scalar Network.node5.wlan[0].radio receptionState:count 1
 attr interpolationmode sample-hold
 attr source receptionStateChanged
 attr title "Radio reception state, count"
-scalar Network.node5.wlan[0].radio transmissionState:count 4
+scalar Network.node5.wlan[0].radio transmissionState:count 1
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, count"
@@ -1479,11 +2313,11 @@ scalar Network.node5.udp packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-scalar Network.node5.udp packetSent:count 1
+scalar Network.node5.udp packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node5.udp packetSent:sum(packetBytes) 20
+scalar Network.node5.udp packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
@@ -1499,8 +2333,9 @@ scalar Network.node5.udp droppedPkBadChecksum:count 0
 attr interpolationmode none
 attr source packetDropReasonIsIncorrectlyReceived(packetDropped)
 attr title "packets dropped (checksum error), count"
-scalar Network.node5.app[0] "packets sent" 1
-scalar Network.node5.app[0] "packets received" 0
+scalar Network.node5.app[0] "Total sent" 0
+scalar Network.node5.app[0] "Total received" 0
+scalar Network.node5.app[0] "Total deleted" 0
 scalar Network.node5.app[0] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -1509,7 +2344,7 @@ scalar Network.node5.app[0] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node5.app[0] rcvdPkLifetime:stats
+statistic Network.node5.app[0] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -1519,18 +2354,38 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
-scalar Network.node5.app[0] packetSent:count 1
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node5.app[0] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, count"
-scalar Network.node5.app[0] packetSent:sum(packetBytes) 12
+scalar Network.node5.app[0] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node5.app[1] "packets sent" 0
-scalar Network.node5.app[1] "packets received" 0
+scalar Network.node5.app[0] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node5.app[0] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node5.app[0] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node5.app[0] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node5.app[1] "Total sent" 0
+scalar Network.node5.app[1] "Total received" 0
+scalar Network.node5.app[1] "Total deleted" 0
 scalar Network.node5.app[1] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -1539,7 +2394,7 @@ scalar Network.node5.app[1] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node5.app[1] rcvdPkLifetime:stats
+statistic Network.node5.app[1] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -1549,8 +2404,11 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node5.app[1] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
@@ -1559,8 +2417,25 @@ scalar Network.node5.app[1] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.node5.app[2] "packets sent" 0
-scalar Network.node5.app[2] "packets received" 0
+scalar Network.node5.app[1] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node5.app[1] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node5.app[1] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node5.app[1] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node5.app[2] "Total sent" 0
+scalar Network.node5.app[2] "Total received" 0
+scalar Network.node5.app[2] "Total deleted" 0
 scalar Network.node5.app[2] packetReceived:count 0
 attr interpolationmode none
 attr source packetReceived
@@ -1569,7 +2444,7 @@ scalar Network.node5.app[2] packetReceived:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetReceived
 attr title "packets received, sum(packetBytes)"
-statistic Network.node5.app[2] rcvdPkLifetime:stats
+statistic Network.node5.app[2] endToEndDelay:histogram
 field count 0
 field mean -nan
 field stddev nan
@@ -1579,8 +2454,11 @@ field sum 0
 field sqrsum 0
 attr interpolationmode none
 attr source dataAge(packetReceived)
-attr title "received packet lifetime, stats"
+attr title "delay, histogram"
 attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
 scalar Network.node5.app[2] packetSent:count 0
 attr interpolationmode none
 attr source packetSent
@@ -1589,23 +2467,89 @@ scalar Network.node5.app[2] packetSent:sum(packetBytes) 0
 attr interpolationmode none
 attr source packetSent
 attr title "packets sent, sum(packetBytes)"
-scalar Network.unitDiskRadioMedium.propagation "Arrival computation count" 28
-scalar Network.unitDiskRadioMedium "transmission count" 7
-scalar Network.unitDiskRadioMedium "signal send count" 28
-scalar Network.unitDiskRadioMedium "reception computation count" 27
-scalar Network.unitDiskRadioMedium "interference computation count" 92
-scalar Network.unitDiskRadioMedium "reception decision computation count" 0
-scalar Network.unitDiskRadioMedium "listening decision computation count" 65
-scalar Network.unitDiskRadioMedium "reception cache hit" 75
+scalar Network.node5.app[2] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node5.app[2] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node5.app[2] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node5.app[2] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.node5.app[3] "Total sent" 0
+scalar Network.node5.app[3] "Total received" 0
+scalar Network.node5.app[3] "Total deleted" 0
+scalar Network.node5.app[3] packetReceived:count 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, count"
+scalar Network.node5.app[3] packetReceived:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetReceived
+attr title "packets received, sum(packetBytes)"
+statistic Network.node5.app[3] endToEndDelay:histogram
+field count 0
+field mean -nan
+field stddev nan
+field min nan
+field max nan
+field sum 0
+field sqrsum 0
+attr interpolationmode none
+attr source dataAge(packetReceived)
+attr title "delay, histogram"
+attr unit s
+bin	-inf	0
+bin	0	0
+bin	1	0
+scalar Network.node5.app[3] packetSent:count 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, count"
+scalar Network.node5.app[3] packetSent:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetSent
+attr title "packets sent, sum(packetBytes)"
+scalar Network.node5.app[3] dropPk:count 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, count"
+scalar Network.node5.app[3] dropPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source packetDropped
+attr title "packets dropped, sum(packetBytes)"
+scalar Network.node5.app[3] outOfOrderPk:count 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, count"
+scalar Network.node5.app[3] outOfOrderPk:sum(packetBytes) 0
+attr interpolationmode none
+attr source outOfOrderPk
+attr title "packets received out of order, sum(packetBytes)"
+scalar Network.unitDiskRadioMedium.propagation "Arrival computation count" 4
+scalar Network.unitDiskRadioMedium "transmission count" 1
+scalar Network.unitDiskRadioMedium "signal send count" 4
+scalar Network.unitDiskRadioMedium "reception computation count" 1
+scalar Network.unitDiskRadioMedium "interference computation count" 10
+scalar Network.unitDiskRadioMedium "reception decision computation count" 1
+scalar Network.unitDiskRadioMedium "listening decision computation count" 8
+scalar Network.unitDiskRadioMedium "reception cache hit" 85.714285714286
 attr unit %
-scalar Network.unitDiskRadioMedium "interference cache hit" -nan
+scalar Network.unitDiskRadioMedium "interference cache hit" 66.666666666667
 attr unit %
-scalar Network.unitDiskRadioMedium "noise cache hit" -nan
+scalar Network.unitDiskRadioMedium "noise cache hit" 0
 attr unit %
-scalar Network.unitDiskRadioMedium "snir cache hit" -nan
+scalar Network.unitDiskRadioMedium "snir cache hit" 50
 attr unit %
-scalar Network.unitDiskRadioMedium "reception decision cache hit" -nan
+scalar Network.unitDiskRadioMedium "reception decision cache hit" 50
 attr unit %
-scalar Network.unitDiskRadioMedium "reception result cache hit" -nan
+scalar Network.unitDiskRadioMedium "reception result cache hit" 0
 attr unit %
 

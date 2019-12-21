@@ -16,14 +16,15 @@
 #ifndef MYUDPBASICAPP_H_
 #define MYUDPBASICAPP_H_
 
-#include "inet/applications/udpapp/UdpBasicApp.h"
+#include "inet/applications/udpapp/UdpBasicBurst.h"
 
 namespace inet{
 
-class MyUdpBasicApp : public UdpBasicApp {
+class MyUdpBasicApp : public UdpBasicBurst {
     protected:
         void initialize(int stage) override;
-        void sendPacket() override;
+        void sendPacket();
+        void sendPacket(char* str);
         void processPacket(Packet *pk) override;
     };
 }// namespace inet

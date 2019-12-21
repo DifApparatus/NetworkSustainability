@@ -15,10 +15,10 @@
 
 package networksustainability;
 
-import inet.applications.udpapp.UdpBasicApp;
+import inet.applications.udpapp.UdpBasicBurst;
 
 
-simple MyUdpBasicApp extends UdpBasicApp
+simple MyUdpBasicApp extends UdpBasicBurst
 {
         parameters:
         	@class(inet::MyUdpBasicApp);

@@ -19,6 +19,8 @@ import inet.applications.contract.IApp;
 import inet.applications.pingapp.PingApp;
 import inet.applications.tcpapp.TcpBasicClientApp;
 import inet.applications.udpapp.UdpBasicApp;
+import inet.applications.udpapp.UdpBasicBurst;
+import inet.networklayer.common.InterfaceTable;
 import inet.networklayer.configurator.ipv4.Ipv4FlatNetworkConfigurator;
 import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
 import inet.node.base.ApplicationLayerNodeBase;
