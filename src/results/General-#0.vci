@@ -1,15 +1,15 @@
-file 38652 1576883121                                           
+file 18521 1576889800                                           
 version 2
-run General-0-20191221-02:05:03-24188
+run General-0-20191221-03:56:27-29799
 attr configname General
-attr datetime 20191221-02:05:03
+attr datetime 20191221-03:56:27
 attr experiment General
 attr inifile omnetpp.ini
 attr iterationvars ""
 attr iterationvarsf ""
 attr measurement ""
 attr network Network
-attr processid 24188
+attr processid 29799
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -55,21 +55,20 @@ param **.node*.numWlanInterfaces 1
 param **.node*.wlan[*].radio.typename "\"UnitDiskRadio\""
 param **.node*.wlan[*].radio.transmitter.typename "\"UnitDiskTransmitter\""
 param **.node*.wlan[*].radio.transmitter.bitrate 10000000000bps
-param **.node*.wlan[*].radio.transmitter.communicationRange 120m
+param **.node*.wlan[*].radio.transmitter.communicationRange 75m
 param **.node*.wlan[*].radio.receiver.typename "\"UnitDiskReceiver\""
 param **.wlan[*].radio.displayCommunicationRange true
 param **.wlan[*].radio.receiver.ignoreInterference true
 param **.wlan[*].radio.radioMediumModule "\"unitDiskRadioMedium\""
-param **.unitDiskRadioMedium.rangeFilter "\"communicationRange\""
+param *.unitDiskRadioMedium.rangeFilter "\"communicationRange\""
+param *.unitDiskRadioMedium.signalAnalogRepresentation "\"unitDisk\""
+param *.integratedVisualizer.*.mediumVisualizer.mediumModule "\"unitDiskRadioMedium\""
+param *.integratedVisualizer.*.mediumVisualizer.packetFilter "\"Coords\""
 param *.integratedVisualizer.*.dataLinkVisualizer.displayLinks true
-param *.integratedVisualizer.*.dataLinkVisualizer.packetFilter "\"Coords*\""
-param *.integratedVisualizer.*.mediumVisualizer.displayCommunicationRanges true
-param *.integratedVisualizer.*.radioVisualizer.displayRadios true
-param *.integratedVisualizer.*.radioVisualizer.displayRadioMode false
-param *.integratedVisualizer.*.radioVisualizer.displayReceptionState false
-param *.integratedVisualizer.*.radioVisualizer.displayTransmissionState false
-param *.integratedVisualizer.*.radioVisualizer.displayAntennaLobes false
-param *.integratedVisualizer.*.radioVisualizer.antennaLobeOpacity 0
+param *.integratedVisualizer.*.dataLinkVisualizer.packetFilter "\"Coords\""
+param *.integratedVisualizer.*.physicalLinkVisualizer.packetFilter "\"Coords\""
+param *.integratedVisualizer.*.transportConnectionVisualizer.displayTransportConnections true
+param *.integratedVisualizer.*.transportConnectionVisualizer.destinationNodeFilter "\"node1\""
 
 vector 0 Network.node1.energyStorage powerConsumption:vector ETV
 attr interpolationmode sample-hold
@@ -223,241 +222,142 @@ vector 37 Network.node1.energyStorage residualEnergyCapacity:vector ETV
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, vector"
-vector 38 Network.node4.energyStorage residualEnergyCapacity:vector ETV
+vector 38 Network.node1.wlan[0].radio transmissionState:vector ETV
+attr interpolationmode sample-hold
+attr source transmissionStateChanged
+attr title "Radio transmission state, vector"
+vector 39 Network.node4.energyStorage residualEnergyCapacity:vector ETV
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, vector"
-vector 39 Network.node1.wlan[0].radio transmissionState:vector ETV
+vector 40 Network.node4.wlan[0].radio transmissionState:vector ETV
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, vector"
-vector 40 Network.node1.udp packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 41 Network.node1.udp passedUpPk:vector(count) ETV
-attr interpolationmode none
-attr source packetSentToUpper
-attr title "packets passed up, vector(count)"
-vector 42 Network.node1.app[0] packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 43 Network.node1.app[0] rcvdPkLifetime:vector ETV
-attr interpolationmode none
-attr source dataAge(packetReceived)
-attr title "received packet lifetime, vector"
-attr unit s
-vector 44 Network.node4.wlan[0].radio transmissionState:vector ETV
-attr interpolationmode sample-hold
-attr source transmissionStateChanged
-attr title "Radio transmission state, vector"
-vector 45 Network.node4.udp packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 46 Network.node4.udp passedUpPk:vector(count) ETV
-attr interpolationmode none
-attr source packetSentToUpper
-attr title "packets passed up, vector(count)"
-vector 47 Network.node4.app[0] packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 48 Network.node4.app[0] rcvdPkLifetime:vector ETV
-attr interpolationmode none
-attr source dataAge(packetReceived)
-attr title "received packet lifetime, vector"
-attr unit s
-vector 49 Network.node5.wlan[0].mac packetDropNotAddressToUs:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, vector(packetBytes)"
-vector 50 Network.node3.wlan[0].mac packetDropNotAddressToUs:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, vector(packetBytes)"
-vector 51 Network.node2.energyStorage residualEnergyCapacity:vector ETV
+vector 41 Network.node2.energyStorage residualEnergyCapacity:vector ETV
 attr interpolationmode linear
 attr source residualEnergyCapacityChanged
 attr title "Residual energy capacity, vector"
-vector 52 Network.node2.wlan[0].mac packetDropNotAddressToUs:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetDropReasonIsNotAddressedToUs(packetDropped)
-attr title "packet drop: not addressed to us, vector(packetBytes)"
-vector 53 Network.node2.wlan[0].radio transmissionState:vector ETV
+vector 42 Network.node2.wlan[0].radio transmissionState:vector ETV
 attr interpolationmode sample-hold
 attr source transmissionStateChanged
 attr title "Radio transmission state, vector"
-vector 54 Network.node2.udp packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 55 Network.node2.udp passedUpPk:vector(count) ETV
-attr interpolationmode none
-attr source packetSentToUpper
-attr title "packets passed up, vector(count)"
-vector 56 Network.node2.app[0] packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 57 Network.node2.app[0] rcvdPkLifetime:vector ETV
-attr interpolationmode none
-attr source dataAge(packetReceived)
-attr title "received packet lifetime, vector"
-attr unit s
-vector 58 Network.node3.udp packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 59 Network.node3.udp passedUpPk:vector(count) ETV
-attr interpolationmode none
-attr source packetSentToUpper
-attr title "packets passed up, vector(count)"
-vector 60 Network.node3.app[1] packetReceived:vector(packetBytes) ETV
-attr interpolationmode none
-attr source packetReceived
-attr title "packets received, vector(packetBytes)"
-vector 61 Network.node3.app[1] rcvdPkLifetime:vector ETV
-attr interpolationmode none
-attr source dataAge(packetReceived)
-attr title "received packet lifetime, vector"
-attr unit s
-0	14112 2069 0 276 0 0.008497945313 85 0 0.075 0.760145 0.046550000725
-1	16181 1255 0 279 0 0.008498259615 55 0 0.075 0.5051 0.0295250005
-2	17436 1215 0 282 0 0.008498303765 53 0 0.075 0.520105 0.028850000525
-3	18651 1149 0 262 0 0.007392589981 49 0 0.075 0.390075 0.025200000375
-4	19800 860 0 265 0 0.007392971011 39 0 0.075 0.38508 0.0206750004
-5	20660 298 0 276 0 0.008497945313 15 0 3 32 82
-6	20958 2061 0 276 0 0.008497945313 84 0 0.075 0.760145 0.046550000725
-7	23019 150 0 207 0 0.004784802319 9 0 3 17 43
-8	23169 1247 0 279 0 0.008498259615 54 0 0.075 0.5051 0.0295250005
-9	24416 106 0 248 0 0.006577537805 7 0 3 12 30
-10	24522 1259 0 282 0 0.008498303765 52 0 0.075 0.520105 0.028850000525
-11	25781 217 0 262 0 0.007392589981 11 0 3 22 56
-12	25998 1189 0 262 0 0.007392589981 48 0 0.075 0.390075 0.025200000375
-13	27187 65 0 63 0 0.0012800488 5 0 3 7 17
-14	27252 890 0 265 0 0.007392971011 38 0 0.075 0.38508 0.0206750004
-15	28142 533 0 276 0 0.008497945313 23 0 3 27 57
-16	28675 379 0 279 0 0.008498259615 17 0 3 24 54
-17	29054 428 0 282 0 0.008498303765 19 0 3 31 73
-18	29482 245 0 262 0 0.007392589981 11 0 3 9 15
-19	29727 333 0 265 0 0.007392971011 15 0 3 26 62
-20	30060 10 1 1 0 0 1 12 12 12 144
-21	30070 10 2 2 0 0 1 12 12 12 144
-22	30080 10 3 3 0 0 1 12 12 12 144
-23	30090 10 4 4 0 0 1 12 12 12 144
-24	30100 10 7 7 0 0 1 12 12 12 144
-25	30110 11 10 10 0 0 1 12 12 12 144
-26	30121 11 11 11 0 0 1 12 12 12 144
-27	30132 11 13 13 0 0 1 12 12 12 144
-28	30143 33 17 21 0 0 3 20 20 60 1200
-29	30176 11 23 23 0 0 1 20 20 20 400
-30	30187 11 27 27 0 0 1 20 20 20 400
-31	30198 22 31 33 0 0 2 20 20 40 800
-32	30220 11 36 36 0 0 1 20 20 20 400
-33	30231 734 57 282 0.001088 0.008498303765 19 -1.978809850825e-06 -5.44e-09 -2.164763376225e-05 2.9069686972657e-11
-34	30965 171 57 248 0.001088 0.006577537805 8 0 2 8 12
-35	31136 571 58 265 0.001088 0.007392971011 15 -1.010783499055e-06 -5.44e-09 -1.381578881052e-05 1.3626737578472e-11
-36	31707 75 58 63 0.001088 0.0012800488 4 0 2 4 6
-37	31782 1067 64 276 0.001280359414 0.008497945313 26 -5.822087746565e-06 -6.40179707e-09 -7.858690125165e-05 3.1140011985186e-10
-38	32849 533 65 262 0.001280381181 0.007392589981 13 -3.887561905905e-06 -6.401905905e-09 -2.5288144776765e-05 6.9886209479156e-11
-39	33382 572 69 276 0.001280408214 0.008497945313 24 0 2 24 36
-40	33954 49 71 136 0.001280408214 0.002560363183 2 20 20 40 800
-41	34003 47 71 136 0.001280408214 0.002560363183 2 1 2 3 5
-42	34050 49 72 137 0.001280408214 0.002560363183 2 12 12 24 288
-43	34099 73 72 137 0.001280408214 0.002560363183 2 0.001280408214 0.002560363183 0.003840771397 8.1949048233406e-06
-44	34172 380 74 262 0.001280429981 0.007392589981 16 0 2 16 24
-45	34552 24 76 76 0.001280429981 0.001280429981 1 20 20 20 400
-46	34576 23 76 76 0.001280429981 0.001280429981 1 1 1 1 1
-47	34599 24 77 77 0.001280429981 0.001280429981 1 12 12 12 144
-48	34623 36 77 77 0.001280429981 0.001280429981 1 0.001280429981 0.001280429981 0.001280429981 1.6395009362437e-06
-49	34659 123 80 266 0.001280435861 0.007392971011 5 5 49 201 9629
-50	34782 123 81 283 0.001280435861 0.008498303765 5 5 49 201 9629
-51	34905 702 96 279 0.001472722612 0.008498259615 18 -2.936629874075e-06 -7.36361306e-09 -3.218717745791e-05 7.6909859017204e-11
-52	35607 73 98 280 0.001472736212 0.008498259615 3 5 49 103 4827
-53	35680 263 118 207 0.002368 0.004784802319 12 0 2 12 18
-54	35943 25 196 196 0.004592788719 0.004592788719 1 20 20 20 400
-55	35968 24 196 196 0.004592788719 0.004592788719 1 1 1 1 1
-56	35992 25 197 197 0.004592788719 0.004592788719 1 12 12 12 144
-57	36017 37 197 197 0.004592788719 0.004592788719 1 0.004592788719 0.004592788719 0.004592788719 2.1093708217374e-05
-58	36054 25 241 241 0.006385524205 0.006385524205 1 20 20 20 400
-59	36079 24 241 241 0.006385524205 0.006385524205 1 1 1 1 1
-60	36103 25 242 242 0.006385524205 0.006385524205 1 12 12 12 144
-61	36128 37 242 242 0.006385524205 0.006385524205 1 0.006385524205 0.006385524205 0.006385524205 4.0774919372641e-05
-vector 62 Network.node1.app[0] throughput:vector ETV
+0	10617 244 0 82 0 0.0016000488 15 0 0.075 0.08502 0.0056750001
+1	10861 490 0 139 0 0.0034400976 25 0 0.075 0.170035 0.011350000175
+2	11351 480 0 122 0 0.0028000976 25 0 0.075 0.170035 0.011350000175
+3	11831 246 0 98 0 0.0022400488 15 0 0.075 0.08502 0.0056750001
+4	12077 246 0 63 0 0.0012800488 15 0 0.075 0.08502 0.0056750001
+5	12323 60 0 82 0 0.0016000488 5 0 3 7 17
+6	12383 236 0 82 0 0.0016000488 14 0 0.075 0.08502 0.0056750001
+7	12619 104 0 139 0 0.0034400976 7 0 3 12 30
+8	12723 482 0 139 0 0.0034400976 24 0 0.075 0.170035 0.011350000175
+9	13205 102 0 122 0 0.0028000976 7 0 3 12 30
+10	13307 496 0 122 0 0.0028000976 24 0 0.075 0.170035 0.011350000175
+11	13803 65 0 98 0 0.0022400488 5 0 3 7 17
+12	13868 252 0 98 0 0.0022400488 14 0 0.075 0.08502 0.0056750001
+13	14120 65 0 63 0 0.0012800488 5 0 3 7 17
+14	14185 252 0 63 0 0.0012800488 14 0 0.075 0.08502 0.0056750001
+15	14437 47 0 82 0 0.0016000488 3 0 1 2 2
+16	14484 93 0 139 0 0.0034400976 5 0 1 3 3
+17	14577 91 0 122 0 0.0028000976 5 0 1 3 3
+18	14668 47 0 98 0 0.0022400488 3 0 1 2 2
+19	14715 47 0 63 0 0.0012800488 3 0 1 2 2
+20	14762 10 1 1 0 0 1 12 12 12 144
+21	14772 10 2 2 0 0 1 12 12 12 144
+22	14782 10 3 3 0 0 1 12 12 12 144
+23	14792 10 4 4 0 0 1 12 12 12 144
+24	14802 10 7 7 0 0 1 12 12 12 144
+25	14812 11 10 10 0 0 1 12 12 12 144
+26	14823 11 11 11 0 0 1 12 12 12 144
+27	14834 11 13 13 0 0 1 12 12 12 144
+28	14845 33 17 21 0 0 3 20 20 60 1200
+29	14878 11 23 23 0 0 1 20 20 20 400
+30	14889 11 27 27 0 0 1 20 20 20 400
+31	14900 22 31 33 0 0 2 20 20 40 800
+32	14922 11 36 36 0 0 1 20 20 20 400
+33	14933 178 57 122 0.001088 0.0028000976 6 -1.9394e-06 -5.44e-09 -6.79086e-06 1.03316890524e-11
+34	15111 163 57 122 0.001088 0.0028000976 8 0 2 8 12
+35	15274 81 58 63 0.001088 0.0012800488 3 -9.691e-07 -5.44e-09 -1.93998e-06 1.8712587972e-12
+36	15355 75 58 63 0.001088 0.0012800488 4 0 2 4 6
+37	15430 80 80 82 0.001408 0.0016000488 3 -9.707e-07 -7.04e-09 -1.94478e-06 1.8774744132e-12
+38	15510 74 80 82 0.001408 0.0016000488 4 0 2 4 6
+39	15584 82 94 98 0.002048 0.0022400488 3 -9.739e-07 -1.024e-08 -1.95438e-06 1.8899517252e-12
+40	15666 75 94 98 0.002048 0.0022400488 4 0 2 4 6
+41	15741 182 107 139 0.002368 0.0034400976 6 -1.9426e-06 -1.184e-08 -6.81966e-06 1.03877200284e-11
+42	15923 167 107 139 0.002368 0.0034400976 8 0 2 8 12
+vector 43 Network.node1.app[0] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 63 Network.node1.app[1] throughput:vector ETV
+vector 44 Network.node1.app[1] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 64 Network.node1.app[2] throughput:vector ETV
+vector 45 Network.node1.app[2] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 65 Network.node2.app[0] throughput:vector ETV
+vector 46 Network.node2.app[0] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 66 Network.node2.app[1] throughput:vector ETV
+vector 47 Network.node2.app[1] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 67 Network.node2.app[2] throughput:vector ETV
+vector 48 Network.node2.app[2] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 68 Network.node3.app[0] throughput:vector ETV
+vector 49 Network.node3.app[0] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 69 Network.node3.app[1] throughput:vector ETV
+vector 50 Network.node3.app[1] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 70 Network.node3.app[2] throughput:vector ETV
+vector 51 Network.node3.app[2] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 71 Network.node4.app[0] throughput:vector ETV
+vector 52 Network.node4.app[0] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 72 Network.node4.app[1] throughput:vector ETV
+vector 53 Network.node4.app[1] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 73 Network.node4.app[2] throughput:vector ETV
+vector 54 Network.node4.app[2] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 74 Network.node5.app[0] throughput:vector ETV
+vector 55 Network.node5.app[0] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 75 Network.node5.app[1] throughput:vector ETV
+vector 56 Network.node5.app[1] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-vector 76 Network.node5.app[2] throughput:vector ETV
+vector 57 Network.node5.app[2] throughput:vector ETV
 attr source throughput(packetReceived)
 attr title "throughput, vector"
 attr unit bps
-62	38235 38 286 286 0.008498467033 0.008498467033 1 22592.309795926 22592.309795926 22592.309795926 510412461.91509
-63	38273 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-64	38297 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-65	38321 38 286 286 0.008498467033 0.008498467033 1 11296.154897963 11296.154897963 11296.154897963 127603115.47877
-66	38359 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-67	38383 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-68	38407 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-69	38431 38 286 286 0.008498467033 0.008498467033 1 11296.154897963 11296.154897963 11296.154897963 127603115.47877
-70	38469 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-71	38493 38 286 286 0.008498467033 0.008498467033 1 11296.154897963 11296.154897963 11296.154897963 127603115.47877
-72	38531 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-73	38555 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-74	38579 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-75	38603 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
-76	38627 24 286 286 0.008498467033 0.008498467033 1 0 0 0 0
+43	18160 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+44	18184 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+45	18208 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+46	18232 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+47	18256 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+48	18280 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+49	18304 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+50	18328 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+51	18352 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+52	18376 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+53	18400 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+54	18424 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+55	18448 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+56	18472 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
+57	18496 24 144 144 0.003440770679 0.003440770679 1 0 0 0 0
 
