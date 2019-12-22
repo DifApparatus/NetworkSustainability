@@ -42,7 +42,7 @@ namespace inet{
     {
         UdpBasicBurst::initialize(stage);
         problemNode = -1;
-        maxDistance = 150;
+        maxDistance = 200;
         optimalDistance = maxDistance * 0.5;
         correctingDistance = maxDistance * 0.7;
     }
@@ -282,13 +282,14 @@ namespace inet{
             int x = coords.getX();
             int y = coords.getY();
             int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
-            if(problemDistance > distance){
+            if( problemDistance > distance){
+                EV << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
                 cModule *del_module = getSimulation()->getModule(problemNode);
                 cModule *del_neighbourNode = getContainingNode(del_module);
                 L3Address del_addr = L3AddressResolver().resolve(del_neighbourNode->getFullName());
                 std::vector<L3Address>::iterator del_pos = std::find(destAddresses.begin(), destAddresses.end(), del_addr);
-                int index = std::distance(destAddresses.begin(), std::find(destAddresses.begin(), destAddresses.end(), del_addr));
-                distances.erase(distances.begin() + index - 1);
+                int index = std::distance(destAddresses.begin(), del_pos);
+                distances.erase(distances.begin() + index);
                 destAddresses.erase(del_pos);
 
                 std::vector<int>::iterator pos = std::find(neighbours_Id.begin(), neighbours_Id.end(), problemNode);
@@ -297,12 +298,36 @@ namespace inet{
                 cModule *module = getSimulation()->getModule(moduleId);
                 cModule *neighbourNode = getContainingNode(module);
                 L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
+
                 destAddresses.push_back(addr);
                 distances.push_back(distance);
 
+                problemDistance = 0;
+                problemNode = -1;
+                neighbours_Id.push_back(moduleId);
 
-                problemDistance = distance;
-                problemNode = moduleId;
+                sendNewConnectionRequest(addr);
+            }
+        }
+        if ( strcmp(pk->getName(),"NEW_CONNECTION_REQUEST") == 0 ){
+            if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
+                cModule *module = getSimulation()->getModule(moduleId);
+                cModule *neighbourNode = getContainingNode(module);
+                L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
+
+                auto data = pk->popAtBack<CurrentCoordsMessage>();
+                int neighbour_x = data->getX();
+                int neighbour_y = data->getY();
+
+                cModule *host = getContainingNode(this);
+                IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
+                Coord coords = mobility->getCurrentPosition();
+                int x = coords.getX();
+                int y = coords.getY();
+                int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
+
+                destAddresses.push_back(addr);
+                distances.push_back(distance);
 
                 neighbours_Id.push_back(moduleId);
             }
@@ -338,5 +363,16 @@ namespace inet{
         emit(packetSentSignal, pk);
         socket.sendTo(pk, addr, 1024);
         numSent++;
+    }
+    void MyUdpBasicApp::sendNewConnectionRequest(L3Address addr){
+        Packet *pk = createPacket();
+        char prName[] = "NEW_CONNECTION_REQUEST";
+        pk->setName(prName);
+        pk->addPar("sourceId") = getId();
+        pk->addPar("msgId") = numSent;
+        pk->setTimestamp();
+
+        emit(packetSentSignal, pk);
+        socket.sendTo(pk, addr, 1024);
     }
 }//namespace inet

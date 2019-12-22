@@ -40,6 +40,7 @@ class MyUdpBasicApp : public UdpBasicBurst {
         virtual void processStart() override;
         void sendBroadcastCoords();
         void sendBroadcastCoordsReply(int destModuleId);
+        void sendNewConnectionRequest(L3Address addr);
     };
 }// namespace inet
 #endif /* MYUDPBASICAPP_H_ */
