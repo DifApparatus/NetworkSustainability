@@ -23,6 +23,7 @@ namespace inet{
 
 class MyUdpBasicApp : public UdpBasicBurst {
     std::vector<int> neighbours_Id;
+    std::vector<int> distances;
     int problemNode;
     int problemDistance;
     UdpSocket broadcastSocket;

@@ -120,6 +120,7 @@ namespace inet{
                 timerNext->setKind(STOP);
                 nextPkt = stopTime;
             }
+
             scheduleAt(nextPkt, timerNext);
     }
     void MyUdpBasicApp::handleMessageWhenUp(cMessage *msg)
@@ -204,6 +205,17 @@ namespace inet{
             delete pk;
             return;
         }
+        double nodeConnectQuality = 1;
+        double maxDist;
+        if (distances.size()>0){
+            maxDist = 0;
+            for (int i = 0; i < distances.size();i++){
+                if (maxDist < distances[i])
+                    maxDist = distances[i];
+            }
+        }
+        else maxDist = maxDistance;
+        if (maxDist > optimalDistance) nodeConnectQuality = 1-(maxDist-optimalDistance)/(maxDistance-optimalDistance);
         int moduleId = pk->par("sourceId");
         int msgId = pk->par("msgId");
 
@@ -232,7 +244,10 @@ namespace inet{
 
                     if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
                        neighbours_Id.push_back(moduleId);
+                       distances.push_back(distance);
                     }
+                    int index = std::distance(neighbours_Id.begin(), std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId));
+                    distances.at(index) = distance;
                     if (distance >= correctingDistance){
                         if (problemNode == -1) {
                             problemNode = moduleId;
@@ -272,6 +287,8 @@ namespace inet{
                 cModule *del_neighbourNode = getContainingNode(del_module);
                 L3Address del_addr = L3AddressResolver().resolve(del_neighbourNode->getFullName());
                 std::vector<L3Address>::iterator del_pos = std::find(destAddresses.begin(), destAddresses.end(), del_addr);
+                int index = std::distance(destAddresses.begin(), std::find(destAddresses.begin(), destAddresses.end(), del_addr));
+                distances.erase(distances.begin() + index - 1);
                 destAddresses.erase(del_pos);
 
                 std::vector<int>::iterator pos = std::find(neighbours_Id.begin(), neighbours_Id.end(), problemNode);
@@ -281,6 +298,7 @@ namespace inet{
                 cModule *neighbourNode = getContainingNode(module);
                 L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
                 destAddresses.push_back(addr);
+                distances.push_back(distance);
 
 
                 problemDistance = distance;
@@ -317,7 +335,6 @@ namespace inet{
         cModule *module = getSimulation()->getModule(moduleId);
         cModule *neighbourNode = getContainingNode(module);
         L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
-        EV<<"==================================================="<<addr;
         emit(packetSentSignal, pk);
         socket.sendTo(pk, addr, 1024);
         numSent++;
