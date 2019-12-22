@@ -29,8 +29,10 @@
 #include "CurrentCoordsMessage_m.h"
 #include "inet/common/packet/chunk/Chunk.h"
 #include <string.h>
+#include <vector>
+#include <algorithm>
 
-#include <omnetpp.h>
+#include "omnetpp.h"
 
 namespace inet{
 
@@ -39,10 +41,7 @@ namespace inet{
     void MyUdpBasicApp::initialize(int stage)
     {
         UdpBasicBurst::initialize(stage);
-        //int distances[];
-       // cModule *host = getContainingNode(this);
-        //cPar maxDist = host->getAncestorPar("communicationRange");
-        //broadcastSocket.bind(Ipv4Address("255.255.255.255"), 1025);
+        problemNode = -1;
         maxDistance = 150;
         optimalDistance = maxDistance * 0.5;
         correctingDistance = maxDistance * 0.7;
@@ -181,6 +180,7 @@ namespace inet{
             }
         }
 
+
         nextSleep = simTime();
         nextBurst = simTime();
         nextPkt = simTime();
@@ -204,26 +204,8 @@ namespace inet{
             delete pk;
             return;
         }
-
-        if (pk->hasPar("sourceId") && pk->hasPar("msgId")) {
-            // duplicate control
-            int moduleId = pk->par("sourceId");
-            int msgId = pk->par("msgId");
-            auto it = sourceSequence.find(moduleId);
-            if (it != sourceSequence.end()) {
-                if (it->second >= msgId) {
-                    EV_DEBUG << "Out of order packet: " << UdpSocket::getReceivedPacketInfo(pk) << endl;
-                    emit(outOfOrderPkSignal, pk);
-                    delete pk;
-                    numDuplicated++;
-                    return;
-                }
-                else
-                    it->second = msgId;
-            }
-            else
-                sourceSequence[moduleId] = msgId;
-        }
+        int moduleId = pk->par("sourceId");
+        int msgId = pk->par("msgId");
 
         if (delayLimit > 0) {
             if (simTime() - pk->getTimestamp() > delayLimit) {
@@ -248,7 +230,14 @@ namespace inet{
                     int y = coords.getY();
                     int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
 
+                    if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
+                       neighbours_Id.push_back(moduleId);
+                    }
                     if (distance >= correctingDistance){
+                        if (problemNode == -1) {
+                            problemNode = moduleId;
+                        }
+                        problemDistance = distance;
                         sendBroadcastCoords();
                     }
         }
@@ -263,7 +252,42 @@ namespace inet{
             int x = coords.getX();
             int y = coords.getY();
             int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
-            EV_INFO <<"??????????????????????????????????????????????????????????????????????????\n";
+            if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
+                sendBroadcastCoordsReply(moduleId);
+            }
+        }
+        if ( strcmp(pk->getName(),"Coords_BROADCAST_REPLY") == 0 ){
+            auto data = pk->popAtBack<CurrentCoordsMessage>();
+            int neighbour_x = data->getX();
+            int neighbour_y = data->getY();
+
+            cModule *host = getContainingNode(this);
+            IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
+            Coord coords = mobility->getCurrentPosition();
+            int x = coords.getX();
+            int y = coords.getY();
+            int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
+            if(problemDistance > distance){
+                cModule *del_module = getSimulation()->getModule(problemNode);
+                cModule *del_neighbourNode = getContainingNode(del_module);
+                L3Address del_addr = L3AddressResolver().resolve(del_neighbourNode->getFullName());
+                std::vector<L3Address>::iterator del_pos = std::find(destAddresses.begin(), destAddresses.end(), del_addr);
+                destAddresses.erase(del_pos);
+
+                std::vector<int>::iterator pos = std::find(neighbours_Id.begin(), neighbours_Id.end(), problemNode);
+                neighbours_Id.erase(pos);
+
+                cModule *module = getSimulation()->getModule(moduleId);
+                cModule *neighbourNode = getContainingNode(module);
+                L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
+                destAddresses.push_back(addr);
+
+
+                problemDistance = distance;
+                problemNode = moduleId;
+
+                neighbours_Id.push_back(moduleId);
+            }
         }
         numReceived++;
         delete pk;
@@ -279,6 +303,23 @@ namespace inet{
 
         emit(packetSentSignal, pk);
         socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, 1025);
+        numSent++;
+    }
+    void MyUdpBasicApp::sendBroadcastCoordsReply(int moduleId){
+        char broadcast_string[] = "_BROADCAST_REPLY";
+        Packet *pk = createPacket();
+        char *prName = strdup(pk->getName());
+        pk->setName(strcat(prName,broadcast_string));
+        pk->addPar("sourceId") = getId();
+        pk->addPar("msgId") = numSent;
+        pk->setTimestamp();
+
+        cModule *module = getSimulation()->getModule(moduleId);
+        cModule *neighbourNode = getContainingNode(module);
+        L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
+        EV<<"==================================================="<<addr;
+        emit(packetSentSignal, pk);
+        socket.sendTo(pk, addr, 1024);
         numSent++;
     }
 }//namespace inet

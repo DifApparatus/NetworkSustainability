@@ -17,11 +17,14 @@
 #define MYUDPBASICAPP_H_
 
 #include "inet/applications/udpapp/UdpBasicBurst.h"
+#include <vector>
 
 namespace inet{
 
 class MyUdpBasicApp : public UdpBasicBurst {
-    //int distances[];
+    std::vector<int> neighbours_Id;
+    int problemNode;
+    int problemDistance;
     UdpSocket broadcastSocket;
     int maxDistance;
     int optimalDistance;
@@ -35,6 +38,7 @@ class MyUdpBasicApp : public UdpBasicBurst {
         void processPacket(Packet *pk) override;
         virtual void processStart() override;
         void sendBroadcastCoords();
+        void sendBroadcastCoordsReply(int destModuleId);
     };
 }// namespace inet
 #endif /* MYUDPBASICAPP_H_ */
