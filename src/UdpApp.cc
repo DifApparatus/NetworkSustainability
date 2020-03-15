@@ -274,26 +274,14 @@ namespace inet{
         delete pk;
     }
     void UdpApp::sendBroadcastCoords(){
-        char broadcast_string[] = "_BROADCAST";
-        Packet *pk = createPacket("Coords", createCoordPayload());
-        char *prName = strdup(pk->getName());
-        pk->setName(strcat(prName,broadcast_string));
-        pk->addPar("sourceId") = getId();
-        pk->addPar("msgId") = numSent;
-        pk->setTimestamp();
+        Packet *pk = createPacket("Coords_BROADCAST", createCoordPayload());
 
         emit(packetSentSignal, pk);
         socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, 1025);
         numSent++;
     }
     void UdpApp::sendBroadcastCoordsReply(int moduleId){
-        char broadcast_string[] = "_BROADCAST_REPLY";
-        Packet *pk = createPacket("Coords", createCoordPayload());
-        char *prName = strdup(pk->getName());
-        pk->setName(strcat(prName,broadcast_string));
-        pk->addPar("sourceId") = getId();
-        pk->addPar("msgId") = numSent;
-        pk->setTimestamp();
+        Packet *pk = createPacket("Coords_BROADCAST_REPLY", createCoordPayload());
 
         cModule *module = getSimulation()->getModule(moduleId);
         cModule *neighbourNode = getContainingNode(module);
@@ -303,12 +291,7 @@ namespace inet{
         numSent++;
     }
     void UdpApp::sendNewConnectionRequest(L3Address addr){
-        Packet *pk = createPacket("Coords", createCoordPayload());
-        char prName[] = "NEW_CONNECTION_REQUEST";
-        pk->setName(prName);
-        pk->addPar("sourceId") = getId();
-        pk->addPar("msgId") = numSent;
-        pk->setTimestamp();
+        Packet *pk = createPacket("Coords_NEW_CONNECTION_REQUEST", createCoordPayload());
 
         emit(packetSentSignal, pk);
         socket.sendTo(pk, addr, 1024);
