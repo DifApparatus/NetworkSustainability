@@ -34,6 +34,9 @@
 
 #include "omnetpp.h"
 
+const int MESSAGE_FOR_RESILIENCE = 0;
+const int INFORM_MESSAGE = 1;
+
 namespace inet{
 
     Define_Module(UdpApp);
@@ -73,7 +76,7 @@ namespace inet{
         return payload;
     }
 
-    /** Creates packets to send per intarvals/
+    /** Creates packets to send per intervals/
      * This differs from UdpBasicBurst::generateBurst by commentaries and
      * that it has group cast. It sends usual messages(coordinates)
      */
@@ -101,19 +104,15 @@ namespace inet{
                     nextSleep = now + burstDuration;
                     nextBurst = nextSleep + sleepDuration;
                 }
-
-                if (chooseDestAddrMode == PER_BURST)
-                    destAddr = chooseDestAddr();
             }
-
-            if (chooseDestAddrMode == PER_SEND)
-                destAddr = chooseDestAddr();
-            Packet *payload = createPacket("Coords", createCoordPayload());
+            //Coordinates exchange
+            Packet *packetForResilience = createPacket("Coords", createCoordPayload());
+            packetForResilience->setKind(MESSAGE_FOR_RESILIENCE);
             for (int i = 0; i < destAddresses.size(); i++){
-                Packet *copy_payload = payload->dup();
-                copy_payload->setTimestamp();
-                emit(packetSentSignal, copy_payload);
-                socket.sendTo(copy_payload, destAddresses[i], destPort);
+                Packet *copy = packetForResilience->dup();
+                copy->setTimestamp();
+                emit(packetSentSignal, copy);
+                socket.sendTo(copy, destAddresses[i], destPort);
                 numSent++;
             }
 
@@ -128,6 +127,7 @@ namespace inet{
 
             scheduleAt(nextPkt, timerNext);
     }
+
     void UdpApp::processStart()
     {
         broadcastSocket.setOutputGate(gate("socketOut"));
@@ -144,6 +144,12 @@ namespace inet{
             delete pk;
             return;
         }
+        else if (pk->getKind() == MESSAGE_FOR_RESILIENCE){
+            processResiliencePacket(pk);
+        }
+        delete pk;
+    }
+    void UdpApp::processResiliencePacket(Packet *pk){
         double nodeConnectQuality = 1;
         double maxDist;
         if (distances.size()>0){
@@ -194,6 +200,7 @@ namespace inet{
                         problemDistance = distance;
                         sendBroadcastCoords();
                     }
+                    //drop(pk);
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST") == 0 ){
             auto data = pk->popAtBack<CurrentCoordsMessage>();
@@ -271,7 +278,6 @@ namespace inet{
             }
         }
         numReceived++;
-        delete pk;
     }
     void UdpApp::sendBroadcastCoords(){
         Packet *pk = createPacket("Coords_BROADCAST", createCoordPayload());

@@ -35,7 +35,8 @@ class UdpApp : public UdpBasicBurst {
         template<class T> Packet *createPacket(char packetName[], T payload);
         inet::Ptr<CurrentCoordsMessage> createCoordPayload();
         virtual void generateBurst() override;
-        void processPacket(Packet *pk) override;
+        virtual void processPacket(Packet *pk) override;
+        void processResiliencePacket(Packet *pk);
         virtual void processStart() override;
         void sendBroadcastCoords();
         void sendBroadcastCoordsReply(int destModuleId);

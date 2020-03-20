@@ -40,8 +40,10 @@ import inet.visualizer.physicallayer.PhysicalLinkVisualizer;
 // TODO auto-generated type
 //
 network Network
-{
-    @display("bgb=600,400");
+{   
+    parameters:
+            @display("bgb=600,400");
+            @statistic[dropRate](source=numSent/numDeleted; record=last);
     submodules:
         node1: SensorNode {
             @display("p=253,152;t=1;");
