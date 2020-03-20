@@ -18,9 +18,8 @@ package networksustainability;
 import inet.applications.udpapp.UdpBasicBurst;
 
 
-simple UdpApp extends UdpBasicBurst
+simple WsnUdpApp extends UdpBasicBurst
 {
-        parameters:
-        	@class(inet::UdpApp);
+        @class(inet::WsnUdpApp);
 }
 

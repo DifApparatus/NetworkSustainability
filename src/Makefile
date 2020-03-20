@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for NetworkSustainability
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -KNETWORKSUSTAINABILITY_PROJ=.. -KINET4_PROJ=../../inet4 -DINET_IMPORT -I. -I$$\(INET4_PROJ\)/src -L$$\(INET4_PROJ\)/src -lINET$$\(D\)
+#  opp_makemake -f --deep -KNETWORKSUSTAINABILITY_PROJ=.. -KINET4_PROJ=/media/mathapparatus/90368FE0368FC6261/Omnet++/inet4 -DINET_IMPORT -I. -I$$\(INET4_PROJ\)/src -L$$\(INET4_PROJ\)/src -lINET$$\(D\)
 #
 
 # Name of target to be created (-o option)
@@ -30,7 +30,7 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/UdpApp.o $O/CurrentCoordsMessage_m.o
+OBJS = $O/WsnUdpApp.o $O/CurrentCoordsMessage_m.o
 
 # Message files
 MSGFILES = \
@@ -41,7 +41,7 @@ SMFILES =
 
 # Other makefile variables (-K)
 NETWORKSUSTAINABILITY_PROJ=..
-INET4_PROJ=../../inet4
+INET4_PROJ=/media/mathapparatus/90368FE0368FC6261/Omnet++/inet4
 
 #------------------------------------------------------------------------------
 

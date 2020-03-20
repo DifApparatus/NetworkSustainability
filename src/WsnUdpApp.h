@@ -13,15 +13,15 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef UDPAPP_H_
-#define UDPAPP_H_
+#ifndef WSNUDPAPP_H_
+#define WSNUDPAPP_H_
 
 #include "inet/applications/udpapp/UdpBasicBurst.h"
 #include <vector>
 
 namespace inet{
 
-class UdpApp : public UdpBasicBurst {
+class WsnUdpApp : public UdpBasicBurst {
     std::vector<int> neighbours_Id;
     std::vector<int> distances;
     int problemNode;
@@ -36,11 +36,11 @@ class UdpApp : public UdpBasicBurst {
         inet::Ptr<CurrentCoordsMessage> createCoordPayload();
         virtual void generateBurst() override;
         virtual void processPacket(Packet *pk) override;
-        void processResiliencePacket(Packet *pk);
+        void processResiliencePacket(Packet* &pk);
         virtual void processStart() override;
         void sendBroadcastCoords();
         void sendBroadcastCoordsReply(int destModuleId);
         void sendNewConnectionRequest(L3Address addr);
     };
 }// namespace inet
-#endif /* UDPAPP_H_ */
+#endif /* WSNUDPAPP_H_ */

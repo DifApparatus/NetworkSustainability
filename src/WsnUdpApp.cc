@@ -28,20 +28,20 @@
 #include "CurrentCoordsMessage_m.h"
 #include "inet/common/packet/chunk/Chunk.h"
 #include <string.h>
-#include <UdpApp.h>
+#include <WsnUdpApp.h>
 #include <vector>
 #include <algorithm>
 
 #include "omnetpp.h"
 
-const int MESSAGE_FOR_RESILIENCE = 0;
-const int INFORM_MESSAGE = 1;
+const short MESSAGE_FOR_RESILIENCE = 0;
+const short INFORM_MESSAGE = 1;
 
 namespace inet{
 
-    Define_Module(UdpApp);
+    Define_Module(WsnUdpApp);
 
-    void UdpApp::initialize(int stage)
+    void WsnUdpApp::initialize(int stage)
     {
         UdpBasicBurst::initialize(stage);
         problemNode = -1;
@@ -50,7 +50,7 @@ namespace inet{
         correctingDistance = maxDistance * 0.7;
     }
     template<class T>
-    Packet *UdpApp::createPacket(char packetName[], T payload)
+    Packet *WsnUdpApp::createPacket(char packetName[], T payload)
     {
         std::ostringstream str;
         str << packetName;
@@ -62,7 +62,7 @@ namespace inet{
 
         return pk;
     }
-    inet::Ptr<CurrentCoordsMessage> UdpApp::createCoordPayload(){
+    inet::Ptr<CurrentCoordsMessage> WsnUdpApp::createCoordPayload(){
         cModule *hostNode = getContainingNode(this);// Node that contains this app
         IMobility *mobility = dynamic_cast<IMobility *>(hostNode->getSubmodule("mobility"));
         Coord coords = mobility->getCurrentPosition();
@@ -80,11 +80,11 @@ namespace inet{
      * This differs from UdpBasicBurst::generateBurst by commentaries and
      * that it has group cast. It sends usual messages(coordinates)
      */
-    void UdpApp::generateBurst(){
+    void WsnUdpApp::generateBurst(){
         simtime_t now = simTime();
             if (nextPkt < now)
                 nextPkt = now;
-
+            EV << "SHIT!" << "==================================================" << endl;
             double sendInterval = *sendIntervalPar;
             if (sendInterval <= 0.0)
                 throw cRuntimeError("The sendInterval parameter must be bigger than 0");
@@ -107,9 +107,9 @@ namespace inet{
             }
             //Coordinates exchange
             Packet *packetForResilience = createPacket("Coords", createCoordPayload());
-            packetForResilience->setKind(MESSAGE_FOR_RESILIENCE);
             for (int i = 0; i < destAddresses.size(); i++){
                 Packet *copy = packetForResilience->dup();
+                copy->setKind(MESSAGE_FOR_RESILIENCE);
                 copy->setTimestamp();
                 emit(packetSentSignal, copy);
                 socket.sendTo(copy, destAddresses[i], destPort);
@@ -128,7 +128,7 @@ namespace inet{
             scheduleAt(nextPkt, timerNext);
     }
 
-    void UdpApp::processStart()
+    void WsnUdpApp::processStart()
     {
         broadcastSocket.setOutputGate(gate("socketOut"));
         broadcastSocket.bind(1025);
@@ -137,7 +137,7 @@ namespace inet{
 
         UdpBasicBurst::processStart();
     }
-    void UdpApp::processPacket(Packet *pk)
+    void WsnUdpApp::processPacket(Packet *pk)
     {
         if (pk->getKind() == UDP_I_ERROR) {
             EV_WARN << "UDP error received\n";
@@ -149,7 +149,7 @@ namespace inet{
         }
         delete pk;
     }
-    void UdpApp::processResiliencePacket(Packet *pk){
+    void WsnUdpApp::processResiliencePacket(Packet* &pk){
         double nodeConnectQuality = 1;
         double maxDist;
         if (distances.size()>0){
@@ -176,34 +176,36 @@ namespace inet{
             }
         }
         if ( strcmp(pk->getName(),"Coords") == 0 ){
-                    auto data = pk->popAtBack<CurrentCoordsMessage>();
-                    int neighbour_x = data->getX();
-                    int neighbour_y = data->getY();
+                b dataLength = pk->getDataLength();
+                auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
+                int neighbour_x = data->getX();
+                int neighbour_y = data->getY();
 
-                    cModule *host = getContainingNode(this);
-                    IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
-                    Coord coords = mobility->getCurrentPosition();
-                    int x = coords.getX();
-                    int y = coords.getY();
-                    int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
+                cModule *host = getContainingNode(this);
+                IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
+                Coord coords = mobility->getCurrentPosition();
+                int x = coords.getX();
+                int y = coords.getY();
+                int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
 
-                    if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
-                       neighbours_Id.push_back(moduleId);
-                       distances.push_back(distance);
+                if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
+                   neighbours_Id.push_back(moduleId);
+                   distances.push_back(distance);
+                }
+                int index = std::distance(neighbours_Id.begin(), std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId));
+                distances.at(index) = distance;
+                if (distance >= correctingDistance){
+                    if (problemNode == -1) {
+                        problemNode = moduleId;
                     }
-                    int index = std::distance(neighbours_Id.begin(), std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId));
-                    distances.at(index) = distance;
-                    if (distance >= correctingDistance){
-                        if (problemNode == -1) {
-                            problemNode = moduleId;
-                        }
-                        problemDistance = distance;
-                        sendBroadcastCoords();
-                    }
-                    //drop(pk);
+                    problemDistance = distance;
+                    sendBroadcastCoords();
+                }
+                //drop(pk);
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST") == 0 ){
-            auto data = pk->popAtBack<CurrentCoordsMessage>();
+            b dataLength = pk->getDataLength();
+            auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
             int neighbour_x = data->getX();
             int neighbour_y = data->getY();
 
@@ -218,7 +220,8 @@ namespace inet{
             }
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST_REPLY") == 0 ){
-            auto data = pk->popAtBack<CurrentCoordsMessage>();
+            b dataLength = pk->getDataLength();
+            auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
             int neighbour_x = data->getX();
             int neighbour_y = data->getY();
 
@@ -260,7 +263,8 @@ namespace inet{
                 cModule *neighbourNode = getContainingNode(module);
                 L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
 
-                auto data = pk->popAtBack<CurrentCoordsMessage>();
+                b dataLength = pk->getDataLength();
+                auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
                 int neighbour_x = data->getX();
                 int neighbour_y = data->getY();
 
@@ -279,14 +283,14 @@ namespace inet{
         }
         numReceived++;
     }
-    void UdpApp::sendBroadcastCoords(){
+    void WsnUdpApp::sendBroadcastCoords(){
         Packet *pk = createPacket("Coords_BROADCAST", createCoordPayload());
 
         emit(packetSentSignal, pk);
         socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, 1025);
         numSent++;
     }
-    void UdpApp::sendBroadcastCoordsReply(int moduleId){
+    void WsnUdpApp::sendBroadcastCoordsReply(int moduleId){
         Packet *pk = createPacket("Coords_BROADCAST_REPLY", createCoordPayload());
 
         cModule *module = getSimulation()->getModule(moduleId);
@@ -296,7 +300,7 @@ namespace inet{
         socket.sendTo(pk, addr, 1024);
         numSent++;
     }
-    void UdpApp::sendNewConnectionRequest(L3Address addr){
+    void WsnUdpApp::sendNewConnectionRequest(L3Address addr){
         Packet *pk = createPacket("Coords_NEW_CONNECTION_REQUEST", createCoordPayload());
 
         emit(packetSentSignal, pk);
