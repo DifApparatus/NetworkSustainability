@@ -39,6 +39,7 @@ namespace inet{
             void sendBroadcastCoords();
             void sendBroadcastCoordsReply(int destModuleId);
             void sendNewConnectionRequest(L3Address addr);
+            int distanceFromCoordMessage(Packet *pk);
         };
 }// namespace inet
 #endif

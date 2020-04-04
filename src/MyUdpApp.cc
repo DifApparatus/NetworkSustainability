@@ -100,62 +100,32 @@ namespace inet{
         int msgId = pk->par("msgId");
 
         if ( strcmp(pk->getName(),"Coords") == 0 ){
-                b dataLength = pk->getDataLength();
-                auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
-                int neighbour_x = data->getX();
-                int neighbour_y = data->getY();
+            int distance = distanceFromCoordMessage(pk);
+            EV << distance << "===========================================" << endl;
 
-                cModule *host = getContainingNode(this);
-                IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
-                Coord coords = mobility->getCurrentPosition();
-                int x = coords.getX();
-                int y = coords.getY();
-                int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
-                EV << distance << "===========================================" << endl;
-
-                if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
-                   neighbours_Id.push_back(moduleId);
-                   distances.push_back(distance);
+            if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
+               neighbours_Id.push_back(moduleId);
+               distances.push_back(distance);
+            }
+            int index = std::distance(neighbours_Id.begin(), std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId));
+            distances.at(index) = distance;
+            if (distance >= correctingDistance){
+                if (problemNode == -1) {
+                    problemNode = moduleId;
                 }
-                int index = std::distance(neighbours_Id.begin(), std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId));
-                distances.at(index) = distance;
-                if (distance >= correctingDistance){
-                    if (problemNode == -1) {
-                        problemNode = moduleId;
-                    }
-                    problemDistance = distance;
-                    //sendBroadcastCoords();
-                }
-                //drop(pk);
+                problemDistance = distance;
+                //sendBroadcastCoords();
+            }
+            //drop(pk);
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST") == 0 ){
-            b dataLength = pk->getDataLength();
-            auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
-            int neighbour_x = data->getX();
-            int neighbour_y = data->getY();
-
-            cModule *host = getContainingNode(this);
-            IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
-            Coord coords = mobility->getCurrentPosition();
-            int x = coords.getX();
-            int y = coords.getY();
-            int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
+            int distance = distanceFromCoordMessage(pk);
             if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
                 //sendBroadcastCoordsReply(moduleId);
             }
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST_REPLY") == 0 ){
-            b dataLength = pk->getDataLength();
-            auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
-            int neighbour_x = data->getX();
-            int neighbour_y = data->getY();
-
-            cModule *host = getContainingNode(this);
-            IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
-            Coord coords = mobility->getCurrentPosition();
-            int x = coords.getX();
-            int y = coords.getY();
-            int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
+            int distance = distanceFromCoordMessage(pk);
             if( problemDistance > distance){
                 cModule *del_module = getSimulation()->getModule(problemNode);
                 cModule *del_neighbourNode = getContainingNode(del_module);
@@ -231,6 +201,20 @@ namespace inet{
 
         emit(packetSentSignal, pk);
         socket.sendTo(pk, addr, 1024);
+    }
+    int MyUdpApp::distanceFromCoordMessage(Packet *pk){
+        b dataLength = pk->getDataLength();
+        auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
+        int neighbour_x = data->getX();
+        int neighbour_y = data->getY();
+
+        cModule *host = getContainingNode(this);
+        IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
+        Coord coords = mobility->getCurrentPosition();
+        int x = coords.getX();
+        int y = coords.getY();
+        int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
+        return distance;
     }
 
 }// namesapce inet
