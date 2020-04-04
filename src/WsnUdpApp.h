@@ -35,12 +35,12 @@ class WsnUdpApp : public UdpBasicBurst {
         template<class T> Packet *createPacket(char packetName[], T payload);
         inet::Ptr<CurrentCoordsMessage> createCoordPayload();
         virtual void generateBurst() override;
-        virtual void processPacket(Packet *pk) override;
-        void processResiliencePacket(Packet* &pk);
-        virtual void processStart() override;
-        void sendBroadcastCoords();
-        void sendBroadcastCoordsReply(int destModuleId);
-        void sendNewConnectionRequest(L3Address addr);
+     //  virtual void processPacket(Packet *pk) override;
+     //  void processResiliencePacket(Packet* &pk);
+     //  virtual void processStart() override;
+     //   void sendBroadcastCoords();
+     //   void sendBroadcastCoordsReply(int destModuleId);
+     //   void sendNewConnectionRequest(L3Address addr);
     };
 }// namespace inet
 #endif /* WSNUDPAPP_H_ */

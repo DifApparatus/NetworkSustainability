@@ -257,6 +257,38 @@
                         					
                     </folderInfo>
                     					
+                    <folderInfo id="org.omnetpp.cdt.gnu.config.release.344536722.959098651" name="/" resourcePath="src">
+                        						
+                        <toolChain id="org.omnetpp.cdt.gnu.toolchain.release.1913214162" name="C++ Toolchain for OMNeT++" superClass="org.omnetpp.cdt.gnu.toolchain.release" unusedChildren="">
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.archiver.base.1882127034" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.1537835486"/>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1290887952" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.1693333415">
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1147101299" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+                                							
+                            </tool>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1957417004" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base.119433263">
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1551490574" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+                                							
+                            </tool>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.c.linker.base.1472022523" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base.2040765482"/>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1446341842" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base.1429861607"/>
+                            							
+                            <tool id="cdt.managedbuild.tool.gnu.assembler.base.1345944779" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base.1572131846">
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.816879813" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+                                							
+                            </tool>
+                            						
+                        </toolChain>
+                        					
+                    </folderInfo>
+                    					
                     <sourceEntries>
                         						
                         <entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="simulations"/>

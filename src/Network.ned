@@ -18,6 +18,7 @@ package networksustainability;
 import inet.applications.contract.IApp;
 import inet.applications.pingapp.PingApp;
 import inet.applications.tcpapp.TcpBasicClientApp;
+import inet.applications.udpapp.UdpApp;
 import inet.applications.udpapp.UdpBasicApp;
 import inet.applications.udpapp.UdpBasicBurst;
 import inet.linklayer.configurator.L2NetworkConfigurator;
@@ -42,32 +43,32 @@ import inet.visualizer.physicallayer.PhysicalLinkVisualizer;
 network Network
 {
     parameters:
-        @display("bgb=600,400");
+        @display("bgb=300,300");
         @statistic[dropRate](source=numSent/numDeleted; record=last);
     submodules:
         node1: SensorNode {
-            @display("p=253,152;t=1;");
+            @display("p=150,152;t=1;is=s");
         }
         node2: SensorNode {
-            @display("p=191,223;t=2;");
+            @display("p=100,200;t=2;is=s");
         }
         node3: SensorNode {
-            @display("p=318,66;t=3;");
+            @display("p=168,66;t=3;is=s");
         }
         node4: SensorNode {
-            @display("p=344,232;t=4;");
+            @display("p=170,139;t=4;is=s");
         }
         node5: SensorNode {
-            @display("p=409,138;t=5;");
+            @display("p=204,65;t=5;is=s");
         }
         configurator: Ipv4NetworkConfigurator {
-            @display("p=51,27");
+            @display("p=22,27;is=s");
         }
         unitDiskRadioMedium: UnitDiskRadioMedium {
-            @display("p=48,82");
+            @display("p=21,75;is=s");
         }
         integratedVisualizer: IntegratedVisualizer {
-            @display("p=51,145");
+            @display("p=22,121;is=s");
         }
     connections allowunconnected:
 }
