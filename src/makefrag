@@ -1,0 +1,2 @@
+INCLUDE_PATH = -I. -I$(INET4_PROJ)/src
+MSGC:=$(MSGC) --msg6

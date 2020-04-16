@@ -70,7 +70,7 @@ namespace inet{
             IMobility *mobility = dynamic_cast<IMobility *>(hostNode->getSubmodule("mobility"));
             Coord coords = mobility->getCurrentPosition();
 
-            const auto& payload = makeShared<CurrentCoordsMessage>("CurrentCoordinates");
+            const auto& payload = makeShared<CurrentCoordsMessage>();
             payload->setX(coords.x);
             payload->setY(coords.y);
             payload->setZ(0);
@@ -101,8 +101,20 @@ namespace inet{
 
         if ( strcmp(pk->getName(),"Coords") == 0 ){
             int distance = distanceFromCoordMessage(pk);
-            EV << distance << "===========================================" << endl;
-
+            //////////////////////////////////////////////////////////////////
+            cModule *host = getContainingNode(this);
+            //IRoutingTable *routingTable = dynamic_cast<IRoutingTable *>(host->getSubmodule("routingTable"));
+            /*IInterfaceTable *table = dynamic_cast<IInterfaceTable *>(host->getSubmodule("interfaceTable"));
+            int numInterfaces = table->getNumInterfaces();
+            for (int i=0;i<numInterfaces;i++){
+                InterfaceEntry *interface = table->getInterface(i);
+                EV << "=========================" << interface->getInterfaceName() << "=============================\n";
+                //routingTable->getNumMulticastRoutes();
+            }*/
+            //socket.joinMulticastGroup(multicastAddr, interfaceId)
+            //EV << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<< routingTable->getNumMulticastRoutes() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+            //socket.joinMulticastGroup(multicastAddr, interfaceId)
+            /////////////////////////////////////////////////////////////////
             if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
                neighbours_Id.push_back(moduleId);
                distances.push_back(distance);
@@ -119,10 +131,10 @@ namespace inet{
             //drop(pk);
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST") == 0 ){
-            int distance = distanceFromCoordMessage(pk);
+            /*int distance = distanceFromCoordMessage(pk);
             if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
-                //sendBroadcastCoordsReply(moduleId);
-            }
+                sendBroadcastCoordsReply(moduleId);
+            }*/
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST_REPLY") == 0 ){
             int distance = distanceFromCoordMessage(pk);
@@ -149,7 +161,7 @@ namespace inet{
                 problemNode = -1;
                 neighbours_Id.push_back(moduleId);
 
-                //sendNewConnectionRequest(addr);
+                sendNewConnectionRequest(addr);
             }
         }
         if ( strcmp(pk->getName(),"NEW_CONNECTION_REQUEST") == 0 ){

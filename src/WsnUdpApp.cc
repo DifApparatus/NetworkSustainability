@@ -67,7 +67,7 @@ namespace inet{
         IMobility *mobility = dynamic_cast<IMobility *>(hostNode->getSubmodule("mobility"));
         Coord coords = mobility->getCurrentPosition();
 
-        const auto& payload = makeShared<CurrentCoordsMessage>("CurrentCoordinates");
+        const auto& payload = makeShared<CurrentCoordsMessage>();
         payload->setX(coords.x);
         payload->setY(coords.y);
         payload->setZ(0);

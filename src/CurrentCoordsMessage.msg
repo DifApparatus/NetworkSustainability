@@ -1,4 +1,3 @@
-//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -14,11 +13,23 @@
 // 
 
 
-cplusplus {{
-#include "inet/applications/base/ApplicationPacket_m.h"
-}}
-class inet::ApplicationPacket;
-packet CurrentCoordsMessage extends ApplicationPacket{
+//cplusplus {{
+// #include "inet/applications/base/ApplicationPacket_m.h"
+//}}
+
+//class inet::ApplicationPacket;
+
+//packet CurrentCoordsMessage extends ApplicationPacket{
+  //  int x;
+	//int y;
+	//int z;
+//}
+
+import inet.applications.base.ApplicationPacket;
+
+namespace inet;
+
+class CurrentCoordsMessage extends ApplicationPacket {
     int x;
 	int y;
 	int z;

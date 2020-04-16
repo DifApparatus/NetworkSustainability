@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by nedtool 5.5 from CurrentCoordsMessage.msg.
+// Generated file, do not edit! Created by nedtool 5.6 from CurrentCoordsMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -26,6 +26,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <memory>
 #include "CurrentCoordsMessage_m.h"
 
 namespace omnetpp {
@@ -67,7 +68,7 @@ void doParsimUnpacking(omnetpp::cCommBuffer *buffer, std::list<T,A>& l)
 {
     int n;
     doParsimUnpacking(buffer, n);
-    for (int i=0; i<n; i++) {
+    for (int i = 0; i < n; i++) {
         l.push_back(T());
         doParsimUnpacking(buffer, l.back());
     }
@@ -87,7 +88,7 @@ void doParsimUnpacking(omnetpp::cCommBuffer *buffer, std::set<T,Tr,A>& s)
 {
     int n;
     doParsimUnpacking(buffer, n);
-    for (int i=0; i<n; i++) {
+    for (int i = 0; i < n; i++) {
         T x;
         doParsimUnpacking(buffer, x);
         s.insert(x);
@@ -110,7 +111,7 @@ void doParsimUnpacking(omnetpp::cCommBuffer *buffer, std::map<K,V,Tr,A>& m)
 {
     int n;
     doParsimUnpacking(buffer, n);
-    for (int i=0; i<n; i++) {
+    for (int i = 0; i < n; i++) {
         K k; V v;
         doParsimUnpacking(buffer, k);
         doParsimUnpacking(buffer, v);
@@ -148,10 +149,39 @@ void doParsimUnpacking(omnetpp::cCommBuffer *, T& t)
 
 }  // namespace omnetpp
 
+namespace {
+template <class T> inline
+typename std::enable_if<std::is_polymorphic<T>::value && std::is_base_of<omnetpp::cObject,T>::value, void *>::type
+toVoidPtr(T* t)
+{
+    return (void *)(static_cast<const omnetpp::cObject *>(t));
+}
+
+template <class T> inline
+typename std::enable_if<std::is_polymorphic<T>::value && !std::is_base_of<omnetpp::cObject,T>::value, void *>::type
+toVoidPtr(T* t)
+{
+    return (void *)dynamic_cast<const void *>(t);
+}
+
+template <class T> inline
+typename std::enable_if<!std::is_polymorphic<T>::value, void *>::type
+toVoidPtr(T* t)
+{
+    return (void *)static_cast<const void *>(t);
+}
+
+}
+
+namespace inet {
 
 // forward
 template<typename T, typename A>
 std::ostream& operator<<(std::ostream& out, const std::vector<T,A>& vec);
+
+// Template rule to generate operator<< for shared_ptr<T>
+template<typename T>
+inline std::ostream& operator<<(std::ostream& out,const std::shared_ptr<T>& t) { return out << t.get(); }
 
 // Template rule which fires if a struct or class doesn't have operator<<
 template<typename T>
@@ -170,7 +200,7 @@ inline std::ostream& operator<<(std::ostream& out, const std::vector<T,A>& vec)
         out << *it;
     }
     out.put('}');
-    
+
     char buf[32];
     sprintf(buf, " (size=%u)", (unsigned int)vec.size());
     out.write(buf, strlen(buf));
@@ -179,11 +209,8 @@ inline std::ostream& operator<<(std::ostream& out, const std::vector<T,A>& vec)
 
 Register_Class(CurrentCoordsMessage)
 
-CurrentCoordsMessage::CurrentCoordsMessage(const char *name, short kind) : ::inet::ApplicationPacket()
+CurrentCoordsMessage::CurrentCoordsMessage() : ::inet::ApplicationPacket()
 {
-    this->x = 0;
-    this->y = 0;
-    this->z = 0;
 }
 
 CurrentCoordsMessage::CurrentCoordsMessage(const CurrentCoordsMessage& other) : ::inet::ApplicationPacket(other)
@@ -197,7 +224,7 @@ CurrentCoordsMessage::~CurrentCoordsMessage()
 
 CurrentCoordsMessage& CurrentCoordsMessage::operator=(const CurrentCoordsMessage& other)
 {
-    if (this==&other) return *this;
+    if (this == &other) return *this;
     ::inet::ApplicationPacket::operator=(other);
     copy(other);
     return *this;
@@ -233,6 +260,7 @@ int CurrentCoordsMessage::getX() const
 
 void CurrentCoordsMessage::setX(int x)
 {
+    handleChange();
     this->x = x;
 }
 
@@ -243,6 +271,7 @@ int CurrentCoordsMessage::getY() const
 
 void CurrentCoordsMessage::setY(int y)
 {
+    handleChange();
     this->y = y;
 }
 
@@ -253,6 +282,7 @@ int CurrentCoordsMessage::getZ() const
 
 void CurrentCoordsMessage::setZ(int z)
 {
+    handleChange();
     this->z = z;
 }
 
@@ -260,6 +290,11 @@ class CurrentCoordsMessageDescriptor : public omnetpp::cClassDescriptor
 {
   private:
     mutable const char **propertynames;
+    enum FieldConstants {
+        FIELD_x,
+        FIELD_y,
+        FIELD_z,
+    };
   public:
     CurrentCoordsMessageDescriptor();
     virtual ~CurrentCoordsMessageDescriptor();
@@ -286,7 +321,7 @@ class CurrentCoordsMessageDescriptor : public omnetpp::cClassDescriptor
 
 Register_ClassDescriptor(CurrentCoordsMessageDescriptor)
 
-CurrentCoordsMessageDescriptor::CurrentCoordsMessageDescriptor() : omnetpp::cClassDescriptor("CurrentCoordsMessage", "inet::ApplicationPacket")
+CurrentCoordsMessageDescriptor::CurrentCoordsMessageDescriptor() : omnetpp::cClassDescriptor(omnetpp::opp_typename(typeid(inet::CurrentCoordsMessage)), "inet::ApplicationPacket")
 {
     propertynames = nullptr;
 }
@@ -333,11 +368,11 @@ unsigned int CurrentCoordsMessageDescriptor::getFieldTypeFlags(int field) const
         field -= basedesc->getFieldCount();
     }
     static unsigned int fieldTypeFlags[] = {
-        FD_ISEDITABLE,
-        FD_ISEDITABLE,
-        FD_ISEDITABLE,
+        FD_ISEDITABLE,    // FIELD_x
+        FD_ISEDITABLE,    // FIELD_y
+        FD_ISEDITABLE,    // FIELD_z
     };
-    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
+    return (field >= 0 && field < 3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *CurrentCoordsMessageDescriptor::getFieldName(int field) const
@@ -353,16 +388,16 @@ const char *CurrentCoordsMessageDescriptor::getFieldName(int field) const
         "y",
         "z",
     };
-    return (field>=0 && field<3) ? fieldNames[field] : nullptr;
+    return (field >= 0 && field < 3) ? fieldNames[field] : nullptr;
 }
 
 int CurrentCoordsMessageDescriptor::findField(const char *fieldName) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     int base = basedesc ? basedesc->getFieldCount() : 0;
-    if (fieldName[0]=='x' && strcmp(fieldName, "x")==0) return base+0;
-    if (fieldName[0]=='y' && strcmp(fieldName, "y")==0) return base+1;
-    if (fieldName[0]=='z' && strcmp(fieldName, "z")==0) return base+2;
+    if (fieldName[0] == 'x' && strcmp(fieldName, "x") == 0) return base+0;
+    if (fieldName[0] == 'y' && strcmp(fieldName, "y") == 0) return base+1;
+    if (fieldName[0] == 'z' && strcmp(fieldName, "z") == 0) return base+2;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
@@ -375,11 +410,11 @@ const char *CurrentCoordsMessageDescriptor::getFieldTypeString(int field) const
         field -= basedesc->getFieldCount();
     }
     static const char *fieldTypeStrings[] = {
-        "int",
-        "int",
-        "int",
+        "int",    // FIELD_x
+        "int",    // FIELD_y
+        "int",    // FIELD_z
     };
-    return (field>=0 && field<3) ? fieldTypeStrings[field] : nullptr;
+    return (field >= 0 && field < 3) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **CurrentCoordsMessageDescriptor::getFieldPropertyNames(int field) const
@@ -446,9 +481,9 @@ std::string CurrentCoordsMessageDescriptor::getFieldValueAsString(void *object, 
     }
     CurrentCoordsMessage *pp = (CurrentCoordsMessage *)object; (void)pp;
     switch (field) {
-        case 0: return long2string(pp->getX());
-        case 1: return long2string(pp->getY());
-        case 2: return long2string(pp->getZ());
+        case FIELD_x: return long2string(pp->getX());
+        case FIELD_y: return long2string(pp->getY());
+        case FIELD_z: return long2string(pp->getZ());
         default: return "";
     }
 }
@@ -463,9 +498,9 @@ bool CurrentCoordsMessageDescriptor::setFieldValueAsString(void *object, int fie
     }
     CurrentCoordsMessage *pp = (CurrentCoordsMessage *)object; (void)pp;
     switch (field) {
-        case 0: pp->setX(string2long(value)); return true;
-        case 1: pp->setY(string2long(value)); return true;
-        case 2: pp->setZ(string2long(value)); return true;
+        case FIELD_x: pp->setX(string2long(value)); return true;
+        case FIELD_y: pp->setY(string2long(value)); return true;
+        case FIELD_z: pp->setZ(string2long(value)); return true;
         default: return false;
     }
 }
@@ -497,4 +532,5 @@ void *CurrentCoordsMessageDescriptor::getFieldStructValuePointer(void *object, i
     }
 }
 
+} // namespace inet
 
