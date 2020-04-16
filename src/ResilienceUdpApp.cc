@@ -13,6 +13,8 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
+#include "ResilienceUdpApp.h"
+
 #include "inet/common/packet/printer/PacketPrinter.h"
 #include "inet/mobility/contract/IMobility.h"
 #include "inet/applications/base/ApplicationPacket_m.h"
@@ -28,15 +30,14 @@
 #include "CurrentCoordsMessage_m.h"
 #include "inet/common/packet/chunk/Chunk.h"
 #include <string.h>
-#include <MyUdpApp.h>
 #include <vector>
 #include <algorithm>
 #include "omnetpp.h"
 
 namespace inet{
-    Define_Module(MyUdpApp);
+    Define_Module(ResilienceUdpApp);
 
-    void MyUdpApp::initialize(int stage)
+    void ResilienceUdpApp::initialize(int stage)
     {
         UdpBasicApp::initialize(stage);
         problemNode = -1;
@@ -44,7 +45,7 @@ namespace inet{
         optimalDistance = maxDistance * 0.5;
         correctingDistance = maxDistance * 0.7;
     }
-    void MyUdpApp::sendPacket()
+    void ResilienceUdpApp::sendPacket()
     {
         Packet *packet = createPacket("Coords", createCoordPayload());
         L3Address destAddr = chooseDestAddr();
@@ -53,7 +54,7 @@ namespace inet{
         numSent++;
     }
     template<class T>
-    Packet *MyUdpApp::createPacket(char packetName[], T payload)
+    Packet *ResilienceUdpApp::createPacket(char packetName[], T payload)
         {
             std::ostringstream str;
             str << packetName;
@@ -65,7 +66,7 @@ namespace inet{
 
             return pk;
         }
-        inet::Ptr<CurrentCoordsMessage> MyUdpApp::createCoordPayload(){
+        inet::Ptr<CurrentCoordsMessage> ResilienceUdpApp::createCoordPayload(){
             cModule *hostNode = getContainingNode(this);// Node that contains this app
             IMobility *mobility = dynamic_cast<IMobility *>(hostNode->getSubmodule("mobility"));
             Coord coords = mobility->getCurrentPosition();
@@ -79,7 +80,7 @@ namespace inet{
             payload->addTag<CreationTimeTag>()->setCreationTime(simTime());
             return payload;
         }
-    void MyUdpApp::processPacket(Packet* pk){
+    void ResilienceUdpApp::processPacket(Packet* pk){
         if (pk->getKind() == UDP_I_ERROR) {
             EV_WARN << "UDP error received\n";
             delete pk;
@@ -191,14 +192,14 @@ namespace inet{
         numReceived++;
         EV_INFO << "EVERYTHING IS OKAY!"<<endl;
     }
-    void MyUdpApp::sendBroadcastCoords(){
+    void ResilienceUdpApp::sendBroadcastCoords(){
         Packet *pk = createPacket("Coords_BROADCAST", createCoordPayload());
 
         emit(packetSentSignal, pk);
         socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, 1025);
         numSent++;
     }
-    void MyUdpApp::sendBroadcastCoordsReply(int moduleId){
+    void ResilienceUdpApp::sendBroadcastCoordsReply(int moduleId){
         Packet *pk = createPacket("Coords_BROADCAST_REPLY", createCoordPayload());
 
         cModule *module = getSimulation()->getModule(moduleId);
@@ -208,13 +209,13 @@ namespace inet{
         socket.sendTo(pk, addr, 1024);
         numSent++;
     }
-    void MyUdpApp::sendNewConnectionRequest(L3Address addr){
+    void ResilienceUdpApp::sendNewConnectionRequest(L3Address addr){
         Packet *pk = createPacket("Coords_NEW_CONNECTION_REQUEST", createCoordPayload());
 
         emit(packetSentSignal, pk);
         socket.sendTo(pk, addr, 1024);
     }
-    int MyUdpApp::distanceFromCoordMessage(Packet *pk){
+    int ResilienceUdpApp::distanceFromCoordMessage(Packet *pk){
         b dataLength = pk->getDataLength();
         auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
         int neighbour_x = data->getX();

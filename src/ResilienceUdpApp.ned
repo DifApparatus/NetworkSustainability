@@ -17,7 +17,7 @@ package networksustainability;
 
 import inet.applications.udpapp.UdpBasicApp;
 
-simple MyUdpApp extends UdpBasicApp
+simple ResilienceUdpApp extends UdpBasicApp
 {
-        @class(inet::MyUdpApp);
+        @class(inet::ResilienceUdpApp);
 }

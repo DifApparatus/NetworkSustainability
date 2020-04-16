@@ -17,10 +17,11 @@
 #define __NETWORKSUSTAINABILITY_MYUDPAPP_H_
 
 #include <inet/applications/udpapp/UdpBasicApp.h>
+#include "CurrentCoordsMessage_m.h"
 #include <omnetpp.h>
 
 namespace inet{
-    class MyUdpApp : public UdpBasicApp
+    class ResilienceUdpApp : public UdpBasicApp
     {
         std::vector<int> neighbours_Id;
         std::vector<int> distances;
