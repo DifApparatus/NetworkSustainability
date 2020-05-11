@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scave:Analysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:scave="http://www.omnetpp.org/omnetpp/scave">
+  <inputs>
+    <inputs name="/NetworkSustainability/src/results/General-0.sca"/>
+    <inputs name="/NetworkSustainability/src/results/General-0.vec"/>
+  </inputs>
+  <datasets>
+    <datasets name="PacketDelivery">
+      <items xsi:type="scave:Add" filterPattern="file(/NetworkSustainability/src/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(Network) AND name(pktSent:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="file(/NetworkSustainability/src/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(Network) AND name(pktDelivered:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Apply" operation="subtractfirstval"/>
+      <items xsi:type="scave:Apply" operation="timewinavg">
+        <params name="windowSize" value="100"/>
+      </items>
+      <items xsi:type="scave:Apply" operation="difference"/>
+      <items xsi:type="scave:LineChart" name="" lineNameFormat=""/>
+    </datasets>
+  </datasets>
+  <chartSheets>
+    <chartSheets name="default" charts="//@datasets/@datasets.0/@items.5"/>
+  </chartSheets>
+</scave:Analysis>

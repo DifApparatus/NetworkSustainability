@@ -44,22 +44,23 @@ network Network
 {
     parameters:
         @display("bgb=300,300");
-        @statistic[dropRate](source=numSent/numDeleted; record=last);
+        @statistic[pktDelivered](source=count(packetReceived);record=vector);
+        @statistic[pktSent](source=count(packetSent);record=vector);
     submodules:
         node1: SensorNode {
             @display("p=150,152;t=1;is=s");
         }
         node2: SensorNode {
-            @display("p=100,200;t=2;is=s");
+            @display("p=82,187;t=2;is=s");
         }
         node3: SensorNode {
-            @display("p=168,66;t=3;is=s");
+            @display("p=171,89;t=3;is=s");
         }
         node4: SensorNode {
-            @display("p=170,139;t=4;is=s");
+            @display("p=189,200;t=4;is=s");
         }
         node5: SensorNode {
-            @display("p=204,65;t=5;is=s");
+            @display("p=238,135;t=5;is=s");
         }
         configurator: Ipv4NetworkConfigurator {
             @display("p=22,27;is=s");
