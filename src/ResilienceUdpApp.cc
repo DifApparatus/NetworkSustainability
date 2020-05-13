@@ -47,7 +47,7 @@ namespace inet{
     }
     void ResilienceUdpApp::sendPacket()
     {
-        Packet *packet = createPacket("Coords", createCoordPayload());
+        Packet *packet = createPacket("COORDS", createCoordPayload());
         L3Address destAddr = chooseDestAddr();
         emit(packetSentSignal, packet);
         socket.sendTo(packet, destAddr, destPort);
@@ -190,10 +190,11 @@ namespace inet{
             }
         }
         numReceived++;
+        EV_INFO << "==================================================" << endl;
         EV_INFO << "EVERYTHING IS OKAY!"<<endl;
     }
     void ResilienceUdpApp::sendBroadcastCoords(){
-        Packet *pk = createPacket("Coords_BROADCAST", createCoordPayload());
+        Packet *pk = createPacket("COORDS_BROADCAST", createCoordPayload());
 
         emit(packetSentSignal, pk);
         socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, 1025);
