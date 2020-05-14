@@ -19,5 +19,8 @@ import inet.applications.udpapp.UdpBasicApp;
 
 simple ResilienceUdpApp extends UdpBasicApp
 {
-        @class(inet::ResilienceUdpApp);
+    parameters:
+        double Rnes;// Necessary level of resilience (0 <= Rnes <= 1)
+        
+    @class(inet::ResilienceUdpApp);
 }

@@ -23,6 +23,7 @@
 namespace inet{
     class ResilienceUdpApp : public UdpBasicApp
     {
+        double Rnes;
         std::vector<int> neighbours_Id;
         std::vector<int> distances;
         int problemNode;

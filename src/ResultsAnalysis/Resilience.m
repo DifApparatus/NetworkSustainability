@@ -35,11 +35,13 @@ for i=1:length(t)-2
 end
 
 deliveryRate = averRec./averSent;
-Qnes = 0.4;
+Qnes = 0.8;
 Q = deliveryRate/Qnes;
 deliveryRateFlags = Q<1;
 Q_fal = (1 - Q).*deliveryRateFlags;
 Q_fal_aver = mean(rmmissing(Q_fal));
+
+plot(t,1-Q_fal);
 
 %%%%%% Resilience %%%%%
 R = 1 - Q_fal_aver*sum(deliveryRateFlags)/length(deliveryRateFlags);

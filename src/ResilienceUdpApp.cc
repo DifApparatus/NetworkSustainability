@@ -33,6 +33,7 @@
 #include <vector>
 #include <algorithm>
 #include "omnetpp.h"
+#include "inet/networklayer/common/InterfaceTable.h"
 
 namespace inet{
     Define_Module(ResilienceUdpApp);
@@ -40,6 +41,8 @@ namespace inet{
     void ResilienceUdpApp::initialize(int stage)
     {
         UdpBasicApp::initialize(stage);
+
+        Rnes = par("Rnes").doubleValue();
         problemNode = -1;
         maxDistance = 75;
         optimalDistance = maxDistance * 0.5;
@@ -49,6 +52,12 @@ namespace inet{
     {
         Packet *packet = createPacket("COORDS", createCoordPayload());
         L3Address destAddr = chooseDestAddr();
+        cModule *host = getContainingNode(this);
+        IInterfaceTable *table = dynamic_cast<IInterfaceTable *>(host->getSubmodule("interfaceTable"));
+        InterfaceEntry *interface = table->findInterfaceByName("wlan0");
+        interface->setBroadcast(true);
+        EV << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << interface->isBroadcast() << endl;
+
         emit(packetSentSignal, packet);
         socket.sendTo(packet, destAddr, destPort);
         numSent++;

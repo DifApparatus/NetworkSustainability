@@ -32,9 +32,9 @@ class WsnUdpApp : public UdpBasicBurst {
     int correctingDistance;
     protected:
         void initialize(int stage) override;
+        virtual Packet *createPacket() override;
         template<class T> Packet *createPacket(char packetName[], T payload);
         inet::Ptr<CurrentCoordsMessage> createCoordPayload();
-        virtual void generateBurst() override;
      //  virtual void processPacket(Packet *pk) override;
      //  void processResiliencePacket(Packet* &pk);
      //  virtual void processStart() override;

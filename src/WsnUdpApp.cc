@@ -34,8 +34,6 @@
 
 #include "omnetpp.h"
 
-const short MESSAGE_FOR_RESILIENCE = 0;
-const short INFORM_MESSAGE = 1;
 
 namespace inet{
 
@@ -48,6 +46,9 @@ namespace inet{
         maxDistance = 200;
         optimalDistance = maxDistance * 0.5;
         correctingDistance = maxDistance * 0.7;
+    }
+    Packet *WsnUdpApp::createPacket(){
+        return createPacket("COORDS", createCoordPayload());
     }
     template<class T>
     Packet *WsnUdpApp::createPacket(char packetName[], T payload)
@@ -74,59 +75,6 @@ namespace inet{
         payload->setChunkLength(B(par("messageLength")));
         payload->setSequenceNumber(numSent);
         return payload;
-    }
-
-    /** Creates packets to send per intervals/
-     * This differs from UdpBasicBurst::generateBurst by commentaries and
-     * that it has group cast. It sends usual messages(coordinates)
-     */
-    void WsnUdpApp::generateBurst(){
-        simtime_t now = simTime();
-            if (nextPkt < now)
-                nextPkt = now;
-            double sendInterval = *sendIntervalPar;
-            if (sendInterval <= 0.0)
-                throw cRuntimeError("The sendInterval parameter must be bigger than 0");
-            nextPkt += sendInterval;
-
-            if (activeBurst && nextBurst <= now) {    // new burst
-                double burstDuration = *burstDurationPar;
-                if (burstDuration < 0.0)
-                    throw cRuntimeError("The burstDuration parameter mustn't be smaller than 0");
-                double sleepDuration = *sleepDurationPar;
-
-                if (burstDuration == 0.0)
-                    activeBurst = false;
-                else {
-                    if (sleepDuration < 0.0)
-                        throw cRuntimeError("The sleepDuration parameter mustn't be smaller than 0");
-                    nextSleep = now + burstDuration;
-                    nextBurst = nextSleep + sleepDuration;
-                }
-            }
-            //Coordinates exchange
-            Packet *packetForResilience = createPacket("Coords", createCoordPayload());
-            emit(packetSentSignal, packetForResilience);
-            packetForResilience->setTimestamp();
-            //socket.sendTo(packetForResilience, destAddresses[0] , destPort);
-            for (int i = 0; i < destAddresses.size(); i++){
-                Packet *copy = packetForResilience->dup();
-                //copy->setKind(MESSAGE_FOR_RESILIENCE);
-                copy->setTimestamp();
-                socket.sendTo(copy, destAddresses[i], destPort);
-                numSent++;
-            }
-
-            // Next timer
-            if (activeBurst && nextPkt >= nextSleep)
-                nextPkt = nextBurst;
-
-            if (stopTime >= SIMTIME_ZERO && nextPkt >= stopTime) {
-                timerNext->setKind(STOP);
-                nextPkt = stopTime;
-            }
-
-            scheduleAt(nextPkt, timerNext);
     }
 
     /*void WsnUdpApp::processStart()
