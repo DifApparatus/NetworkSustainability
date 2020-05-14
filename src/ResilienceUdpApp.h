@@ -25,13 +25,12 @@ namespace inet{
     {
         double Rnes;
         std::vector<int> neighbours_Id;
-        std::vector<int> distances;
+        std::vector<double> distances;
         int problemNode;
-        int problemDistance;
-        UdpSocket broadcastSocket;
-        int maxDistance;
-        int optimalDistance;
-        int correctingDistance;
+        double problemDistance;
+        double maxDistance; // Maximal distance between nodes
+        double optimalDistance; // Optimal distance between nodes
+        //double correctingDistance; // Distance when its need to correct work of node
           protected:
             virtual void initialize(int stage) override;
             virtual void sendPacket() override;
@@ -41,7 +40,8 @@ namespace inet{
             void sendBroadcastCoords();
             void sendBroadcastCoordsReply(int destModuleId);
             void sendNewConnectionRequest(L3Address addr);
-            int distanceFromCoordMessage(Packet *pk);
+            double distanceFromCoordMessage(Packet *pk);
+            double evaluateResilience();
         };
 }// namespace inet
 #endif

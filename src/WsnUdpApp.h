@@ -22,11 +22,11 @@
 namespace inet{
 
 class WsnUdpApp : public UdpBasicBurst {
+    double Rnes;
     std::vector<int> neighbours_Id;
     std::vector<int> distances;
     int problemNode;
     int problemDistance;
-    UdpSocket broadcastSocket;
     int maxDistance;
     int optimalDistance;
     int correctingDistance;
@@ -35,9 +35,7 @@ class WsnUdpApp : public UdpBasicBurst {
         virtual Packet *createPacket() override;
         template<class T> Packet *createPacket(char packetName[], T payload);
         inet::Ptr<CurrentCoordsMessage> createCoordPayload();
-     //  virtual void processPacket(Packet *pk) override;
-     //  void processResiliencePacket(Packet* &pk);
-     //  virtual void processStart() override;
+        virtual void processPacket(Packet *pk) override;
      //   void sendBroadcastCoords();
      //   void sendBroadcastCoordsReply(int destModuleId);
      //   void sendNewConnectionRequest(L3Address addr);

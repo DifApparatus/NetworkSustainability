@@ -32,18 +32,18 @@ namespace inet {
  * <pre>
  * class CurrentCoordsMessage extends ApplicationPacket
  * {
- *     int x;
- *     int y;
- *     int z;
+ *     double x;
+ *     double y;
+ *     double z;
  * }
  * </pre>
  */
 class CurrentCoordsMessage : public ::inet::ApplicationPacket
 {
   protected:
-    int x = 0;
-    int y = 0;
-    int z = 0;
+    double x = 0;
+    double y = 0;
+    double z = 0;
 
   private:
     void copy(const CurrentCoordsMessage& other);
@@ -62,12 +62,12 @@ class CurrentCoordsMessage : public ::inet::ApplicationPacket
     virtual void parsimUnpack(omnetpp::cCommBuffer *b) override;
 
     // field getter/setter methods
-    virtual int getX() const;
-    virtual void setX(int x);
-    virtual int getY() const;
-    virtual void setY(int y);
-    virtual int getZ() const;
-    virtual void setZ(int z);
+    virtual double getX() const;
+    virtual void setX(double x);
+    virtual double getY() const;
+    virtual void setY(double y);
+    virtual double getZ() const;
+    virtual void setZ(double z);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const CurrentCoordsMessage& obj) {obj.parsimPack(b);}

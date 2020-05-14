@@ -42,6 +42,8 @@ namespace inet{
     void WsnUdpApp::initialize(int stage)
     {
         UdpBasicBurst::initialize(stage);
+
+        Rnes = par("Rnes").doubleValue();
         problemNode = -1;
         maxDistance = 200;
         optimalDistance = maxDistance * 0.5;
@@ -76,30 +78,15 @@ namespace inet{
         payload->setSequenceNumber(numSent);
         return payload;
     }
+    void WsnUdpApp::processPacket(Packet *pk) {
 
-    /*void WsnUdpApp::processStart()
-    {
-        broadcastSocket.setOutputGate(gate("socketOut"));
-        broadcastSocket.bind(1025);
-        broadcastSocket.setBroadcast(true);
-        broadcastSocket.setCallback(this);
-
-        UdpBasicBurst::processStart();
-    }
-    void WsnUdpApp::processPacket(Packet *pk)
-    {
         if (pk->getKind() == UDP_I_ERROR) {
             EV_WARN << "UDP error received\n";
             delete pk;
             return;
         }
-        else if (pk->getKind() == MESSAGE_FOR_RESILIENCE){
-            processResiliencePacket(pk);
-        }
-        delete pk;
-    }
-    void WsnUdpApp::processResiliencePacket(Packet* &pk){
-        double nodeConnectQuality = 1;
+        EV << "=======================================================================================================================" << endl;
+        /*double nodeConnectQuality = 1;
         double maxDist;
         if (distances.size()>0){
             maxDist = 0;
@@ -232,8 +219,9 @@ namespace inet{
             }
         }
         numReceived++;
+        delete pk;*/
     }
-    void WsnUdpApp::sendBroadcastCoords(){
+   /* void WsnUdpApp::sendBroadcastCoords(){
         Packet *pk = createPacket("Coords_BROADCAST", createCoordPayload());
 
         emit(packetSentSignal, pk);

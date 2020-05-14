@@ -44,20 +44,14 @@ namespace inet{
 
         Rnes = par("Rnes").doubleValue();
         problemNode = -1;
-        maxDistance = 75;
-        optimalDistance = maxDistance * 0.5;
-        correctingDistance = maxDistance * 0.7;
+        maxDistance = par("Dmax").doubleValue();
+        optimalDistance = par("Dopt").doubleValue();
+        //correctingDistance = par("Dcor").doubleValue();
     }
     void ResilienceUdpApp::sendPacket()
     {
         Packet *packet = createPacket("COORDS", createCoordPayload());
         L3Address destAddr = chooseDestAddr();
-        cModule *host = getContainingNode(this);
-        IInterfaceTable *table = dynamic_cast<IInterfaceTable *>(host->getSubmodule("interfaceTable"));
-        InterfaceEntry *interface = table->findInterfaceByName("wlan0");
-        interface->setBroadcast(true);
-        EV << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << interface->isBroadcast() << endl;
-
         emit(packetSentSignal, packet);
         socket.sendTo(packet, destAddr, destPort);
         numSent++;
@@ -95,8 +89,7 @@ namespace inet{
             delete pk;
             return;
         }
-        double nodeConnectQuality = 1;
-        double maxDist;
+        /*double maxDist;
         if (distances.size()>0){
             maxDist = 0;
             for (int i = 0; i < distances.size();i++){
@@ -104,41 +97,23 @@ namespace inet{
                     maxDist = distances[i];
             }
         }
-        else maxDist = maxDistance;
-        if (maxDist > optimalDistance) nodeConnectQuality = 1-(maxDist-optimalDistance)/(maxDistance-optimalDistance);
+        else maxDist = maxDistance;*/
         int moduleId = pk->par("sourceId");
         int msgId = pk->par("msgId");
 
-        if ( strcmp(pk->getName(),"Coords") == 0 ){
-            int distance = distanceFromCoordMessage(pk);
-            //////////////////////////////////////////////////////////////////
-            cModule *host = getContainingNode(this);
-            //IRoutingTable *routingTable = dynamic_cast<IRoutingTable *>(host->getSubmodule("routingTable"));
-            /*IInterfaceTable *table = dynamic_cast<IInterfaceTable *>(host->getSubmodule("interfaceTable"));
-            int numInterfaces = table->getNumInterfaces();
-            for (int i=0;i<numInterfaces;i++){
-                InterfaceEntry *interface = table->getInterface(i);
-                EV << "=========================" << interface->getInterfaceName() << "=============================\n";
-                //routingTable->getNumMulticastRoutes();
-            }*/
-            //socket.joinMulticastGroup(multicastAddr, interfaceId)
-            //EV << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<< routingTable->getNumMulticastRoutes() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-            //socket.joinMulticastGroup(multicastAddr, interfaceId)
-            /////////////////////////////////////////////////////////////////
-            if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
-               neighbours_Id.push_back(moduleId);
-               distances.push_back(distance);
-            }
-            int index = std::distance(neighbours_Id.begin(), std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId));
-            distances.at(index) = distance;
-            if (distance >= correctingDistance){
-                if (problemNode == -1) {
-                    problemNode = moduleId;
+        if ( strcmp(pk->getName(),"COORDS") == 0 ){
+            double distance = distanceFromCoordMessage(pk);
+            if (distance > 1){//Not self packet
+                if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
+                   neighbours_Id.push_back(moduleId);
+                   distances.push_back(distance);
                 }
-                problemDistance = distance;
-                //sendBroadcastCoords();
+                int index = std::distance(neighbours_Id.begin(), std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId));
+                distances.at(index) = distance;
+                double Reval = evaluateResilience();
+                if (Reval < Rnes) EV << "!!!!!!!!!!!!ALARM!!!!!!!!!!!" << endl;
+                else EV << "========================" << Reval << "==================================" << endl;
             }
-            //drop(pk);
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST") == 0 ){
             /*int distance = distanceFromCoordMessage(pk);
@@ -147,7 +122,7 @@ namespace inet{
             }*/
         }
         if ( strcmp(pk->getName(),"Coords_BROADCAST_REPLY") == 0 ){
-            int distance = distanceFromCoordMessage(pk);
+        /*    int distance = distanceFromCoordMessage(pk);
             if( problemDistance > distance){
                 cModule *del_module = getSimulation()->getModule(problemNode);
                 cModule *del_neighbourNode = getContainingNode(del_module);
@@ -172,10 +147,10 @@ namespace inet{
                 neighbours_Id.push_back(moduleId);
 
                 sendNewConnectionRequest(addr);
-            }
+            }*/
         }
         if ( strcmp(pk->getName(),"NEW_CONNECTION_REQUEST") == 0 ){
-            if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
+           /* if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
                 cModule *module = getSimulation()->getModule(moduleId);
                 cModule *neighbourNode = getContainingNode(module);
                 L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
@@ -196,11 +171,9 @@ namespace inet{
                 distances.push_back(distance);
 
                 neighbours_Id.push_back(moduleId);
-            }
+            }*/
         }
         numReceived++;
-        EV_INFO << "==================================================" << endl;
-        EV_INFO << "EVERYTHING IS OKAY!"<<endl;
     }
     void ResilienceUdpApp::sendBroadcastCoords(){
         Packet *pk = createPacket("COORDS_BROADCAST", createCoordPayload());
@@ -225,19 +198,32 @@ namespace inet{
         emit(packetSentSignal, pk);
         socket.sendTo(pk, addr, 1024);
     }
-    int ResilienceUdpApp::distanceFromCoordMessage(Packet *pk){
+    double ResilienceUdpApp::distanceFromCoordMessage(Packet *pk){
         b dataLength = pk->getDataLength();
         auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
-        int neighbour_x = data->getX();
-        int neighbour_y = data->getY();
+        double neighbour_x = data->getX();
+        double neighbour_y = data->getY();
 
         cModule *host = getContainingNode(this);
         IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
         Coord coords = mobility->getCurrentPosition();
-        int x = coords.getX();
-        int y = coords.getY();
-        int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
+        double x = coords.getX();
+        double y = coords.getY();
+        double distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
         return distance;
+    }
+    double ResilienceUdpApp::evaluateResilience(){
+        double Reval = 0;
+        if (distances.size() > 0){
+            double averageDistance = 0;
+            for (int i = 0; i < distances.size(); i++){
+                averageDistance += distances.at(i);
+            }
+            averageDistance /= distances.size();
+            Reval = (maxDistance - averageDistance) / (maxDistance - optimalDistance);
+            Reval = (Reval > 1) ? 1 : Reval;
+        }
+        return Reval;
     }
 
 }// namesapce inet

@@ -21,6 +21,9 @@ simple ResilienceUdpApp extends UdpBasicApp
 {
     parameters:
         double Rnes;// Necessary level of resilience (0 <= Rnes <= 1)
+        double Dmax;// Maximal distance between nodes
+        double Dopt;// Optimal distance between nodes
+        double Dcor;// Distance when its need to correct work of node
         
     @class(inet::ResilienceUdpApp);
 }

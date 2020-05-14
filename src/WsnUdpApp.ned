@@ -20,6 +20,9 @@ import inet.applications.udpapp.UdpBasicBurst;
 
 simple WsnUdpApp extends UdpBasicBurst
 {
-        @class(inet::WsnUdpApp);
+    parameters:
+        double Rnes;// Necessary level of resilience (0 <= Rnes <= 1)
+        
+    @class(inet::WsnUdpApp);
 }
 

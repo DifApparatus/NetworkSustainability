@@ -253,34 +253,34 @@ void CurrentCoordsMessage::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->z);
 }
 
-int CurrentCoordsMessage::getX() const
+double CurrentCoordsMessage::getX() const
 {
     return this->x;
 }
 
-void CurrentCoordsMessage::setX(int x)
+void CurrentCoordsMessage::setX(double x)
 {
     handleChange();
     this->x = x;
 }
 
-int CurrentCoordsMessage::getY() const
+double CurrentCoordsMessage::getY() const
 {
     return this->y;
 }
 
-void CurrentCoordsMessage::setY(int y)
+void CurrentCoordsMessage::setY(double y)
 {
     handleChange();
     this->y = y;
 }
 
-int CurrentCoordsMessage::getZ() const
+double CurrentCoordsMessage::getZ() const
 {
     return this->z;
 }
 
-void CurrentCoordsMessage::setZ(int z)
+void CurrentCoordsMessage::setZ(double z)
 {
     handleChange();
     this->z = z;
@@ -410,9 +410,9 @@ const char *CurrentCoordsMessageDescriptor::getFieldTypeString(int field) const
         field -= basedesc->getFieldCount();
     }
     static const char *fieldTypeStrings[] = {
-        "int",    // FIELD_x
-        "int",    // FIELD_y
-        "int",    // FIELD_z
+        "double",    // FIELD_x
+        "double",    // FIELD_y
+        "double",    // FIELD_z
     };
     return (field >= 0 && field < 3) ? fieldTypeStrings[field] : nullptr;
 }
@@ -481,9 +481,9 @@ std::string CurrentCoordsMessageDescriptor::getFieldValueAsString(void *object, 
     }
     CurrentCoordsMessage *pp = (CurrentCoordsMessage *)object; (void)pp;
     switch (field) {
-        case FIELD_x: return long2string(pp->getX());
-        case FIELD_y: return long2string(pp->getY());
-        case FIELD_z: return long2string(pp->getZ());
+        case FIELD_x: return double2string(pp->getX());
+        case FIELD_y: return double2string(pp->getY());
+        case FIELD_z: return double2string(pp->getZ());
         default: return "";
     }
 }
@@ -498,9 +498,9 @@ bool CurrentCoordsMessageDescriptor::setFieldValueAsString(void *object, int fie
     }
     CurrentCoordsMessage *pp = (CurrentCoordsMessage *)object; (void)pp;
     switch (field) {
-        case FIELD_x: pp->setX(string2long(value)); return true;
-        case FIELD_y: pp->setY(string2long(value)); return true;
-        case FIELD_z: pp->setZ(string2long(value)); return true;
+        case FIELD_x: pp->setX(string2double(value)); return true;
+        case FIELD_y: pp->setY(string2double(value)); return true;
+        case FIELD_z: pp->setZ(string2double(value)); return true;
         default: return false;
     }
 }

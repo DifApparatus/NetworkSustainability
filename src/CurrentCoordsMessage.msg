@@ -30,7 +30,7 @@ import inet.applications.base.ApplicationPacket;
 namespace inet;
 
 class CurrentCoordsMessage extends ApplicationPacket {
-    int x;
-	int y;
-	int z;
+    double x;
+	double y;
+	double z;
 }
