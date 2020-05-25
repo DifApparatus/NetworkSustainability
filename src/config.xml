@@ -1,5 +1,4 @@
 <config>
 	<interface names='wlan0' address='10.0.0.x' netmask='255.255.255.0'/>
-	<interface names='wlan1' address='10.0.1.x' netmask='255.255.255.0'/>
 	<autoroute metric='errorRate'/>
 </config>

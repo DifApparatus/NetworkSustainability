@@ -34,55 +34,82 @@
 #include <algorithm>
 #include "omnetpp.h"
 #include "inet/networklayer/common/InterfaceTable.h"
+#include "inet/physicallayer/contract/packetlevel/ITransmitter.h"
+#include "inet/networklayer/ipv4/Ipv4RoutingTable.h"
+
+#include <algorithm>
+#include <sstream>
+#include "inet/common/INETUtils.h"
+#include "inet/common/ModuleAccess.h"
+#include "inet/common/PatternMatcher.h"
+#include "inet/common/Simsignals.h"
+#include "inet/common/lifecycle/ModuleOperations.h"
+#include "inet/common/lifecycle/NodeStatus.h"
+#include "inet/networklayer/contract/IInterfaceTable.h"
+#include "inet/networklayer/ipv4/Ipv4InterfaceData.h"
+#include "inet/networklayer/ipv4/Ipv4Route.h"
+#include "inet/networklayer/ipv4/Ipv4RoutingTable.h"
+#include "inet/networklayer/ipv4/RoutingTableParser.h"
+#include "inet/networklayer/common/L3Address_m.h"
+#include "inet/networklayer/ipv4/Ipv4Header_m.h"
+#include "NewPathSearchMessage_m.h"
 
 namespace inet{
     Define_Module(ResilienceUdpApp);
 
-    void ResilienceUdpApp::initialize(int stage)
-    {
+    void ResilienceUdpApp::initialize(int stage){
         UdpBasicApp::initialize(stage);
 
         Rnes = par("Rnes").doubleValue();
-        problemNode = -1;
         maxDistance = par("Dmax").doubleValue();
         optimalDistance = par("Dopt").doubleValue();
-        //correctingDistance = par("Dcor").doubleValue();
+
+        cModule *hostNode = getContainingNode(this);// Node that contains this app
+        routingTable = dynamic_cast<Ipv4RoutingTable *>(hostNode->getSubmodule("ipv4")->getSubmodule("routingTable"));
     }
-    void ResilienceUdpApp::sendPacket()
-    {
-        Packet *packet = createPacket("COORDS", createCoordPayload());
+    void ResilienceUdpApp::processStart(){
+        for (int i = 0; i < routingTable->getNumRoutes(); i++){
+           Ipv4Route *route = routingTable->getRoute(i);
+           route->setMetric(std::numeric_limits<int>::max());//set infinity to metric
+        }
+        UdpBasicApp::processStart();
+    }
+    void ResilienceUdpApp::sendPacket(){
+        Packet *packet = createPacket("COORDS");
+        packet->insertAtBack(createCoordPayload());
         L3Address destAddr = chooseDestAddr();
         emit(packetSentSignal, packet);
         socket.sendTo(packet, destAddr, destPort);
         numSent++;
     }
-    template<class T>
-    Packet *ResilienceUdpApp::createPacket(char packetName[], T payload)
-        {
-            std::ostringstream str;
-            str << packetName;
-
-            Packet *pk = new Packet(str.str().c_str());
-            pk->insertAtBack(payload);
-            pk->addPar("sourceId") = getId();
-            pk->addPar("msgId") = numSent;
-
-            return pk;
-        }
-        inet::Ptr<CurrentCoordsMessage> ResilienceUdpApp::createCoordPayload(){
+    Packet *ResilienceUdpApp::createPacket(char packetName[]){
+        std::ostringstream str;
+        str << packetName;
+        Packet *pk = new Packet(str.str().c_str());
+        pk->addPar("sourceId") = getId();
+        pk->addPar("msgId") = numSent;
+        return pk;
+    }
+    inet::Ptr<CurrentCoordsMessage> ResilienceUdpApp::createCoordPayload(){
             cModule *hostNode = getContainingNode(this);// Node that contains this app
             IMobility *mobility = dynamic_cast<IMobility *>(hostNode->getSubmodule("mobility"));
             Coord coords = mobility->getCurrentPosition();
-
             const auto& payload = makeShared<CurrentCoordsMessage>();
             payload->setX(coords.x);
             payload->setY(coords.y);
             payload->setZ(0);
-            payload->setChunkLength(B(par("messageLength")));
-            payload->setSequenceNumber(numSent);
+            payload->setChunkLength(B(12));
             payload->addTag<CreationTimeTag>()->setCreationTime(simTime());
             return payload;
         }
+    inet::Ptr<NewPathSearchMessage> ResilienceUdpApp::createNewPathSearchPayload(Ipv4Address addr, double distance){
+        const auto& payload = makeShared<NewPathSearchMessage>();
+        payload->setDestAddr(addr);
+        payload->setDistance(distance);
+        payload->setChunkLength(B(40));
+        payload->addTag<CreationTimeTag>()->setCreationTime(simTime());
+        return payload;
+    }
     void ResilienceUdpApp::processPacket(Packet* pk){
         if (pk->getKind() == UDP_I_ERROR) {
             EV_WARN << "UDP error received\n";
@@ -103,107 +130,58 @@ namespace inet{
 
         if ( strcmp(pk->getName(),"COORDS") == 0 ){
             double distance = distanceFromCoordMessage(pk);
-            if (distance > 1){//Not self packet
-                if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
-                   neighbours_Id.push_back(moduleId);
-                   distances.push_back(distance);
-                }
-                int index = std::distance(neighbours_Id.begin(), std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId));
-                distances.at(index) = distance;
-                double Reval = evaluateResilience();
-                if (Reval < Rnes) EV << "!!!!!!!!!!!!ALARM!!!!!!!!!!!" << endl;
-                else EV << "========================" << Reval << "==================================" << endl;
+            Ipv4Address wlanAddr = wlanAddrByAppId(moduleId);
+            updateDistanceInformation(distance, wlanAddr);
+            double Reval = evaluateResilience();
+            if (Reval < Rnes){//Need for searching new path
+                Packet *packet = createPacket("SEARCH_NEW_PATH");
+                packet->insertAtBack(createCoordPayload());
+                packet->insertAtBack(createNewPathSearchPayload(wlanAddr,distance));
+                L3Address destAddr = chooseDestAddr();
+                socket.sendTo(packet, destAddr, destPort);
             }
         }
-        if ( strcmp(pk->getName(),"Coords_BROADCAST") == 0 ){
-            /*int distance = distanceFromCoordMessage(pk);
-            if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
-                sendBroadcastCoordsReply(moduleId);
-            }*/
+        if ( strcmp(pk->getName(),"SEARCH_NEW_PATH") == 0 ){
+            auto data = pk->popAtBack<NewPathSearchMessage>(B(40), Chunk::PeekFlag::PF_ALLOW_SERIALIZATION);
+            Ipv4Address addr = data->getDestAddr();
+            double destDistance = data->getDistance();//Distance between neighbour node and it's problem node
+            double sourceDistance = distanceFromCoordMessage(pk);//Distance to neighbour node
+
+            cModule *hostNode = getContainingNode(this);// Node that contains this app
+            Ipv4RoutingTable *routingTable = dynamic_cast<Ipv4RoutingTable *>(hostNode->getSubmodule("ipv4")->getSubmodule("routingTable"));
+            for (int i = 0; i < routingTable->getNumRoutes(); i++){
+                Ipv4Route *route = routingTable->getRoute(i);
+               if (route->getDestination().equals(addr) == true){
+                   Ipv4Address gatewayAddr = route->getGateway();
+                   if ((gatewayAddr.equals(addr) || gatewayAddr.isUnspecified()) && sourceDistance < destDistance && route->getMetric() < destDistance){
+                       Packet *packet = createPacket("SEARCH_NEW_PATH_REPLY");
+                       packet->insertAtBack(createCoordPayload());
+                       packet->insertAtBack(createNewPathSearchPayload(addr, sourceDistance));
+                       Ipv4Address wlanAddr = wlanAddrByAppId(moduleId);
+                       socket.sendTo(packet, wlanAddr, destPort);
+                   }
+                   break;
+               }
+            }
         }
-        if ( strcmp(pk->getName(),"Coords_BROADCAST_REPLY") == 0 ){
-        /*    int distance = distanceFromCoordMessage(pk);
-            if( problemDistance > distance){
-                cModule *del_module = getSimulation()->getModule(problemNode);
-                cModule *del_neighbourNode = getContainingNode(del_module);
-                L3Address del_addr = L3AddressResolver().resolve(del_neighbourNode->getFullName());
-                std::vector<L3Address>::iterator del_pos = std::find(destAddresses.begin(), destAddresses.end(), del_addr);
-                int index = std::distance(destAddresses.begin(), del_pos);
-                distances.erase(distances.begin() + index);
-                destAddresses.erase(del_pos);
-
-                std::vector<int>::iterator pos = std::find(neighbours_Id.begin(), neighbours_Id.end(), problemNode);
-                neighbours_Id.erase(pos);
-
-                cModule *module = getSimulation()->getModule(moduleId);
-                cModule *neighbourNode = getContainingNode(module);
-                L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
-
-                destAddresses.push_back(addr);
-                distances.push_back(distance);
-
-                problemDistance = 0;
-                problemNode = -1;
-                neighbours_Id.push_back(moduleId);
-
-                sendNewConnectionRequest(addr);
-            }*/
+        if ( strcmp(pk->getName(),"SEARCH_NEW_PATH_REPLY") == 0 ){
+            auto data = pk->popAtBack<NewPathSearchMessage>(B(40), Chunk::PeekFlag::PF_ALLOW_SERIALIZATION);
+            Ipv4Address problemAddr = data->getDestAddr();
+            double newDistance = data->getDistance();
+            for (int i = 0; i < routingTable->getNumRoutes(); i++){
+                Ipv4Route *route = routingTable->getRoute(i);
+               if (route->getDestination().equals(problemAddr) == true || route->getGateway().equals(problemAddr) == true && newDistance < route->getMetric()){
+                   Ipv4Address wlanAddr = wlanAddrByAppId(moduleId);
+                   route->setGateway(wlanAddr);
+                   route->setMetric(newDistance);
+               }
+            }
         }
-        if ( strcmp(pk->getName(),"NEW_CONNECTION_REQUEST") == 0 ){
-           /* if (std::find(neighbours_Id.begin(), neighbours_Id.end(), moduleId) == neighbours_Id.end()){
-                cModule *module = getSimulation()->getModule(moduleId);
-                cModule *neighbourNode = getContainingNode(module);
-                L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
-
-                b dataLength = pk->getDataLength();
-                auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
-                int neighbour_x = data->getX();
-                int neighbour_y = data->getY();
-
-                cModule *host = getContainingNode(this);
-                IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
-                Coord coords = mobility->getCurrentPosition();
-                int x = coords.getX();
-                int y = coords.getY();
-                int distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
-
-                destAddresses.push_back(addr);
-                distances.push_back(distance);
-
-                neighbours_Id.push_back(moduleId);
-            }*/
-        }
-        numReceived++;
-    }
-    void ResilienceUdpApp::sendBroadcastCoords(){
-        Packet *pk = createPacket("COORDS_BROADCAST", createCoordPayload());
-
-        emit(packetSentSignal, pk);
-        socket.sendTo(pk, Ipv4Address::ALLONES_ADDRESS, 1025);
-        numSent++;
-    }
-    void ResilienceUdpApp::sendBroadcastCoordsReply(int moduleId){
-        Packet *pk = createPacket("Coords_BROADCAST_REPLY", createCoordPayload());
-
-        cModule *module = getSimulation()->getModule(moduleId);
-        cModule *neighbourNode = getContainingNode(module);
-        L3Address addr = L3AddressResolver().resolve(neighbourNode->getFullName());
-        emit(packetSentSignal, pk);
-        socket.sendTo(pk, addr, 1024);
-        numSent++;
-    }
-    void ResilienceUdpApp::sendNewConnectionRequest(L3Address addr){
-        Packet *pk = createPacket("Coords_NEW_CONNECTION_REQUEST", createCoordPayload());
-
-        emit(packetSentSignal, pk);
-        socket.sendTo(pk, addr, 1024);
     }
     double ResilienceUdpApp::distanceFromCoordMessage(Packet *pk){
-        b dataLength = pk->getDataLength();
-        auto data = pk->popAtBack<CurrentCoordsMessage>(dataLength);
+        auto data = pk->popAtBack<CurrentCoordsMessage>(B(12));
         double neighbour_x = data->getX();
         double neighbour_y = data->getY();
-
         cModule *host = getContainingNode(this);
         IMobility *mobility = dynamic_cast<IMobility *>(host->getSubmodule("mobility"));
         Coord coords = mobility->getCurrentPosition();
@@ -212,9 +190,9 @@ namespace inet{
         double distance = sqrt((neighbour_x - x)*(neighbour_x - x) + (neighbour_y - y)*(neighbour_y - y));
         return distance;
     }
+
     double ResilienceUdpApp::evaluateResilience(){
-        double Reval = 0;
-        if (distances.size() > 0){
+        /*if (distances.size() > 0){
             double averageDistance = 0;
             for (int i = 0; i < distances.size(); i++){
                 averageDistance += distances.at(i);
@@ -222,8 +200,64 @@ namespace inet{
             averageDistance /= distances.size();
             Reval = (maxDistance - averageDistance) / (maxDistance - optimalDistance);
             Reval = (Reval > 1) ? 1 : Reval;
-        }
+        }*/
+        std::vector<Ipv4Address> neighbourAddrs;
+        double averageDistance = 0;
+        for (int i = 0; i < routingTable->getNumRoutes(); i++){
+             Ipv4Route *route = routingTable->getRoute(i);
+             Ipv4Address addr = route->getGateway();
+             if (addr.isUnspecified()) addr = route->getDestination();
+             if (std::find(neighbourAddrs.begin(), neighbourAddrs.end(), addr) == neighbourAddrs.end()){//new neighbour
+                 int distance = route->getMetric();
+                 if (distance == std::numeric_limits<int>::max()) distance = maxDistance;
+                 averageDistance += distance;
+                 neighbourAddrs.push_back(addr);
+             }
+         }
+        averageDistance/=neighbourAddrs.size();
+        double Reval = (maxDistance - averageDistance) / (maxDistance - optimalDistance);
+        Reval = (Reval > 1) ? 1 : Reval;
         return Reval;
     }
+/**
+ * Only for one wlan
+ */
+Ipv4Address ResilienceUdpApp::wlanAddrByAppId(int appId) {
+    cModule *app = getSimulation()->getModule(appId);
+    cModule *hostNode = getContainingNode(app);//Node that transmitted this packet
+    InterfaceTable *interfaceTable = dynamic_cast<InterfaceTable *>(hostNode->getSubmodule("interfaceTable"));
+    InterfaceEntry *wlan = interfaceTable->getInterface(1);//wlan0
+    Ipv4Address wlanAddr = wlan->getIpv4Address();//Address of wlan0
+    return wlanAddr;
+}
+/**
+ * Coordinates got from neighbour node with neighbourWlanAddr of wlan0
+ */
+    void ResilienceUdpApp::updateDistanceInformation(double distance, Ipv4Address neighbourWlanAddr){
+         for (int i = 0; i < routingTable->getNumRoutes(); i++){
+             Ipv4Route *route = routingTable->getRoute(i);
+            if (route->getDestination().equals(neighbourWlanAddr) == true){
+                if (route->getGateway().isUnspecified())//If nodes are connected directly
+                    route->setMetric(distance);
+                else if (route->getMetric() > distance){//if nodes are connected undirectly but direct connection is better
+                    route->setMetric(distance);
+                    route->setGateway(Ipv4Address::UNSPECIFIED_ADDRESS);
+                }
+            }
+            if (route->getGateway().equals(neighbourWlanAddr) == true){//if neighbour node is a gateway
+                route->setMetric(distance);//Update distance
+            }
+         }
+    }
+
+void ResilienceUdpApp::updateDistanceInformation(double distance, Ipv4Address destAddr, Ipv4Address gatewayAddr) {
+    for (int i = 0; i < routingTable->getNumRoutes(); i++){
+        Ipv4Route *route = routingTable->getRoute(i);
+       if (route->getDestination().equals(destAddr) == true || route->getGateway().equals(destAddr) == true){
+          route->setGateway(gatewayAddr);
+          route->setMetric(distance);
+       }
+    }
+}
 
 }// namesapce inet

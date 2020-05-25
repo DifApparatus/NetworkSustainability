@@ -51,16 +51,16 @@ network Network
             @display("p=150,159;t=1;is=s");
         }
         node2: SensorNode {
-            @display("p=82,187;t=2;is=s");
+            @display("p=94,193;t=2;is=s");
         }
         node3: SensorNode {
             @display("p=129,35;t=3;is=s");
         }
         node4: SensorNode {
-            @display("p=189,200;t=4;is=s");
+            @display("p=182,201;t=4;is=s");
         }
         node5: SensorNode {
-            @display("p=180,96;t=5;is=s");
+            @display("p=189,106;t=5;is=s");
         }
         configurator: Ipv4NetworkConfigurator {
             @display("p=22,27;is=s");

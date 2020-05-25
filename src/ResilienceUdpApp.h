@@ -18,6 +18,8 @@
 
 #include <inet/applications/udpapp/UdpBasicApp.h>
 #include "CurrentCoordsMessage_m.h"
+#include "NewPathSearchMessage_m.h"
+#include "inet/networklayer/ipv4/Ipv4RoutingTable.h"
 #include <omnetpp.h>
 
 namespace inet{
@@ -26,22 +28,24 @@ namespace inet{
         double Rnes;
         std::vector<int> neighbours_Id;
         std::vector<double> distances;
-        int problemNode;
-        double problemDistance;
+        Ipv4RoutingTable *routingTable;
+
         double maxDistance; // Maximal distance between nodes
         double optimalDistance; // Optimal distance between nodes
         //double correctingDistance; // Distance when its need to correct work of node
           protected:
             virtual void initialize(int stage) override;
+            virtual void processStart() override;
             virtual void sendPacket() override;
-            template<class T> Packet *createPacket(char packetName[], T payload);
+            Packet *createPacket(char packetName[]);
             inet::Ptr<CurrentCoordsMessage> createCoordPayload();
+            inet::Ptr<NewPathSearchMessage> createNewPathSearchPayload(Ipv4Address addr, double distance);
             virtual void processPacket(Packet *pk) override;
-            void sendBroadcastCoords();
-            void sendBroadcastCoordsReply(int destModuleId);
-            void sendNewConnectionRequest(L3Address addr);
             double distanceFromCoordMessage(Packet *pk);
             double evaluateResilience();
+            Ipv4Address wlanAddrByAppId(int appId);
+            void updateDistanceInformation(double distance, Ipv4Address addr);
+            void updateDistanceInformation(double distance, Ipv4Address destAddr, Ipv4Address gatewayAddr);
         };
 }// namespace inet
 #endif
