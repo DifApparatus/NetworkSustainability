@@ -116,15 +116,6 @@ namespace inet{
             delete pk;
             return;
         }
-        /*double maxDist;
-        if (distances.size()>0){
-            maxDist = 0;
-            for (int i = 0; i < distances.size();i++){
-                if (maxDist < distances[i])
-                    maxDist = distances[i];
-            }
-        }
-        else maxDist = maxDistance;*/
         int moduleId = pk->par("sourceId");
         int msgId = pk->par("msgId");
 
@@ -192,15 +183,6 @@ namespace inet{
     }
 
     double ResilienceUdpApp::evaluateResilience(){
-        /*if (distances.size() > 0){
-            double averageDistance = 0;
-            for (int i = 0; i < distances.size(); i++){
-                averageDistance += distances.at(i);
-            }
-            averageDistance /= distances.size();
-            Reval = (maxDistance - averageDistance) / (maxDistance - optimalDistance);
-            Reval = (Reval > 1) ? 1 : Reval;
-        }*/
         std::vector<Ipv4Address> neighbourAddrs;
         double averageDistance = 0;
         for (int i = 0; i < routingTable->getNumRoutes(); i++){
