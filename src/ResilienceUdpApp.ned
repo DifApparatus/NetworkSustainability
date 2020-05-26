@@ -24,6 +24,7 @@ simple ResilienceUdpApp extends UdpBasicApp
         double Dmax;// Maximal distance between nodes
         double Dopt;// Optimal distance between nodes
         double Dcor;// Distance when its need to correct work of node
+        volatile double resilienceInterval @unit(s); // should usually be a random value, e.g. exponential(1)
         
     @class(inet::ResilienceUdpApp);
 }

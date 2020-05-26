@@ -66,6 +66,26 @@ namespace inet{
 
         cModule *hostNode = getContainingNode(this);// Node that contains this app
         routingTable = dynamic_cast<Ipv4RoutingTable *>(hostNode->getSubmodule("ipv4")->getSubmodule("routingTable"));
+
+        resMsg = new cMessage("resilienceTimer");
+    }
+    void ResilienceUdpApp::handleMessage(cMessage *msg) {
+        if (msg == resMsg){
+            scheduleAt(simTime() + par("resilienceInterval"), resMsg);
+            double Reval = evaluateResilience();
+            if (Reval < Rnes){//Need for searching new path
+                Packet *packet = createPacket("SEARCH_NEW_PATH");
+                packet->insertAtBack(createCoordPayload());
+                int number = chooseRouteNumberToImprove();
+                Ipv4Route *routeToImprove = routingTable->getRoute(number);
+                Ipv4Address destAddr = routeToImprove->getDestination();
+                Ipv4Address gatewayAddr = routeToImprove->getGateway();
+                double distance = routeToImprove->getMetric();
+                packet->insertAtBack(createNewPathSearchPayload(destAddr,distance));
+                socket.sendTo(packet, chooseDestAddr(), destPort);
+            }
+        }
+        else UdpBasicApp::handleMessage(msg);
     }
     void ResilienceUdpApp::processStart(){
         for (int i = 0; i < routingTable->getNumRoutes(); i++){
@@ -73,6 +93,7 @@ namespace inet{
            route->setMetric(std::numeric_limits<int>::max());//set infinity to metric
         }
         UdpBasicApp::processStart();
+        scheduleAt(simTime() + par("resilienceInterval"), resMsg);
     }
     void ResilienceUdpApp::sendPacket(){
         Packet *packet = createPacket("COORDS");
@@ -123,14 +144,6 @@ namespace inet{
             double distance = distanceFromCoordMessage(pk);
             Ipv4Address wlanAddr = wlanAddrByAppId(moduleId);
             updateDistanceInformation(distance, wlanAddr);
-            double Reval = evaluateResilience();
-            if (Reval < Rnes){//Need for searching new path
-                Packet *packet = createPacket("SEARCH_NEW_PATH");
-                packet->insertAtBack(createCoordPayload());
-                packet->insertAtBack(createNewPathSearchPayload(wlanAddr,distance));
-                L3Address destAddr = chooseDestAddr();
-                socket.sendTo(packet, destAddr, destPort);
-            }
         }
         if ( strcmp(pk->getName(),"SEARCH_NEW_PATH") == 0 ){
             auto data = pk->popAtBack<NewPathSearchMessage>(B(40), Chunk::PeekFlag::PF_ALLOW_SERIALIZATION);
@@ -161,7 +174,7 @@ namespace inet{
             double newDistance = data->getDistance();
             for (int i = 0; i < routingTable->getNumRoutes(); i++){
                 Ipv4Route *route = routingTable->getRoute(i);
-               if (route->getDestination().equals(problemAddr) == true || route->getGateway().equals(problemAddr) == true && newDistance < route->getMetric()){
+               if ((route->getDestination().equals(problemAddr) == true || route->getGateway().equals(problemAddr) == true) && newDistance < route->getMetric()){
                    Ipv4Address wlanAddr = wlanAddrByAppId(moduleId);
                    route->setGateway(wlanAddr);
                    route->setMetric(newDistance);
@@ -240,6 +253,24 @@ void ResilienceUdpApp::updateDistanceInformation(double distance, Ipv4Address de
           route->setMetric(distance);
        }
     }
+}
+
+int ResilienceUdpApp::chooseRouteNumberToImprove() {
+    double maxDist = 0;
+    std::list<int> maxDistAddrs;
+    for (int i = 0; i < routingTable->getNumRoutes(); i++){
+        Ipv4Route *route = routingTable->getRoute(i);
+       if (route->getMetric() > maxDist){
+           maxDist = route->getMetric();
+           if (!maxDistAddrs.empty()) maxDistAddrs.erase(maxDistAddrs.begin(), maxDistAddrs.end());
+           maxDistAddrs.push_back(i);
+       }
+       else if (route->getMetric() == maxDist){
+           maxDistAddrs.push_back(i);
+       }
+    }
+    int z = rand() % maxDistAddrs.size();
+    return z;
 }
 
 }// namesapce inet

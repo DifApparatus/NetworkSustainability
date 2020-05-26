@@ -30,7 +30,7 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/MyUnitDiskRadio.o $O/ResilienceUdpApp.o $O/WsnUdpApp.o $O/CurrentCoordsMessage_m.o $O/NewPathSearchMessage_m.o
+OBJS = $O/MyUnitDiskRadio.o $O/ResilienceUdpApp.o $O/CurrentCoordsMessage_m.o $O/NewPathSearchMessage_m.o
 
 # Message files
 MSGFILES = \

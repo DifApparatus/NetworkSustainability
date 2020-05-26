@@ -26,6 +26,7 @@ namespace inet{
     class ResilienceUdpApp : public UdpBasicApp
     {
         double Rnes;
+        cMessage *resMsg = nullptr;
         std::vector<int> neighbours_Id;
         std::vector<double> distances;
         Ipv4RoutingTable *routingTable;
@@ -35,17 +36,19 @@ namespace inet{
         //double correctingDistance; // Distance when its need to correct work of node
           protected:
             virtual void initialize(int stage) override;
+            virtual void handleMessage(cMessage *msg) override;
             virtual void processStart() override;
             virtual void sendPacket() override;
             Packet *createPacket(char packetName[]);
             inet::Ptr<CurrentCoordsMessage> createCoordPayload();
-            inet::Ptr<NewPathSearchMessage> createNewPathSearchPayload(Ipv4Address addr, double distance);
+            inet::Ptr<NewPathSearchMessage> createNewPathSearchPayload(Ipv4Address destAddr, double distance);
             virtual void processPacket(Packet *pk) override;
             double distanceFromCoordMessage(Packet *pk);
             double evaluateResilience();
             Ipv4Address wlanAddrByAppId(int appId);
             void updateDistanceInformation(double distance, Ipv4Address addr);
             void updateDistanceInformation(double distance, Ipv4Address destAddr, Ipv4Address gatewayAddr);
+            int chooseRouteNumberToImprove();
         };
 }// namespace inet
 #endif

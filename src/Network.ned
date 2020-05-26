@@ -57,7 +57,7 @@ network Network
             @display("p=129,35;t=3;is=s");
         }
         node4: SensorNode {
-            @display("p=182,201;t=4;is=s");
+            @display("p=189,201;t=4;is=s");
         }
         node5: SensorNode {
             @display("p=189,106;t=5;is=s");
