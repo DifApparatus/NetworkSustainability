@@ -68,9 +68,14 @@ namespace inet{
         routingTable = dynamic_cast<Ipv4RoutingTable *>(hostNode->getSubmodule("ipv4")->getSubmodule("routingTable"));
 
         resMsg = new cMessage("resilienceTimer");
+        distUpdateTimes = std::vector<int>(4,0);
     }
     void ResilienceUdpApp::handleMessage(cMessage *msg) {
         if (msg == resMsg){
+            for(int i = 0; i<distUpdateTimes.size(); i++) {
+                distUpdateTimes[i] += 1.0;
+                if (distUpdateTimes[i] >= 4) routingTable->getRoute(i)->setMetric(std::numeric_limits<int>::max());
+            }
             scheduleAt(simTime() + par("resilienceInterval"), resMsg);
             double Reval = evaluateResilience();
             if (Reval < Rnes){//Need for searching new path
@@ -174,10 +179,13 @@ namespace inet{
             double newDistance = data->getDistance();
             for (int i = 0; i < routingTable->getNumRoutes(); i++){
                 Ipv4Route *route = routingTable->getRoute(i);
-               if ((route->getDestination().equals(problemAddr) == true || route->getGateway().equals(problemAddr) == true) && newDistance < route->getMetric()){
+               if ((route->getDestination().equals(problemAddr) == true || route->getGateway().equals(problemAddr) == true) && newDistance <= route->getMetric()){
                    Ipv4Address wlanAddr = wlanAddrByAppId(moduleId);
                    route->setGateway(wlanAddr);
                    route->setMetric(newDistance);
+                   if (route->getDestination().equals(problemAddr) == true){
+                       distUpdateTimes[i] = 0;
+                   }
                }
             }
         }
@@ -232,6 +240,7 @@ Ipv4Address ResilienceUdpApp::wlanAddrByAppId(int appId) {
          for (int i = 0; i < routingTable->getNumRoutes(); i++){
              Ipv4Route *route = routingTable->getRoute(i);
             if (route->getDestination().equals(neighbourWlanAddr) == true){
+                distUpdateTimes[i] = 0;
                 if (route->getGateway().isUnspecified())//If nodes are connected directly
                     route->setMetric(distance);
                 else if (route->getMetric() > distance){//if nodes are connected undirectly but direct connection is better

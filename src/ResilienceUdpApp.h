@@ -27,13 +27,11 @@ namespace inet{
     {
         double Rnes;
         cMessage *resMsg = nullptr;
-        std::vector<int> neighbours_Id;
-        std::vector<double> distances;
+        std::vector<int> distUpdateTimes;
         Ipv4RoutingTable *routingTable;
 
         double maxDistance; // Maximal distance between nodes
         double optimalDistance; // Optimal distance between nodes
-        //double correctingDistance; // Distance when its need to correct work of node
           protected:
             virtual void initialize(int stage) override;
             virtual void handleMessage(cMessage *msg) override;
